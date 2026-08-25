@@ -1,25 +1,30 @@
 import React from 'react';
-
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import HomeNavigator from './HomeNavigator';
-// import ChargingNavigator from './ChargingNavigator';
 import HistoryNavigator from './HistoryNavigator';
 import QRNavigator from './QRNavigator';
-
-// import WalletScreen from '../screens/Wallet/WalletScreen';
 import WalletNavigator from './WalletNavigator';
 import ProfileNavigator from './ProfileNavigator';
 
 import Ionicons from '@react-native-vector-icons/ionicons';
 
+import { useTranslation } from 'react-i18next';
+
 const Tab = createBottomTabNavigator();
 
-export default function BottomNavigator() {
+type BottomNavigatorProps = {
+  onLogout: () => void;
+};
+
+export default function BottomNavigator({ onLogout }: BottomNavigatorProps) {
+  const { t } = useTranslation();
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
+
         tabBarActiveTintColor: '#00A651',
         tabBarInactiveTintColor: '#9CA3AF',
 
@@ -52,15 +57,46 @@ export default function BottomNavigator() {
         },
       })}
     >
-      <Tab.Screen name="Home" component={HomeNavigator} />
-      <Tab.Screen name="Wallet" component={WalletNavigator} />
+      <Tab.Screen
+        name="Home"
+        component={HomeNavigator}
+        options={{
+          tabBarLabel: t('bottomTab.home'),
+        }}
+      />
 
-      <Tab.Screen name="QR" component={QRNavigator} />
+      <Tab.Screen
+        name="Wallet"
+        component={WalletNavigator}
+        options={{
+          tabBarLabel: t('bottomTab.wallet'),
+        }}
+      />
 
-      {/* <Tab.Screen name="Wallet" component={WalletScreen} /> */}
-      {/* <Tab.Screen name="Charging" component={ChargingNavigator} /> */}
-      <Tab.Screen name="History" component={HistoryNavigator} />
-      <Tab.Screen name="Profile" component={ProfileNavigator} />
+      <Tab.Screen
+        name="QR"
+        component={QRNavigator}
+        options={{
+          tabBarLabel: t('bottomTab.qr'),
+        }}
+      />
+
+      <Tab.Screen
+        name="History"
+        component={HistoryNavigator}
+        options={{
+          tabBarLabel: t('bottomTab.history'),
+        }}
+      />
+
+      <Tab.Screen
+        name="Profile"
+        options={{
+          tabBarLabel: t('bottomTab.profile'),
+        }}
+      >
+        {() => <ProfileNavigator onLogout={onLogout} />}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 }

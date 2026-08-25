@@ -13,34 +13,245 @@ import {
 } from 'react-native';
 
 import Ionicons from '@react-native-vector-icons/ionicons';
-
+// import { login } from '../../../api/auth.api';
+import { login, googleLogin } from '../../../api/auth.api';
+import { saveJwt, saveUser } from '../../../storage/authStorage';
 import { useNavigation } from '@react-navigation/native';
 
 import { Images } from '../../../assets';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+type LoginScreenProps = {
+  onLogin: () => void;
+};
 
-const LoginScreen = () => {
-  const navigation = useNavigation<any>();
+const LoginScreen = ({ onLogin }: LoginScreenProps) => {
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  // const navigation = useNavigation<any>();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = () => {
-    console.log('LOGIN', {
-      username,
-      password,
-    });
-    navigation.getParent()?.navigate('Main');
-    // TODO:
-    // เชื่อม Login API ตรงนี้
+  const handleLogin = async () => {
+    if (!username.trim()) {
+      setErrorMessage('Please enter your username or email.');
+      return;
+    }
+
+    if (!password) {
+      setErrorMessage('Please enter your password.');
+      return;
+    }
+
+    if (loading) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setErrorMessage('');
+
+      const payload = {
+        identifier: username.trim(),
+        password,
+      };
+
+      console.log('===== LOGIN REQUEST =====');
+      console.log('Payload:', {
+        identifier: payload.identifier,
+        password: '********',
+      });
+      console.log('========================');
+
+      const response = await login(payload);
+
+      console.log('===== LOGIN SUCCESS =====');
+      console.log('Response:', response);
+      console.log('========================');
+
+      const jwt = response?.jwt;
+      const user = response?.user;
+
+      if (!jwt) {
+        throw new Error('Login successful but JWT was not returned.');
+      }
+
+      // Save JWT
+      saveJwt(jwt);
+
+      // Save user
+      if (user) {
+        saveUser(user);
+      }
+
+      console.log('===== AUTH SAVED =====');
+      console.log('JWT saved:', !!jwt);
+      console.log('User saved:', !!user);
+      console.log('=====================');
+
+      console.log('===== LOGIN AUTH STATE UPDATE =====');
+
+      onLogin();
+
+      console.log('Login authentication state updated');
+    } catch (error: any) {
+      console.log('===== LOGIN FAILED =====');
+      console.log('Error:', error);
+      console.log('Message:', error?.message);
+      console.log('Status:', error?.response?.status);
+      console.log('Response:', error?.response?.data);
+      console.log(
+        'Response JSON:',
+        JSON.stringify(error?.response?.data, null, 2),
+      );
+      console.log('========================');
+
+      const responseData = error?.response?.data;
+
+      let message = 'Login failed. Please check your username and password.';
+
+      // Backend ส่ง { message: "..." }
+      if (typeof responseData?.message === 'string') {
+        message = responseData.message;
+      }
+
+      // Backend ส่ง { error: { message: "..." } }
+      else if (typeof responseData?.error?.message === 'string') {
+        message = responseData.error.message;
+      }
+
+      // Axios error message
+      else if (typeof error?.message === 'string') {
+        message = error.message;
+      }
+
+      setErrorMessage(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleGoogleLogin = () => {
-    console.log('GOOGLE LOGIN');
+  const handleGoogleLogin = async () => {
+    if (loading) {
+      return;
+    }
 
-    // TODO:
-    // เชื่อม Google Login ตรงนี้
+    try {
+      setLoading(true);
+      setErrorMessage('');
+
+      console.log('================================');
+      console.log('===== GOOGLE LOGIN START =====');
+      console.log('================================');
+
+      // 1. Check Google Play Services
+      console.log('... checking Google Play Services');
+
+      await GoogleSignin.hasPlayServices({
+        showPlayServicesUpdateDialog: true,
+      });
+
+      console.log('... Google Play Services OK');
+
+      // 2. Google Sign-In
+      console.log('... opening Google Sign-In');
+
+      const result = await GoogleSignin.signIn();
+
+      console.log('... Google Sign-In success');
+
+      console.log('===== GOOGLE RESULT =====');
+      console.log('Google User:', result?.data?.user);
+      console.log('Google ID Token Received:', !!result?.data?.idToken);
+      console.log(
+        'Google Server Auth Code Received:',
+        !!result?.data?.serverAuthCode,
+      );
+
+      // 3. Get Google Access Token
+      console.log('... getting Google access token');
+
+      const { accessToken } = await GoogleSignin.getTokens();
+
+      if (!accessToken) {
+        throw new Error('Google access token was not received.');
+      }
+
+      console.log('===== GOOGLE ACCESS TOKEN =====');
+      console.log('Access Token Received:', true);
+      console.log(
+        'Access Token Preview:',
+        `${accessToken.substring(0, 20)}...`,
+      );
+
+      // 4. Send Access Token to Backend
+      console.log('... sending Google access token to backend');
+
+      const response = await googleLogin(accessToken);
+
+      console.log('===== GOOGLE BACKEND RESPONSE =====');
+      console.log('JWT received:', !!response?.jwt);
+      console.log('User:', response?.user);
+      console.log('====================================');
+
+      // 5. Get JWT + User
+      const jwt = response?.jwt;
+      const user = response?.user;
+
+      if (!jwt) {
+        throw new Error('Google login successful but JWT was not returned.');
+      }
+
+      // 6. Save authentication
+      saveJwt(jwt);
+
+      if (user) {
+        saveUser(user);
+      }
+
+      console.log('===== GOOGLE LOGIN SUCCESS =====');
+      console.log('JWT saved:', true);
+      console.log('User saved:', !!user);
+      console.log('================================');
+
+      console.log('===== GOOGLE LOGIN AUTH STATE UPDATE =====');
+
+      onLogin();
+
+      console.log('Google login authentication state updated');
+      
+    } catch (error: any) {
+      console.log('================================');
+      console.log('===== GOOGLE LOGIN ERROR =====');
+      console.log('================================');
+
+      console.log('Error Code:', error?.code);
+      console.log('Error Message:', error?.message);
+      console.log('Error Response:', error?.response?.data);
+      console.log('Error Status:', error?.response?.status);
+
+      console.log('================================');
+
+      const responseData = error?.response?.data;
+
+      let message = 'Google Sign-In failed. Please try again.';
+
+      if (typeof responseData === 'string') {
+        message = responseData;
+      } else if (typeof responseData?.message === 'string') {
+        message = responseData.message;
+      } else if (typeof responseData?.error === 'string') {
+        message = responseData.error;
+      } else if (typeof error?.message === 'string') {
+        message = error.message;
+      }
+
+      setErrorMessage(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleRegister = () => {
@@ -147,7 +358,9 @@ const LoginScreen = () => {
               </TouchableOpacity>
             </View>
           </View>
-
+          {errorMessage ? (
+            <Text style={styles.errorText}>{errorMessage}</Text>
+          ) : null}
           {/* =========================
               FORGOT PASSWORD
           ========================== */}
@@ -165,13 +378,18 @@ const LoginScreen = () => {
           ========================== */}
 
           <TouchableOpacity
-            style={styles.loginButton}
+            style={[styles.loginButton, loading && styles.loginButtonDisabled]}
             onPress={handleLogin}
             activeOpacity={0.8}
+            disabled={loading}
           >
-            <Text style={styles.loginButtonText}>Login</Text>
+            <Text style={styles.loginButtonText}>
+              {loading ? 'Signing in...' : 'Login'}
+            </Text>
 
-            <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+            {!loading && (
+              <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+            )}
           </TouchableOpacity>
 
           {/* =========================
@@ -583,5 +801,15 @@ const styles = StyleSheet.create({
     fontSize: 12,
 
     color: '#94A3B8',
+  },
+
+  errorText: {
+    color: '#DC2626',
+    fontSize: 13,
+    marginBottom: 16,
+  },
+
+  loginButtonDisabled: {
+    opacity: 0.6,
   },
 });

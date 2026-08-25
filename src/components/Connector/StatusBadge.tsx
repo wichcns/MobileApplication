@@ -8,7 +8,11 @@ interface Props {
   status: ConnectorStatus;
 }
 
-const statusConfig = {
+const statusConfig: Record<string, {
+  text: string;
+  color: string;
+  background: string;
+}> = {
   AVAILABLE: {
     text: 'Ready',
 
@@ -27,6 +31,22 @@ const statusConfig = {
 
   OFFLINE: {
     text: 'Offline',
+
+    color: '#6B7280',
+
+    background: '#E5E7EB',
+  },
+
+  MAINTENANCE: {
+    text: 'Maintenance',
+
+    color: '#D97706',
+
+    background: '#FEF3C7',
+  },
+
+  DISCONNECTED: {
+    text: 'Disconnected',
 
     color: '#6B7280',
 

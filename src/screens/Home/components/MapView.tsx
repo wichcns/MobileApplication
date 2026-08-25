@@ -2,15 +2,17 @@ import React from 'react';
 
 import { View, StyleSheet } from 'react-native';
 
-import { stations } from '../../../data/stations';
+import type { Station } from '../../../types/station';
 
 import MapMarker from './MapMarker';
 
 interface MapViewProps {
+  stations?: Station[];
   onMarkerPress?: (stationId: string) => void;
 }
 
-const MapView = ({ onMarkerPress }: MapViewProps) => {
+// Legacy component: callers must supply stations loaded from the API.
+const MapView = ({ stations = [], onMarkerPress }: MapViewProps) => {
   return (
     <View style={styles.container}>
       {stations.map(station => {

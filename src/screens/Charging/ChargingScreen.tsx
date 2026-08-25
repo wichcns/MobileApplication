@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { View, StyleSheet, Alert, ScrollView } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import ChargingHeader from '../../components/Charging/ChargingHeader';
 import LivePowerCard from '../../components/Charging/LivePowerCard';
@@ -14,34 +14,19 @@ import StopChargingButton from '../../components/Charging/StopChargingButton';
 
 import {
   chargingSession,
-  stopChargingSession,
   subscribeChargingSession,
 } from '../../store/chargingStore';
-
 import {
-  startChargingSimulator,
-  stopChargingSimulator,
-} from '../../services/ocpp/ocppSimulator';
+  getChargingSessionSummary,
+  stopChargingSessionOnServer,
+} from '../../services/charging/chargingSessionApi';
 
 export default function ChargingScreen() {
   const { t } = useTranslation();
-  const navigation = useNavigation();
-
-  // ==========================
-  // Charging Time
-  // ==========================
-
-  const [seconds, setSeconds] = useState(0);
-
-  // ==========================
-  // Store Simulator Timer
-  // ==========================
-
-  const [chargerTimer, setChargerTimer] = useState<any>(null);
-
-  // ==========================
-  // Start Charging Session
-  // ==========================
+  const navigation = useNavigation<any>();
+  const route = useRoute<any>();
+  const sessionId = route.params?.sessionId ?? chargingSession.sessionId;
+  const [isStopping, setIsStopping] = useState(false);
 
   const [, forceUpdate] = useState(0);
 
@@ -53,39 +38,23 @@ export default function ChargingScreen() {
     return unsubscribe;
   }, []);
 
+  const refreshSession = useCallback(async () => {
+    if (!sessionId) return;
+    try {
+      await getChargingSessionSummary(sessionId);
+    } catch (error: any) {
+      console.log('[Charging] Unable to refresh live session', {
+        status: error?.response?.status,
+        message: error?.message,
+      });
+    }
+  }, [sessionId]);
+
   useEffect(() => {
-    const timer = startChargingSimulator();
-
-    setChargerTimer(timer);
-
-    const timeTimer = setInterval(() => {
-      setSeconds(prev => prev + 1);
-    }, 1000);
-
-    return () => {
-      stopChargingSimulator(timer);
-
-      clearInterval(timeTimer);
-    };
-  }, []);
-
-  // ==========================
-  // Format Time
-  // ==========================
-
-  const formatTime = () => {
-    const hours = Math.floor(seconds / 3600);
-
-    const minutes = Math.floor((seconds % 3600) / 60);
-
-    const secs = seconds % 60;
-
-    return (
-      `${hours.toString().padStart(2, '0')}:` +
-      `${minutes.toString().padStart(2, '0')}:` +
-      `${secs.toString().padStart(2, '0')}`
-    );
-  };
+    refreshSession();
+    const interval = setInterval(refreshSession, 8000);
+    return () => clearInterval(interval);
+  }, [refreshSession]);
 
   // ==========================
   // Stop Charging
@@ -107,23 +76,28 @@ export default function ChargingScreen() {
         {
           text: t('charging.stop'),
 
-          onPress: () => {
-            // 1.
-            // หยุด OCPP Simulator
-
-            if (chargerTimer) {
-              stopChargingSimulator(chargerTimer);
+          onPress: async () => {
+            if (!sessionId || isStopping) return;
+            setIsStopping(true);
+            console.log('[Charging] Requesting OCPP stop command', { sessionId });
+            try {
+              await stopChargingSessionOnServer(sessionId);
+              await refreshSession();
+              navigation.replace('ChargingSummary', { sessionId });
+            } catch (error: any) {
+              const message =
+                error?.response?.data?.message ??
+                error?.response?.data?.error?.message ??
+                error?.message ??
+                'Unable to stop charging';
+              console.log('[Charging] Stop request failed', {
+                status: error?.response?.status,
+                message,
+              });
+              Alert.alert('ไม่สามารถหยุดชาร์จได้', message);
+            } finally {
+              setIsStopping(false);
             }
-
-            // 2.
-            // เปลี่ยนสถานะ Charging
-
-            stopChargingSession();
-
-            // 3.
-            // ไปหน้า Summary
-
-            navigation.navigate('ChargingSummary' as never);
           },
         },
       ],
@@ -150,12 +124,13 @@ export default function ChargingScreen() {
         <ChargingInfoCard
           energy={chargingSession.energy}
           cost={chargingSession.cost}
-          time={formatTime()}
+          time={chargingSession.duration}
+          power={chargingSession.power}
         />
       </ScrollView>
 
       <View style={styles.bottomBar}>
-        <StopChargingButton onPress={handleStopCharging} />
+        <StopChargingButton onPress={handleStopCharging} disabled={isStopping} />
       </View>
     </SafeAreaView>
   );

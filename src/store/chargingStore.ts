@@ -1,3 +1,4 @@
+
 import { ChargingSession } from '../types/Charging';
 
 // ==========================
@@ -5,24 +6,44 @@ import { ChargingSession } from '../types/Charging';
 // ==========================
 
 export let chargingSession: ChargingSession = {
+  // ==========================
   // Session
+  // ==========================
+
   sessionId: '',
 
+  // ==========================
   // Station
+  // ==========================
+
   stationId: '',
   stationName: '',
 
+  // ==========================
   // Charger
+  // ==========================
+
   chargerId: '',
   chargerName: '',
 
+  // ==========================
   // Connector
+  // ==========================
+
   connectorId: 0,
   connectorLabel: '',
   connectorType: '',
   maxPower: 0,
 
+  // ==========================
+  // Charging Price
+  // ==========================
+
+  pricePerKwh: 0,
+
+  // ==========================
   // Charging
+  // ==========================
 
   status: 'AVAILABLE',
 
@@ -44,7 +65,9 @@ export let chargingSession: ChargingSession = {
 
   endTime: '',
 
+  // ==========================
   // Payment
+  // ==========================
 
   serviceFee: 10,
 
@@ -52,7 +75,9 @@ export let chargingSession: ChargingSession = {
 
   total: 0,
 
+  // ==========================
   // Transaction
+  // ==========================
 
   paymentMethod: '',
 
@@ -70,7 +95,6 @@ export let chargingSession: ChargingSession = {
 export function updateChargingSession(data: Partial<ChargingSession>) {
   chargingSession = {
     ...chargingSession,
-
     ...data,
   };
 
@@ -84,46 +108,63 @@ export function updateChargingSession(data: Partial<ChargingSession>) {
 export function startChargingSession(
   station: {
     id: string;
-
     name: string;
+    price?: number;
   },
 
   charger: {
     chargerId: string;
-
     chargerName?: string;
-
     chargerType: string;
-
     maxPower: number;
+
+    // ราคา Charger
+    price?: number;
+    pricePerKwh?: number;
   },
 
   connector: {
     connectorId: number;
-
     label: string;
-
     type: string;
   },
 ) {
+  // ==========================
+  // Get Charger Price
+  // ==========================
+
+  const chargingPrice = station.price ?? 0;
+
+  // ==========================
+  // Create Charging Session
+  // ==========================
+
   updateChargingSession({
+    // ==========================
     // Session
+    // ==========================
 
     sessionId: `CHG-${Date.now()}`,
 
+    // ==========================
     // Station
+    // ==========================
 
     stationId: station.id,
 
     stationName: station.name,
 
+    // ==========================
     // Charger
+    // ==========================
 
     chargerId: charger.chargerId,
 
     chargerName: charger.chargerName ?? charger.chargerId,
 
+    // ==========================
     // Connector
+    // ==========================
 
     connectorId: connector.connectorId,
 
@@ -133,7 +174,15 @@ export function startChargingSession(
 
     maxPower: charger.maxPower,
 
+    // ==========================
+    // Charging Price
+    // ==========================
+
+    pricePerKwh: chargingPrice,
+
+    // ==========================
     // Charging
+    // ==========================
 
     status: 'CHARGING',
 
@@ -155,7 +204,9 @@ export function startChargingSession(
 
     endTime: '',
 
+    // ==========================
     // Payment
+    // ==========================
 
     vat: 0,
 
@@ -172,22 +223,65 @@ export function startChargingSession(
 }
 
 // ==========================
+// Calculate Charging Cost
+// ==========================
+
+export function calculateChargingCost(energy: number, pricePerKwh: number) {
+  return Number((energy * pricePerKwh).toFixed(2));
+}
+
+// ==========================
 // Stop Charging
 // ==========================
 
 export function stopChargingSession() {
   const end = new Date();
 
-  const subtotal = chargingSession.cost + chargingSession.serviceFee;
+  // ==========================
+  // Charging Cost
+  // ==========================
+
+  const chargingCost = calculateChargingCost(
+    chargingSession.energy,
+    chargingSession.pricePerKwh,
+  );
+
+  // ==========================
+  // Service Fee
+  // ==========================
+
+  const serviceFee = chargingSession.serviceFee;
+
+  // ==========================
+  // Subtotal
+  // ==========================
+
+  const subtotal = chargingCost + serviceFee;
+
+  // ==========================
+  // VAT 7%
+  // ==========================
 
   const vat = Number((subtotal * 0.07).toFixed(2));
 
+  // ==========================
+  // Total
+  // ==========================
+
   const total = Number((subtotal + vat).toFixed(2));
+
+  // ==========================
+  // Update Session
+  // ==========================
 
   updateChargingSession({
     status: 'COMPLETED',
 
     endTime: end.toLocaleTimeString(),
+
+    cost: chargingCost,
+
+    serviceFee,
 
     vat,
 
@@ -221,18 +315,44 @@ export function completePayment(method: string, finalAmount?: number) {
 
 export function clearChargingSession() {
   chargingSession = {
+    // ==========================
+    // Session
+    // ==========================
+
     sessionId: '',
+
+    // ==========================
+    // Station
+    // ==========================
 
     stationId: '',
     stationName: '',
 
+    // ==========================
+    // Charger
+    // ==========================
+
     chargerId: '',
     chargerName: '',
+
+    // ==========================
+    // Connector
+    // ==========================
 
     connectorId: 0,
     connectorLabel: '',
     connectorType: '',
     maxPower: 0,
+
+    // ==========================
+    // Charging Price
+    // ==========================
+
+    pricePerKwh: 0,
+
+    // ==========================
+    // Charging
+    // ==========================
 
     status: 'AVAILABLE',
 
@@ -254,11 +374,19 @@ export function clearChargingSession() {
 
     endTime: '',
 
+    // ==========================
+    // Payment
+    // ==========================
+
     serviceFee: 10,
 
     vat: 0,
 
     total: 0,
+
+    // ==========================
+    // Transaction
+    // ==========================
 
     paymentMethod: '',
 
@@ -268,7 +396,13 @@ export function clearChargingSession() {
 
     paidAt: '',
   };
+
+  listeners.forEach(listener => listener());
 }
+
+// ==========================
+// Listener
+// ==========================
 
 type Listener = () => void;
 

@@ -7,22 +7,94 @@ import {
   TouchableOpacity,
   FlatList,
   SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
 
 import Ionicons from '@react-native-vector-icons/ionicons';
 
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
-import { wallet, WalletTransaction } from '../../../store/walletStore';
+import { getWalletHistory } from '../../../api/wallet.api';
+
+type WalletTransaction = {
+  id: string;
+  type: 'TOP_UP' | 'CHARGING' | 'REFUND' | 'ADJUSTMENT';
+  amount: number;
+  description: string;
+  date: string;
+  stationName?: string;
+  chargerName?: string;
+  energy?: number;
+  paymentMethod?: string;
+};
+
+const asNumber = (value: unknown) => {
+  const result = Number(value);
+  return Number.isFinite(result) ? result : 0;
+};
+
+const formatDate = (value: unknown) => {
+  if (!value) return '-';
+  const date = new Date(String(value));
+  return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleString('th-TH');
+};
 
 export default function TransactionHistoryScreen() {
   const navigation = useNavigation<any>();
 
   const [data, setData] = useState<WalletTransaction[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useFocusEffect(
     useCallback(() => {
-      setData([...wallet.transactions]);
+      let isActive = true;
+
+      const loadHistory = async () => {
+        try {
+          setIsLoading(true);
+          setError(null);
+          const response = await getWalletHistory(1, 50);
+          const records = Array.isArray(response?.data) ? response.data : [];
+          const transactions = records.map((record: any): WalletTransaction => {
+            const rawType = String(record?.type ?? record?.transactionType ?? record?.action ?? '').toUpperCase();
+            const amount = asNumber(record?.amount ?? record?.value ?? record?.creditAmount);
+            const type = rawType.includes('CHARG')
+              ? 'CHARGING'
+              : rawType.includes('REFUND')
+              ? 'REFUND'
+              : rawType.includes('ADJUST')
+              ? 'ADJUSTMENT'
+              : 'TOP_UP';
+
+            return {
+              id: String(record?.id ?? record?._id ?? `${type}-${record?.createdAt ?? records.indexOf(record)}`),
+              type,
+              amount: type === 'CHARGING' && amount > 0 ? -amount : amount,
+              description: record?.description ?? record?.message ?? record?.method ?? '-',
+              date: formatDate(record?.createdAt ?? record?.date ?? record?.paidAt),
+              stationName: record?.stationName,
+              chargerName: record?.chargerName,
+              energy: asNumber(record?.energy),
+              paymentMethod: record?.paymentMethod ?? record?.method,
+            };
+          });
+          if (isActive) setData(transactions);
+        } catch (requestError: any) {
+          console.log('[WalletHistory] Load failed', {
+            status: requestError?.response?.status,
+            message: requestError?.response?.data?.message || requestError?.message,
+          });
+          if (isActive) setError('Unable to load wallet transactions.');
+        } finally {
+          if (isActive) setIsLoading(false);
+        }
+      };
+
+      loadHistory();
+      return () => {
+        isActive = false;
+      };
     }, []),
   );
 
@@ -108,6 +180,16 @@ export default function TransactionHistoryScreen() {
         <Text style={styles.headerTitle}>Transaction History</Text>
       </View>
 
+      {isLoading ? (
+        <View style={styles.empty}>
+          <ActivityIndicator size="large" color="#00A651" />
+        </View>
+      ) : error ? (
+        <View style={styles.empty}>
+          <Ionicons name="alert-circle-outline" size={56} color="#EF4444" />
+          <Text style={styles.emptyTitle}>{error}</Text>
+        </View>
+      ) : (
       <FlatList
         data={data}
         keyExtractor={item => item.id}
@@ -128,6 +210,7 @@ export default function TransactionHistoryScreen() {
           </View>
         }
       />
+      )}
     </SafeAreaView>
   );
 }

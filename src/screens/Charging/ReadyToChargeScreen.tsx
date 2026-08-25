@@ -18,7 +18,7 @@ export default function ReadyToChargeScreen() {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
 
-  const { station, charger, connector } = route.params;
+  const { station, charger, connector, verification } = route.params;
 
   if (!station || !charger || !connector) {
     return (
@@ -33,6 +33,7 @@ export default function ReadyToChargeScreen() {
       station,
       charger,
       connector,
+      verification,
     });
   };
 

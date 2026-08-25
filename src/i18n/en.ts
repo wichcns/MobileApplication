@@ -1,5 +1,15 @@
+import { wallet } from '../store/walletStore';
+
 const en = {
   translation: {
+    bottomTab: {
+      home: 'Home',
+      wallet: 'Wallet',
+      qr: 'QR',
+      history: 'History',
+      profile: 'Profile',
+    },
+
     common: {
       back: 'Back',
       save: 'Save',
@@ -206,7 +216,9 @@ const en = {
 
       personalInformation: 'Personal Information',
 
-      fullName: 'Full Name',
+      firstName: 'FirstName',
+
+      lastName: 'LastName',
 
       emailAddress: 'Email Address',
 
@@ -349,7 +361,7 @@ const en = {
       serviceFee: 'Service Fee',
       vat: 'VAT 7%',
       total: 'Total',
-
+      pricePerKwh: 'Charging Price per kWh',
       proceedPayment: 'Proceed Payment',
     },
 
@@ -402,6 +414,7 @@ const en = {
 
       collectPromotion:
         'Collect a promotion first to use a coupon during payment.',
+      creditCardNotAvailable: 'Credit card payment is not available at this time.',
     },
 
     receipt: {

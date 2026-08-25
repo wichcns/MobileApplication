@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import {
   View,
@@ -12,8 +12,6 @@ import Ionicons from '@react-native-vector-icons/ionicons';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-import { topUpWallet } from '../../../store/walletStore';
-import { addTransaction } from '../../../store/transactionStore';
 
 export default function PaymentSuccessScreen() {
   const navigation = useNavigation<any>();
@@ -22,32 +20,6 @@ export default function PaymentSuccessScreen() {
 
   const amount = route.params?.amount ?? 0;
 
-  useEffect(() => {
-    if (amount > 0) {
-      // เพิ่มเงินเข้า Wallet
-
-      topUpWallet(amount);
-
-      // บันทึก Transaction
-
-      addTransaction({
-        id: `TXN-${Date.now()}`,
-
-        type: 'TOPUP',
-
-        title: 'Wallet Top Up',
-
-        description: 'Mobile Banking',
-
-        amount: amount,
-
-        status: 'SUCCESS',
-
-        createdAt: new Date().toLocaleString(),
-      });
-    }
-  }, []);
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -55,9 +27,9 @@ export default function PaymentSuccessScreen() {
           <Ionicons name="checkmark" size={60} color="#FFFFFF" />
         </View>
 
-        <Text style={styles.title}>Payment Successful</Text>
+        <Text style={styles.title}>Payment Confirmed</Text>
 
-        <Text style={styles.subtitle}>Your wallet has been topped up</Text>
+        <Text style={styles.subtitle}>Your wallet balance has been updated by the payment server</Text>
 
         <Text style={styles.amount}>+ ฿{amount.toFixed(2)}</Text>
 

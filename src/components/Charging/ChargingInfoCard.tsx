@@ -8,6 +8,7 @@ interface Props {
   cost: number;
 
   time: string;
+  power: number;
 }
 
 export default function ChargingInfoCard({
@@ -16,6 +17,7 @@ export default function ChargingInfoCard({
   cost,
 
   time,
+  power,
 }: Props) {
   const { t } = useTranslation();
   return (
@@ -35,7 +37,11 @@ export default function ChargingInfoCard({
           value={`${cost.toFixed(2)} ฿`}
         />
 
-        <InfoItem icon="⚡" title={t('charging.power')} value="22 kW" />
+        <InfoItem
+          icon="⚡"
+          title={t('charging.power')}
+          value={`${power.toFixed(1)} kW`}
+        />
       </View>
     </View>
   );

@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import Ionicons from '@react-native-vector-icons/ionicons';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  ActivityIndicator,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -9,10 +12,15 @@ import {
   View,
   Alert,
 } from 'react-native';
+import apiClient from '../../../api/client';
 
-import Ionicons from '@react-native-vector-icons/ionicons';
-
-import { useNavigation } from '@react-navigation/native';
+type SavedCard = {
+  id: string;
+  brand: string;
+  lastDigits: string;
+  name: string;
+  isDefault: boolean;
+};
 
 export default function CreditPaymentScreen() {
   const { t } = useTranslation();
@@ -22,12 +30,28 @@ export default function CreditPaymentScreen() {
   // CREDIT CARD
   // ==========================================================
 
-  const [creditCard, setCreditCard] = useState<{
-    brand: string;
-    last4: string;
-    cardHolder: string;
-    isDefault: boolean;
-  } | null>(null);
+  const [creditCards, setCreditCards] = useState<SavedCard[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const loadCards = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const response = await apiClient.get<SavedCard[]>(
+        '/payment/customers/cards',
+      );
+      setCreditCards(Array.isArray(response.data) ? response.data : []);
+    } catch (error) {
+      setCreditCards([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadCards();
+    }, [loadCards]),
+  );
 
   // ==========================================================
   // ADD CARD
@@ -41,7 +65,7 @@ export default function CreditPaymentScreen() {
   // REMOVE CARD
   // ==========================================================
 
-  const handleRemoveCard = () => {
+  const handleRemoveCard = (card: SavedCard) => {
     Alert.alert(
       t('creditPayment.removeCreditCard'),
       t('creditPayment.removeCreditCardMessage'),
@@ -53,12 +77,44 @@ export default function CreditPaymentScreen() {
         {
           text: t('creditPayment.remove'),
           style: 'destructive',
-          onPress: () => {
-            setCreditCard(null);
+          onPress: async () => {
+            try {
+              const response = await apiClient.delete<SavedCard[]>(
+                `/payment/customers/cards/${card.id}?return_many=true`,
+              );
+              setCreditCards(
+                Array.isArray(response.data) ? response.data : [],
+              );
+            } catch (error) {
+              Alert.alert(
+                t('creditPayment.error'),
+                t('creditPayment.cannotRemoveCard'),
+              );
+            }
           },
         },
       ],
     );
+  };
+
+  const handleSetDefaultCard = async (card: SavedCard) => {
+    if (card.isDefault) {
+      Alert.alert(
+        t('creditPayment.defaultCard'),
+        t('creditPayment.defaultCardMessage'),
+      );
+      return;
+    }
+
+    try {
+      const response = await apiClient.put<SavedCard[]>(
+        `/payment/customers/cards/${card.id}?return_many=true`,
+        { isDefault: true },
+      );
+      setCreditCards(Array.isArray(response.data) ? response.data : []);
+    } catch (error) {
+      Alert.alert(t('creditPayment.error'), t('creditPayment.cannotRemoveCard'));
+    }
   };
 
   return (
@@ -109,7 +165,11 @@ export default function CreditPaymentScreen() {
           NO CARD
       ====================================================== */}
 
-        {!creditCard && (
+        {isLoading ? (
+          <View style={styles.loadingCard}>
+            <ActivityIndicator size="large" color="#16A34A" />
+          </View>
+        ) : creditCards.length === 0 ? (
           <View style={styles.emptyCard}>
             <View style={styles.emptyIcon}>
               <Ionicons name="card-outline" size={38} color="#16A34A" />
@@ -135,14 +195,14 @@ export default function CreditPaymentScreen() {
               </Text>
             </TouchableOpacity>
           </View>
-        )}
+        ) : null}
 
         {/* =====================================================
           CREDIT CARD
       ====================================================== */}
 
-        {creditCard && (
-          <View style={styles.cardWrapper}>
+        {creditCards.map(creditCard => (
+          <View key={creditCard.id} style={styles.cardWrapper}>
             <View style={styles.creditCard}>
               {/* Card Header */}
 
@@ -165,7 +225,7 @@ export default function CreditPaymentScreen() {
               {/* Card Number */}
 
               <Text style={styles.cardNumber}>
-                •••• •••• •••• {creditCard.last4}
+                •••• •••• •••• {creditCard.lastDigits}
               </Text>
 
               {/* Card Holder */}
@@ -176,7 +236,7 @@ export default function CreditPaymentScreen() {
                     {t('creditPayment.cardHolder')}
                   </Text>
 
-                  <Text style={styles.cardHolder}>{creditCard.cardHolder}</Text>
+                  <Text style={styles.cardHolder}>{creditCard.name || '-'}</Text>
                 </View>
 
                 <Ionicons name="shield-checkmark" size={25} color="#FFFFFF" />
@@ -189,12 +249,7 @@ export default function CreditPaymentScreen() {
               <TouchableOpacity
                 style={styles.actionButton}
                 activeOpacity={0.7}
-                onPress={() => {
-                  Alert.alert(
-                    t('creditPayment.defaultCard'),
-                    t('creditPayment.defaultCardMessage'),
-                  );
-                }}
+                onPress={() => handleSetDefaultCard(creditCard)}
               >
                 <Ionicons
                   name="checkmark-circle-outline"
@@ -212,7 +267,7 @@ export default function CreditPaymentScreen() {
               <TouchableOpacity
                 style={styles.actionButton}
                 activeOpacity={0.7}
-                onPress={handleRemoveCard}
+                onPress={() => handleRemoveCard(creditCard)}
               >
                 <Ionicons name="trash-outline" size={20} color="#DC2626" />
 
@@ -222,13 +277,13 @@ export default function CreditPaymentScreen() {
               </TouchableOpacity>
             </View>
           </View>
-        )}
+        ))}
 
         {/* =====================================================
           ADD ANOTHER CARD
       ====================================================== */}
 
-        {creditCard && (
+        {!isLoading && creditCards.length > 0 && (
           <TouchableOpacity
             style={styles.addAnotherButton}
             activeOpacity={0.7}
@@ -391,6 +446,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
 
     borderColor: '#E8F0EE',
+  },
+
+  loadingCard: {
+    minHeight: 180,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   emptyIcon: {

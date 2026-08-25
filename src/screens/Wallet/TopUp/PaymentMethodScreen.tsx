@@ -38,21 +38,13 @@ export default function PaymentMethodScreen() {
     icon: IconName;
   }[] = [
     {
-      id: 'BANK',
-      title: t('paymentMethod.bankTransfer'),
-      subtitle: t('paymentMethod.bankTransferSubtitle'),
-      icon: 'business-outline',
-    },
-
-    {
-      id: 'QR',
+      id: 'PROMPTPAY',
       title: t('paymentMethod.mobileBanking'),
       subtitle: t('paymentMethod.mobileBankingSubtitle'),
       icon: 'qr-code-outline',
     },
-
     {
-      id: 'CARD',
+      id: 'CREDIT_CARD',
       title: t('paymentMethod.creditCard'),
       subtitle: t('paymentMethod.creditCardSubtitle'),
       icon: 'card-outline',
@@ -64,23 +56,25 @@ export default function PaymentMethodScreen() {
   // ==========================================================
 
   const handleContinue = () => {
-    if (selected === 'BANK') {
-      navigation.navigate('BankSelection', {
-        amount,
-      });
+    if (!selected) {
+      return;
     }
 
-    if (selected === 'QR') {
+    if (selected === 'PROMPTPAY') {
       navigation.navigate('QRPayment', {
         amount,
+        method: 'PROMPTPAY',
       });
+
+      return;
     }
 
-    if (selected === 'CARD') {
-      navigation.navigate('PaymentProcessing', {
+    if (selected === 'CREDIT_CARD') {
+      navigation.navigate('CreditCardTopUp', {
         amount,
-        method: 'CARD',
       });
+
+      return;
     }
   };
 

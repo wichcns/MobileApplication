@@ -4,14 +4,16 @@ import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 
 interface Props {
   onPress: () => void;
+  disabled?: boolean;
 }
 
-export default function StopChargingButton({ onPress }: Props) {
+export default function StopChargingButton({ onPress, disabled = false }: Props) {
   const { t } = useTranslation();
   return (
     <TouchableOpacity
-      style={styles.button}
+      style={[styles.button, disabled && styles.disabled]}
       onPress={onPress}
+      disabled={disabled}
       activeOpacity={0.85}
     >
       <View style={styles.iconCircle}>
@@ -50,6 +52,10 @@ const styles = StyleSheet.create({
     },
 
     elevation: 8,
+  },
+
+  disabled: {
+    opacity: 0.6,
   },
 
   iconCircle: {

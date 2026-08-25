@@ -1,6 +1,10 @@
+import Ionicons from '@react-native-vector-icons/ionicons';
+import { useNavigation } from '@react-navigation/native';
+import { OMISE_PUBLIC_KEY } from '@env';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  ActivityIndicator,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -10,10 +14,60 @@ import {
   View,
   Alert,
 } from 'react-native';
+import apiClient from '../../../api/client';
 
-import Ionicons from '@react-native-vector-icons/ionicons';
+const encodeBase64 = (value: string) => {
+  const chars =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+  let output = '';
+  let index = 0;
 
-import { useNavigation } from '@react-navigation/native';
+  while (index < value.length) {
+    const first = value.charCodeAt(index++);
+    const second = value.charCodeAt(index++);
+    const third = value.charCodeAt(index++);
+
+    output += chars.charAt(first >> 2);
+    output += chars.charAt(((first & 3) << 4) | (second >> 4));
+    output += Number.isNaN(second)
+      ? '='
+      : chars.charAt(((second & 15) << 2) | (third >> 6));
+    output += Number.isNaN(third) ? '=' : chars.charAt(third & 63);
+  }
+
+  return output;
+};
+
+const isValidCardNumber = (value: string) => {
+  const digits = value.replace(/\D/g, '');
+  if (digits.length < 13 || digits.length > 19) return false;
+
+  let sum = 0;
+  let shouldDouble = false;
+  for (let index = digits.length - 1; index >= 0; index -= 1) {
+    let digit = Number(digits[index]);
+    if (shouldDouble) {
+      digit *= 2;
+      if (digit > 9) digit -= 9;
+    }
+    sum += digit;
+    shouldDouble = !shouldDouble;
+  }
+  return sum % 10 === 0;
+};
+
+const getCardBrand = (value: string) => {
+  const digits = value.replace(/\D/g, '');
+
+  if (/^4/.test(digits)) return 'Visa';
+  if (/^(5[1-5]|2[2-7])/.test(digits)) return 'Mastercard';
+  if (/^3[47]/.test(digits)) return 'American Express';
+  if (/^35/.test(digits)) return 'JCB';
+  if (/^(30[0-5]|36|38)/.test(digits)) return 'Diners Club';
+  if (/^62/.test(digits)) return 'UnionPay';
+
+  return null;
+};
 
 export default function AddCreditCardScreen() {
   const { t } = useTranslation();
@@ -23,9 +77,22 @@ export default function AddCreditCardScreen() {
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCvv] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const cardBrand = getCardBrand(cardNumber);
 
-  const handleAddCard = () => {
+  const handleAddCard = async () => {
+    const cleanedCardNumber = cardNumber.replace(/\D/g, '');
+    console.log('[CreditCard] Save requested', {
+      hasCardholderName: Boolean(cardName.trim()),
+      brand: cardBrand || 'Unknown',
+      cardNumberLength: cleanedCardNumber.length,
+      last4: cleanedCardNumber.slice(-4),
+      hasExpiryDate: Boolean(expiryDate.trim()),
+      cvvLength: cvv.length,
+    });
+
     if (!cardName.trim()) {
+      console.warn('[CreditCard] Validation failed: missing cardholder name');
       Alert.alert(
         t('addCreditCard.incompleteInformation'),
         t('addCreditCard.enterCardholderName'),
@@ -33,7 +100,8 @@ export default function AddCreditCardScreen() {
       return;
     }
 
-    if (!cardNumber.trim()) {
+    if (!isValidCardNumber(cleanedCardNumber)) {
+      console.warn('[CreditCard] Validation failed: invalid card number');
       Alert.alert(
         t('addCreditCard.incompleteInformation'),
         t('addCreditCard.enterCardNumber'),
@@ -41,7 +109,17 @@ export default function AddCreditCardScreen() {
       return;
     }
 
-    if (!expiryDate.trim()) {
+    const [monthText, yearText] = expiryDate.split('/');
+    const month = Number(monthText);
+    const year = Number(`20${yearText}`);
+    const isExpired =
+      !month ||
+      month > 12 ||
+      !year ||
+      new Date(year, month, 0, 23, 59, 59) < new Date();
+
+    if (isExpired) {
+      console.warn('[CreditCard] Validation failed: invalid or expired date');
       Alert.alert(
         t('addCreditCard.incompleteInformation'),
         t('addCreditCard.enterExpiryDate'),
@@ -49,7 +127,8 @@ export default function AddCreditCardScreen() {
       return;
     }
 
-    if (!cvv.trim()) {
+    if (!/^\d{3,4}$/.test(cvv)) {
+      console.warn('[CreditCard] Validation failed: invalid CVV length');
       Alert.alert(
         t('addCreditCard.incompleteInformation'),
         t('addCreditCard.enterCvv'),
@@ -57,19 +136,90 @@ export default function AddCreditCardScreen() {
       return;
     }
 
-    console.log('ADD CREDIT CARD', {
-      cardName,
-      cardNumber,
-      expiryDate,
-      cvv,
-    });
+    if (!OMISE_PUBLIC_KEY) {
+      console.error('[CreditCard] OMISE_PUBLIC_KEY is not configured');
+      Alert.alert(t('creditPayment.error'), t('creditPayment.cannotRemoveCard'));
+      return;
+    }
 
-    Alert.alert(t('addCreditCard.success'), t('addCreditCard.successMessage'), [
-      {
-        text: t('addCreditCard.ok'),
-        onPress: () => navigation.goBack(),
-      },
-    ]);
+    try {
+      setIsSubmitting(true);
+      console.log('[CreditCard] Requesting Omise token');
+      const body = [
+        ['card[name]', cardName.trim()],
+        ['card[number]', cleanedCardNumber],
+        ['card[expiration_month]', String(month)],
+        ['card[expiration_year]', String(year)],
+        ['card[security_code]', cvv],
+      ]
+        .map(
+          ([key, value]) =>
+            `${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
+        )
+        .join('&');
+
+      const tokenResponse = await fetch('https://vault.omise.co/tokens', {
+        method: 'POST',
+        headers: {
+          Authorization: `Basic ${encodeBase64(`${OMISE_PUBLIC_KEY}:`)}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body,
+      });
+      const token = await tokenResponse.json();
+      console.log('[CreditCard] Omise token response', {
+        status: tokenResponse.status,
+        receivedToken: Boolean(token?.id),
+      });
+      if (!tokenResponse.ok || !token?.id) {
+        throw new Error('Unable to tokenize card');
+      }
+
+      console.log('[CreditCard] Saving token to payment API');
+      const saveResponse = await apiClient.post(
+        '/payment/customers/cards?return_many=true',
+        {
+          token: token.id,
+          isDefault: false,
+        },
+      );
+      console.log('[CreditCard] Card saved', {
+        status: saveResponse.status,
+        savedCardCount: Array.isArray(saveResponse.data)
+          ? saveResponse.data.length
+          : undefined,
+      });
+
+      setCardNumber('');
+      setCvv('');
+      Alert.alert(t('addCreditCard.success'), t('addCreditCard.successMessage'), [
+        { text: t('addCreditCard.ok'), onPress: () => navigation.goBack() },
+      ]);
+    } catch (error) {
+      const apiError = error as {
+        message?: string;
+        response?: {
+          status?: number;
+          data?: {
+            message?: string | string[];
+            error?: { message?: string };
+          } | string;
+        };
+      };
+      const responseData = apiError?.response?.data;
+      const serverMessage =
+        typeof responseData === 'string'
+          ? responseData
+          : responseData?.message || responseData?.error?.message;
+      console.error('[CreditCard] Save failed', {
+        message: apiError?.message || 'Unknown error',
+        status: apiError?.response?.status,
+        serverMessage,
+      });
+      Alert.alert(t('creditPayment.error'), t('creditPayment.cannotRemoveCard'));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -99,7 +249,9 @@ export default function AddCreditCardScreen() {
 
         <View style={styles.cardPreview}>
           <View style={styles.cardTop}>
-            <Text style={styles.cardBrand}>{t('addCreditCard.cardBrand')}</Text>
+            <Text style={styles.cardBrand}>
+              {cardBrand || t('addCreditCard.cardBrand')}
+            </Text>
 
             <Ionicons name="card-outline" size={30} color="#FFFFFF" />
           </View>
@@ -265,12 +417,18 @@ export default function AddCreditCardScreen() {
           style={styles.addButton}
           onPress={handleAddCard}
           activeOpacity={0.8}
+          disabled={isSubmitting}
         >
-          <Ionicons name="card-outline" size={21} color="#FFFFFF" />
-
-          <Text style={styles.addButtonText}>
-            {t('addCreditCard.addButton')}
-          </Text>
+          {isSubmitting ? (
+            <ActivityIndicator color="#FFFFFF" />
+          ) : (
+            <>
+              <Ionicons name="card-outline" size={21} color="#FFFFFF" />
+              <Text style={styles.addButtonText}>
+                {t('addCreditCard.addButton')}
+              </Text>
+            </>
+          )}
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

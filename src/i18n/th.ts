@@ -1,5 +1,12 @@
 const th = {
   translation: {
+    bottomTab: {
+      home: 'หน้าหลัก',
+      wallet: 'กระเป๋าเงิน',
+      qr: 'QR',
+      history: 'ประวัติ',
+      profile: 'โปรไฟล์',
+    },
     common: {
       back: 'ย้อนกลับ',
       save: 'บันทึก',
@@ -202,7 +209,9 @@ const th = {
 
       personalInformation: 'ข้อมูลส่วนตัว',
 
-      fullName: 'ชื่อ-นามสกุล',
+      firstName: 'ชื่อ',
+
+      lastName: 'นามสกุล',
 
       emailAddress: 'อีเมล',
 
@@ -345,6 +354,7 @@ const th = {
       serviceFee: 'ค่าบริการ',
       vat: 'VAT 7%',
       total: 'รวมทั้งหมด',
+      pricePerKwh: 'ราคาชาร์จต่อ kWh',
 
       proceedPayment: 'ดำเนินการชำระเงิน',
     },
@@ -397,6 +407,7 @@ const th = {
       noCouponsAvailable: 'ไม่มีคูปองที่สามารถใช้งานได้',
 
       collectPromotion: 'รับโปรโมชั่นก่อนเพื่อใช้คูปองในการชำระเงิน',
+      creditCardNotAvailable: 'การชำระด้วยบัตรเครดิตยังไม่พร้อมให้บริการในขณะนี้',
     },
 
     receipt: {

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   Alert,
+  ActivityIndicator,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -16,6 +17,7 @@ import Ionicons from '@react-native-vector-icons/ionicons';
 import { useNavigation } from '@react-navigation/native';
 
 import { user } from '../../../store/userStore';
+import apiClient from '../../../api/client';
 
 type TaxType = 'individual' | 'company';
 
@@ -35,8 +37,46 @@ export default function TaxInfoScreen() {
 
   const [phone, setPhone] = useState(user.phone ?? '');
   const [email, setEmail] = useState(user.email ?? '');
+  const [billingInformationId, setBillingInformationId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
-  const handleSave = () => {
+  useEffect(() => {
+    const loadBillingInformation = async () => {
+      try {
+        const response = await apiClient.get('/billing-informations/me');
+        const billingInformation = Array.isArray(response.data) ? response.data[0] : null;
+
+        if (!billingInformation) {
+          return;
+        }
+
+        const savedAddress = billingInformation.address || {};
+        setBillingInformationId(String(billingInformation.id));
+        setName(billingInformation.name ?? '');
+        setTaxId(billingInformation.taxId ?? '');
+        setAddress(savedAddress.address ?? '');
+        setProvince(savedAddress.province ?? '');
+        setDistrict(savedAddress.district ?? '');
+        setSubDistrict(savedAddress.subDistrict ?? '');
+        setPostalCode(savedAddress.postalCode ?? '');
+        setPhone(billingInformation.phoneNumber ?? '');
+        setEmail(billingInformation.email ?? '');
+        setTaxType(savedAddress.taxType === 'company' ? 'company' : 'individual');
+      } catch (error: any) {
+        console.log('[TaxInfo] Load failed', {
+          status: error?.response?.status,
+          message: error?.response?.data?.message || error?.message,
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadBillingInformation();
+  }, []);
+
+  const handleSave = async () => {
     if (!name.trim()) {
       Alert.alert(
         'Incomplete Information',
@@ -87,29 +127,40 @@ export default function TaxInfoScreen() {
       return;
     }
 
-    console.log('SAVE TAX INFORMATION', {
-      taxType,
-      name,
-      taxId,
-      address,
-      province,
-      district,
-      subDistrict,
-      postalCode,
-      phone,
-      email,
-    });
-
-    Alert.alert(
-      'Success',
-      'Your tax information has been saved successfully.',
-      [
-        {
-          text: 'OK',
-          onPress: () => navigation.goBack(),
+    try {
+      setIsSaving(true);
+      const payload = {
+        name: name.trim(),
+        taxId: taxId.trim(),
+        phoneNumber: phone.trim(),
+        email: email.trim(),
+        address: {
+          taxType,
+          address: address.trim(),
+          province: province.trim(),
+          district: district.trim(),
+          subDistrict: subDistrict.trim(),
+          postalCode: postalCode.trim(),
         },
-      ],
-    );
+      };
+
+      const response = billingInformationId
+        ? await apiClient.put(`/billing-informations/${billingInformationId}`, payload)
+        : await apiClient.post('/billing-informations', payload);
+
+      setBillingInformationId(String(response.data?.id ?? billingInformationId));
+      Alert.alert('Success', 'Your tax information has been saved successfully.', [
+        { text: 'OK', onPress: () => navigation.goBack() },
+      ]);
+    } catch (error: any) {
+      console.log('[TaxInfo] Save failed', {
+        status: error?.response?.status,
+        message: error?.response?.data?.message || error?.message,
+      });
+      Alert.alert('Error', 'Unable to save tax information. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const Input = ({
@@ -383,13 +434,19 @@ export default function TaxInfoScreen() {
         {/* SAVE */}
 
         <TouchableOpacity
-          style={styles.saveButton}
+          style={[styles.saveButton, (isLoading || isSaving) && styles.saveButtonDisabled]}
           onPress={handleSave}
           activeOpacity={0.8}
+          disabled={isLoading || isSaving}
         >
-          <Ionicons name="checkmark-circle-outline" size={21} color="#FFFFFF" />
-
-          <Text style={styles.saveButtonText}>Save Tax Information</Text>
+          {isSaving ? (
+            <ActivityIndicator color="#FFFFFF" />
+          ) : (
+            <>
+              <Ionicons name="checkmark-circle-outline" size={21} color="#FFFFFF" />
+              <Text style={styles.saveButtonText}>Save Tax Information</Text>
+            </>
+          )}
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -622,5 +679,9 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '800',
+  },
+
+  saveButtonDisabled: {
+    opacity: 0.65,
   },
 });

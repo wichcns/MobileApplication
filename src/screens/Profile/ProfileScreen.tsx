@@ -16,19 +16,105 @@ import Ionicons from '@react-native-vector-icons/ionicons';
 import { user } from '../../store/userStore';
 
 import { useNavigation } from '@react-navigation/native';
-
-export default function ProfileScreen() {
+import { getMe } from '../../api/auth.api';
+import { updateUser } from '../../store/userStore';
+import { getWalletBalance } from '../../api/wallet.api';
+type ProfileScreenProps = {
+  onLogout?: () => void;
+};
+export default function ProfileScreen({ onLogout }: ProfileScreenProps) {
   const { t } = useTranslation();
   // ==========================
   // Quick Actions
   // ==========================
   const navigation = useNavigation<any>();
   const [profileUser, setProfileUser] = useState(user);
+  const [walletBalance, setWalletBalance] = useState(0);
+  const [loadingProfile, setLoadingProfile] = useState(false);
+  const loadProfile = async () => {
+    try {
+      setLoadingProfile(true);
+
+      console.log('===== PROFILE LOAD START =====');
+
+      const [profile, wallet] = await Promise.all([
+        getMe(),
+        getWalletBalance(),
+      ]);
+
+      console.log('===== PROFILE API RESPONSE =====');
+      console.log('Profile:', profile);
+      console.log('Name:', profile?.name);
+      console.log('Phone:', profile?.phoneNumber);
+      console.log('Email:', profile?.email);
+      console.log('Cars:', profile?.cars);
+      console.log('================================');
+
+      console.log('===== WALLET API RESPONSE =====');
+      console.log('Wallet:', wallet);
+      console.log('Wallet balance:', wallet?.balance);
+      console.log('Wallet data.balance:', wallet?.data?.balance);
+      console.log('Wallet wallet.balance:', wallet?.wallet?.balance);
+      console.log('================================');
+
+      // ==========================================
+      // UPDATE USER
+      // ==========================================
+
+      const currentUser = {
+        id: profile?._id || profile?.id || '',
+        name: profile?.name || '',
+        surname: profile?.surname || '',
+        email: profile?.email || '',
+        phone: profile?.phoneNumber || '',
+        phoneNumber: profile?.phoneNumber || '',
+        avatar: null,
+        cars: profile?.cars || [],
+      };
+
+      updateUser(currentUser);
+      setProfileUser(currentUser);
+
+      // ==========================================
+      // UPDATE WALLET
+      // ==========================================
+
+      let balance = 0;
+
+      if (typeof wallet?.balance === 'number') {
+        balance = wallet.balance / 100;
+      } else if (typeof wallet?.data?.balance === 'number') {
+        balance = wallet.data.balance / 100;
+      } else if (typeof wallet?.wallet?.balance === 'number') {
+        balance = wallet.wallet.balance / 100;
+      }
+
+      console.log('===== FINAL WALLET BALANCE =====');
+      console.log('Backend Balance:', wallet?.balance);
+      console.log('Display Balance:', balance);
+      console.log('================================');
+
+      setWalletBalance(balance);
+    } catch (error: any) {
+      console.log('===== PROFILE LOAD ERROR =====');
+      console.log('Message:', error?.message);
+      console.log('Response:', error?.response?.data);
+      console.log('Status:', error?.response?.status);
+      console.log('==============================');
+    } finally {
+      setLoadingProfile(false);
+    }
+  };
   useFocusEffect(
     useCallback(() => {
-      setProfileUser({ ...user });
+      loadProfile();
     }, []),
   );
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     loadProfile();
+  //   }, []),
+  // );
   const quickActions = [
     {
       key: 'favorite',
@@ -79,6 +165,19 @@ export default function ProfileScreen() {
     },
   ];
 
+  const handleLogout = () => {
+    console.log('===== LOGOUT BUTTON =====');
+    console.log('onLogout:', onLogout);
+    console.log('typeof onLogout:', typeof onLogout);
+
+    if (typeof onLogout !== 'function') {
+      console.error('ERROR: onLogout is not a function');
+      return;
+    }
+
+    onLogout();
+  };
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView
@@ -108,7 +207,7 @@ export default function ProfileScreen() {
             </Text>
 
             <Text style={styles.phone} numberOfLines={1}>
-              {profileUser.phone || '*****5441'}
+              {profileUser.phone || '-'}
             </Text>
           </View>
 
@@ -144,9 +243,10 @@ export default function ProfileScreen() {
 
           <View style={styles.accountStats}>
             {/* Balance */}
-
             <TouchableOpacity style={styles.accountItem}>
-              <Text style={styles.accountNumber}>0</Text>
+              <Text style={styles.accountNumber}>
+                {loadingProfile ? '...' : Number(walletBalance || 0).toFixed(2)}
+              </Text>
 
               <Text style={styles.accountLabel}>
                 {t('profile.availableBalance')}
@@ -156,7 +256,6 @@ export default function ProfileScreen() {
             <View style={styles.verticalDivider} />
 
             {/* Coupon */}
-
             <TouchableOpacity style={styles.accountItem}>
               <Text style={styles.accountNumber}>0</Text>
 
@@ -166,7 +265,6 @@ export default function ProfileScreen() {
             <View style={styles.verticalDivider} />
 
             {/* Vehicle */}
-
             <TouchableOpacity style={styles.accountItem}>
               <Text style={styles.accountNumber}>0</Text>
 
@@ -175,7 +273,6 @@ export default function ProfileScreen() {
           </View>
 
           {/* Charging Statistics */}
-
           <View style={styles.accountFooter}>
             <View style={styles.energyInfo}>
               <Ionicons name="flash" size={18} color="#00A651" />
@@ -296,7 +393,11 @@ export default function ProfileScreen() {
         LOGOUT
     ====================================================== */}
 
-        <TouchableOpacity style={styles.logoutButton} activeOpacity={0.7}>
+        <TouchableOpacity
+          style={styles.logoutButton}
+          activeOpacity={0.7}
+          onPress={handleLogout}
+        >
           <Ionicons name="log-out-outline" size={21} color="#DC2626" />
 
           <Text style={styles.logoutText}>{t('profile.logout')}</Text>

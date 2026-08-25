@@ -15,6 +15,11 @@ import LanguageScreen from '../screens/Profile/LanguageScreen';
 import ServiceScreen from '../screens/Profile/ServiceScreen/ServiceScreen';
 import FeedbackScreen from '../screens/Profile/ServiceScreen/FeedbackScreen';
 import OnlineServiceScreen from '../screens/Profile/ServiceScreen/OnlineServiceScreen';
+
+type ProfileNavigatorProps = {
+  onLogout: () => void;
+};
+
 export type ProfileStackParamList = {
   ProfileHome: undefined;
   PersonalInformation: undefined;
@@ -33,14 +38,16 @@ export type ProfileStackParamList = {
 
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
 
-export default function ProfileNavigator() {
+export default function ProfileNavigator({ onLogout }: ProfileNavigatorProps) {
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
       }}
     >
-      <Stack.Screen name="ProfileHome" component={ProfileScreen} />
+      <Stack.Screen name="ProfileHome">
+        {() => <ProfileScreen onLogout={onLogout} />}
+      </Stack.Screen>
 
       <Stack.Screen
         name="PersonalInformation"
@@ -61,10 +68,15 @@ export default function ProfileNavigator() {
         name="ChargingStations"
         component={ChargingStationsScreen}
       />
+
       <Stack.Screen name="About" component={AboutScreen} />
+
       <Stack.Screen name="Language" component={LanguageScreen} />
+
       <Stack.Screen name="Service" component={ServiceScreen} />
+
       <Stack.Screen name="Feedback" component={FeedbackScreen} />
+
       <Stack.Screen name="OnlineService" component={OnlineServiceScreen} />
     </Stack.Navigator>
   );

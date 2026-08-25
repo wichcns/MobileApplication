@@ -41,12 +41,12 @@ export default function StationMarker({
    * New Model:
    * Charger -> connectors -> status
    */
-  const availableCount = station.chargers.reduce(
+  const availableCount = (station.chargers ?? []).reduce(
     (sum, charger) =>
       sum +
-      charger.connectors.filter(connector => connector.status === 'AVAILABLE')
-        .length,
-
+      (charger.connectors ?? []).filter(
+        connector => connector.status === 'AVAILABLE',
+      ).length,
     0,
   );
 

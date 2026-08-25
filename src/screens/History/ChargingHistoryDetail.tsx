@@ -166,10 +166,13 @@ export default function ChargingHistoryDetail() {
 
           <Row
             label={t('chargingHistoryDetail.chargingFee')}
-            value={`฿${history.total}`}
+            value={`฿${history.total.toFixed(2)}`}
           />
 
-          <Row label={t('chargingHistoryDetail.serviceFee')} value="฿10" />
+          <Row
+            label={t('chargingHistoryDetail.serviceFee')}
+            value="-"
+          />
 
           <Row
             label={t('chargingHistoryDetail.vat')}

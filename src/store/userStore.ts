@@ -1,15 +1,14 @@
 import { User } from '../types/user';
 
 export let user: User = {
-  id: 'USER001',
-
-  name: 'SunPower User',
-
-  email: 'user@sunpower.com',
-
-  phone: '08X-XXX-XXXX',
-
+  id: '',
+  name: '',
+  surname: '',
+  email: '',
+  phone: '',
+  phoneNumber: '',
   avatar: null,
+  cars: [],
 };
 
 export function updateUser(data: Partial<User>) {
@@ -23,8 +22,11 @@ export function clearUser() {
   user = {
     id: '',
     name: '',
+    surname: '',
     email: '',
     phone: '',
+    phoneNumber: '',
     avatar: null,
+    cars: [],
   };
 }

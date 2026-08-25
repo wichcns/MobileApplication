@@ -1,67 +1,138 @@
+// ============================================================
+// PROMOTION TYPE
+// ============================================================
+
 export type Promotion = {
   id: string;
+
   merchant: string;
+
   title: string;
+
   description: string;
+
   discount: string;
+
   category: string;
+
   expiresAt: string;
+
   code: string;
 };
 
-export let promotions: Promotion[] = [
-  {
-    id: 'PROMO001',
-    merchant: 'SunPower EV',
-    title: 'Charge More, Pay Less',
-    description: 'Get 20% off your EV charging session.',
-    discount: '20% OFF',
-    category: 'EV Charging',
-    expiresAt: '31 Aug 2026',
-    code: 'EV20',
-  },
+// ============================================================
+// PROMOTION STATE
+// ============================================================
+//
+// IMPORTANT:
+//
+// Phase 1
+// ไม่ใช้ Mock Data
+//
+// ข้อมูลจะถูกโหลดจาก Backend/API
+//
+// ============================================================
 
-  {
-    id: 'PROMO002',
-    merchant: 'Green Hotel',
-    title: 'Hotel Guest Charging',
-    description: 'Save 100 THB when charging at selected locations.',
-    discount: '100 THB OFF',
-    category: 'Hotel',
-    expiresAt: '15 Sep 2026',
-    code: 'HOTEL100',
-  },
+export let promotions: Promotion[] = [];
 
-  {
-    id: 'PROMO003',
-    merchant: 'Coffee Corner',
-    title: 'Charge & Coffee',
-    description: 'Get 50 THB discount at participating coffee shops.',
-    discount: '50 THB OFF',
-    category: 'Restaurant',
-    expiresAt: '30 Sep 2026',
-    code: 'COFFEE50',
-  },
+// ============================================================
+// UPDATE PROMOTIONS
+// ============================================================
+//
+// ใช้สำหรับนำข้อมูล Promotion ที่ได้จาก Backend
+// มาเก็บไว้ใน Store
+//
+// ============================================================
 
-  {
-    id: 'PROMO004',
-    merchant: 'Travel Partner',
-    title: 'Weekend Charging',
-    description: 'Enjoy 15% off charging during your weekend trip.',
-    discount: '15% OFF',
-    category: 'Travel',
-    expiresAt: '30 Sep 2026',
-    code: 'TRAVEL15',
-  },
+export function setPromotions(data: Promotion[]) {
+  if (!Array.isArray(data)) {
+    console.log('Invalid promotions data');
 
-  {
-    id: 'PROMO005',
-    merchant: 'Lifestyle Mall',
-    title: 'EV Member Reward',
-    description: 'Special discount for SunPower EV members.',
-    discount: '80 THB OFF',
-    category: 'Lifestyle',
-    expiresAt: '31 Oct 2026',
-    code: 'EV80',
-  },
-];
+    promotions = [];
+
+    return;
+  }
+
+  promotions = data;
+}
+
+// ============================================================
+// GET ALL PROMOTIONS
+// ============================================================
+
+export function getPromotions(): Promotion[] {
+  return promotions;
+}
+
+// ============================================================
+// GET PROMOTION BY ID
+// ============================================================
+
+export function getPromotionById(promotionId: string): Promotion | undefined {
+  return promotions.find(promotion => promotion.id === promotionId);
+}
+
+// ============================================================
+// GET PROMOTIONS BY CATEGORY
+// ============================================================
+
+export function getPromotionsByCategory(category: string): Promotion[] {
+  return promotions.filter(promotion => promotion.category === category);
+}
+
+// ============================================================
+// GET PROMOTION BY CODE
+// ============================================================
+
+export function getPromotionByCode(code: string): Promotion | undefined {
+  return promotions.find(
+    promotion => promotion.code.toLowerCase() === code.toLowerCase(),
+  );
+}
+
+// ============================================================
+// CHECK PROMOTION EXPIRY
+// ============================================================
+//
+// ตรวจสอบว่า Promotion หมดอายุหรือยัง
+//
+// ============================================================
+
+export function isPromotionExpired(promotion: Promotion): boolean {
+  if (!promotion.expiresAt) {
+    return true;
+  }
+
+  const expiryDate = new Date(promotion.expiresAt);
+
+  if (Number.isNaN(expiryDate.getTime())) {
+    return true;
+  }
+
+  return expiryDate.getTime() < Date.now();
+}
+
+// ============================================================
+// GET ACTIVE PROMOTIONS
+// ============================================================
+//
+// คืนเฉพาะ Promotion ที่ยังไม่หมดอายุ
+//
+// ============================================================
+
+export function getActivePromotions(): Promotion[] {
+  return promotions.filter(promotion => !isPromotionExpired(promotion));
+}
+
+// ============================================================
+// CLEAR PROMOTIONS
+// ============================================================
+//
+// ใช้ตอน Logout
+// หรือเปลี่ยน User
+//
+// ============================================================
+
+export function clearPromotions() {
+  promotions = [];
+}

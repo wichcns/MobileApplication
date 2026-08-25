@@ -26,29 +26,34 @@ export default function StationCard({
       ? '#F59E0B'
       : '#DC2626';
 
-  const total = station.chargers.reduce(
-    (sum, charger) => sum + charger.connectors.length,
+  const chargers = station.chargers ?? [];
+
+  const total = chargers.reduce(
+    (sum, charger) => sum + (charger.connectors ?? []).length,
     0,
   );
 
-  const available = station.chargers.reduce((sum, charger) => {
-    return (
+  const available = chargers.reduce(
+    (sum, charger) =>
       sum +
-      charger.connectors.filter(connector => connector.status === 'AVAILABLE')
-        .length
-    );
-  }, 0);
+      (charger.connectors ?? []).filter(
+        connector => connector.status === 'AVAILABLE',
+      ).length,
+    0,
+  );
 
   return (
     <TouchableOpacity activeOpacity={0.85} onPress={() => onPress?.(station)}>
       <View style={[styles.card, selected && styles.selected]}>
-        {/* Header */}
-
         <View style={styles.header}>
-          <View>
-            <Text style={styles.name}>{station.name}</Text>
+          <View style={styles.nameContainer}>
+            <Text style={styles.name} numberOfLines={1}>
+              {station.name}
+            </Text>
 
-            <Text style={styles.address}>{station.address}</Text>
+            <Text style={styles.address} numberOfLines={2}>
+              {station.address ?? 'Address unavailable'}
+            </Text>
           </View>
 
           <View
@@ -65,34 +70,36 @@ export default function StationCard({
           </View>
         </View>
 
-        {/* Charger */}
-
         <View style={styles.info}>
           <Text style={styles.count}>
             ⚡ {available}/{total}
           </Text>
 
-          <Text style={styles.price}>{station.price} ฿/kWh</Text>
+          <Text style={styles.price}>
+            {station.price > 0 ? `${station.price} ฿/kWh` : 'Price unavailable'}
+          </Text>
         </View>
 
-        {/* Charger Type */}
+        {chargers.length > 0 && (
+          <View style={styles.chargerRow}>
+            {chargers.map(charger => {
+              const connectors = charger.connectors ?? [];
 
-        <View style={styles.chargerRow}>
-          {station.chargers.map(charger => {
-            const availableConnector = charger.connectors.filter(
-              c => c.status === 'AVAILABLE',
-            ).length;
+              const availableConnector = connectors.filter(
+                connector => connector.status === 'AVAILABLE',
+              ).length;
 
-            return (
-              <View key={charger.chargerId} style={styles.charger}>
-                <Text style={styles.chargerText}>
-                  {charger.chargerType} {availableConnector}/
-                  {charger.connectors.length}
-                </Text>
-              </View>
-            );
-          })}
-        </View>
+              return (
+                <View key={charger.chargerId} style={styles.charger}>
+                  <Text style={styles.chargerText}>
+                    {charger.chargerType} {availableConnector}/
+                    {connectors.length}
+                  </Text>
+                </View>
+              );
+            })}
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -124,6 +131,7 @@ const styles = StyleSheet.create({
 
   selected: {
     borderWidth: 2,
+
     borderColor: '#16A34A',
   },
 
@@ -133,6 +141,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
 
     alignItems: 'center',
+  },
+
+  nameContainer: {
+    flex: 1,
+
+    marginRight: 10,
   },
 
   name: {
@@ -201,6 +215,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
 
     marginTop: 12,
+
+    flexWrap: 'wrap',
   },
 
   charger: {
@@ -213,6 +229,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
 
     marginRight: 8,
+
+    marginBottom: 6,
   },
 
   chargerText: {

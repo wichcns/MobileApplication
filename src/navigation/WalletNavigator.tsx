@@ -15,6 +15,7 @@ import QRPaymentScreen from '../screens/Wallet/TopUp/QRPaymentScreen';
 import PaymentProcessingScreen from '../screens/Wallet/TopUp/PaymentProcessingScreen';
 
 import PaymentSuccessScreen from '../screens/Wallet/TopUp/PaymentSuccessScreen';
+import CreditCardTopUpScreen from '../screens/Wallet/TopUp/CreditCardTopUpScreen';
 
 import TransactionHistoryScreen from '../screens/Wallet/Transaction/TransactionHistoryScreen';
 import TransactionDetailScreen from '../screens/Wallet/Transaction/TransactionDetailScreen';
@@ -45,6 +46,8 @@ export default function WalletNavigator() {
       />
 
       <Stack.Screen name="PaymentSuccess" component={PaymentSuccessScreen} />
+
+      <Stack.Screen name="CreditCardTopUp" component={CreditCardTopUpScreen} />
 
       <Stack.Screen
         name="TransactionHistory"

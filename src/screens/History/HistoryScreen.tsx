@@ -1,28 +1,71 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import {
   FlatList,
+  ActivityIndicator,
+  RefreshControl,
   SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
+  View,
 } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import HistoryCard from './Components/HistoryCard';
 
-import { mockHistory } from '../../data/mockHistory';
+import apiClient from '../../api/client';
+import { ChargingHistory } from '../../types/history';
 
 type HistoryStackParamList = {
   HistoryHome: undefined;
 
   ChargingHistoryDetail: {
     history: any;
+  };
+};
+
+const asNumber = (value: unknown) => Number(value ?? 0) || 0;
+
+const formatDate = (value: unknown) => {
+  if (!value) return '-';
+  const date = new Date(String(value));
+  if (Number.isNaN(date.getTime())) return '-';
+  return date.toLocaleString('th-TH', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+};
+
+const mapChargingHistory = (session: any): ChargingHistory => {
+  const connector = session?.connector ?? {};
+  const chargingPoint = connector?.chargingPoint ?? {};
+  const station = chargingPoint?.station ?? {};
+
+  return {
+    id: String(session?.id ?? ''),
+    stationName: station?.name ?? 'ไม่ระบุสถานี',
+    chargerName:
+      chargingPoint?.name ?? chargingPoint?.serialNumber ?? 'ไม่ระบุเครื่องชาร์จ',
+    connectorType:
+      connector?.connectorType?.name ??
+      connector?.connectorType?.key ??
+      connector?.name ??
+      String(connector?.connectorId ?? '-'),
+    energy: asNumber(session?.totalEnergy),
+    duration: Math.round(asNumber(session?.totalChargingDuration) / 60000),
+    total: asNumber(session?.grandTotalFee),
+    status: session?.status ?? 'UNKNOWN',
+    startTime: formatDate(session?.checkedInAt ?? session?.createdAt),
+    endTime: formatDate(session?.checkedOutAt ?? session?.completedAt),
   };
 };
 
@@ -33,16 +76,66 @@ export default function HistoryScreen() {
     useNavigation<NativeStackNavigationProp<HistoryStackParamList>>();
 
   const [search, setSearch] = useState('');
+  const [history, setHistory] = useState<ChargingHistory[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const history = useMemo(() => {
+  const loadHistory = useCallback(async (isRefresh = false) => {
+    if (isRefresh) setRefreshing(true);
+    else setLoading(true);
+
+    try {
+      console.log('[History] Loading charging history');
+      const response = await apiClient.get('/charging-sessions/histories', {
+        params: { _sort: 'checkedInAt:DESC' },
+      });
+      const sessions = Array.isArray(response.data)
+        ? response.data
+        : response.data?.data ?? [];
+      setHistory(
+        sessions
+          .map(mapChargingHistory)
+          .filter((item: ChargingHistory) => item.id),
+      );
+      setError(null);
+      console.log('[History] Charging history loaded', { count: sessions.length });
+    } catch (requestError: any) {
+      const message =
+        requestError?.response?.data?.message ??
+        requestError?.response?.data?.error?.message ??
+        requestError?.message ??
+        'ไม่สามารถโหลดประวัติการชาร์จได้';
+      console.log('[History] Charging history load failed', {
+        status: requestError?.response?.status,
+        message,
+      });
+      setError(message);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadHistory();
+    }, [loadHistory]),
+  );
+
+  const filteredHistory = useMemo(() => {
     if (!search.trim()) {
-      return mockHistory;
+      return history;
     }
 
-    return mockHistory.filter(item =>
-      item.stationName.toLowerCase().includes(search.toLowerCase()),
+    const query = search.trim().toLowerCase();
+    return history.filter(item =>
+      [item.stationName, item.chargerName, item.connectorType]
+        .join(' ')
+        .toLowerCase()
+        .includes(query),
     );
-  }, [search]);
+  }, [search, history]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -69,10 +162,34 @@ export default function HistoryScreen() {
       ====================================================== */}
 
       <FlatList
-        data={history}
+        data={filteredHistory}
         keyExtractor={item => item.id}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.list}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => loadHistory(true)}
+            colors={['#00A651']}
+          />
+        }
+        ListEmptyComponent={
+          loading ? (
+            <View style={styles.emptyState}>
+              <ActivityIndicator size="large" color="#00A651" />
+              <Text style={styles.emptyText}>กำลังโหลดประวัติการชาร์จ...</Text>
+            </View>
+          ) : (
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyTitle}>
+                {error ? 'ไม่สามารถโหลดประวัติได้' : 'ยังไม่มีประวัติการชาร์จ'}
+              </Text>
+              <Text style={styles.emptyText}>
+                {error ?? 'เมื่อชาร์จและชำระเงินเสร็จ รายการจะแสดงที่นี่'}
+              </Text>
+            </View>
+          )
+        }
         renderItem={({ item }) => (
           <HistoryCard
             item={item}
@@ -135,5 +252,26 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
 
     paddingBottom: 30,
+  },
+
+  emptyState: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 32,
+    paddingTop: 72,
+  },
+
+  emptyTitle: {
+    color: '#111827',
+    fontSize: 17,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+
+  emptyText: {
+    color: '#64748B',
+    fontSize: 14,
+    marginTop: 10,
+    textAlign: 'center',
   },
 });

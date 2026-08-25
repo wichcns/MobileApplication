@@ -8,6 +8,7 @@ import {
   ScrollView,
   StyleSheet,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -16,10 +17,7 @@ import Ionicons from '@react-native-vector-icons/ionicons';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-import {
-  updateTaxInvoice,
-  submitTaxInvoice,
-} from '../../store/taxInvoiceStore';
+import apiClient from '../../api/client';
 
 export default function TaxInvoiceRequest() {
   const { t } = useTranslation();
@@ -46,8 +44,9 @@ export default function TaxInvoiceRequest() {
   const [phone, setPhone] = useState('');
 
   const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (
       !companyName ||
       !taxId ||
@@ -64,31 +63,55 @@ export default function TaxInvoiceRequest() {
       return;
     }
 
-    updateTaxInvoice({
-      companyName,
+    if (!history?.id) {
+      Alert.alert('Error', 'Charging session information is unavailable.');
+      return;
+    }
 
-      taxId,
+    try {
+      setIsSubmitting(true);
+      const billingPayload = {
+        name: companyName.trim(),
+        taxId: taxId.trim(),
+        phoneNumber: phone.trim(),
+        email: email.trim(),
+        address: {
+          address: address.trim(),
+          province: province.trim(),
+          district: district.trim(),
+          subDistrict: subDistrict.trim(),
+          postalCode: postalCode.trim(),
+        },
+      };
+      const billingResponse = await apiClient.get('/billing-informations/me');
+      const existingBillingInformation = Array.isArray(billingResponse.data)
+        ? billingResponse.data[0]
+        : null;
 
-      address,
+      if (existingBillingInformation?.id) {
+        await apiClient.put(
+          `/billing-informations/${existingBillingInformation.id}`,
+          billingPayload,
+        );
+      } else {
+        await apiClient.post('/billing-informations', billingPayload);
+      }
 
-      province,
-
-      district,
-
-      subDistrict,
-
-      postalCode,
-
-      phone,
-
-      email,
-    });
-
-    submitTaxInvoice();
-
-    Alert.alert('Success', 'Tax invoice request submitted.');
-
-    navigation.goBack();
+      await apiClient.post(`/charging-sessions/${history.id}/generate-invoice`, {
+        email: email.trim(),
+      });
+      Alert.alert('Success', 'Your tax invoice has been sent to your email.', [
+        { text: 'OK', onPress: () => navigation.goBack() },
+      ]);
+    } catch (error: any) {
+      console.log('[TaxInvoice] Request failed', {
+        status: error?.response?.status,
+        message: error?.response?.data?.message || error?.message,
+      });
+      Alert.alert('Error', 'Unable to request a tax invoice. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const Input = ({
@@ -277,10 +300,19 @@ export default function TaxInvoiceRequest() {
 
         {/* SUBMIT */}
 
-        <TouchableOpacity style={styles.button} onPress={onSubmit}>
-          <Ionicons name="paper-plane" size={18} color="#FFFFFF" />
-
-          <Text style={styles.buttonText}>{t('taxInvoice.submitRequest')}</Text>
+        <TouchableOpacity
+          style={[styles.button, isSubmitting && styles.buttonDisabled]}
+          onPress={onSubmit}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <ActivityIndicator color="#FFFFFF" />
+          ) : (
+            <>
+              <Ionicons name="paper-plane" size={18} color="#FFFFFF" />
+              <Text style={styles.buttonText}>{t('taxInvoice.submitRequest')}</Text>
+            </>
+          )}
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -437,5 +469,9 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 17,
     fontWeight: '800',
+  },
+
+  buttonDisabled: {
+    opacity: 0.65,
   },
 });

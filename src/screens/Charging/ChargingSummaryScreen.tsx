@@ -1,21 +1,82 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 
 import { chargingSession } from '../../store/chargingStore';
+import { getChargingSessionSummary } from '../../services/charging/chargingSessionApi';
+import { checkOutChargingSessionOnServer } from '../../services/charging/chargingSessionApi';
 
 export default function ChargingSummaryScreen() {
-  const navigation = useNavigation<any>();
+  const route = useRoute<any>();
 
   const { t } = useTranslation();
+  const sessionId = route.params?.sessionId ?? chargingSession.sessionId;
+  const [isLoading, setIsLoading] = useState(Boolean(sessionId));
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+
+  const refreshSummary = useCallback(async () => {
+    if (!sessionId) {
+      setLoadError('ไม่พบข้อมูลการชาร์จ');
+      setIsLoading(false);
+      return;
+    }
+    try {
+      await getChargingSessionSummary(sessionId);
+      setLoadError(null);
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.message ?? error?.message ?? 'Unable to load summary';
+      console.log('[Charging] Summary request failed', {
+        sessionId,
+        status: error?.response?.status,
+        message,
+      });
+      setLoadError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [sessionId]);
+
+  useEffect(() => {
+    refreshSummary();
+  }, [refreshSummary]);
+
+  const handleCheckOut = async () => {
+    if (!sessionId || isCheckingOut) return;
+    setIsCheckingOut(true);
+    try {
+      const result = await checkOutChargingSessionOnServer(sessionId);
+      Alert.alert(
+        result?.status === 'COMPLETED' ? 'ชำระเงินสำเร็จ' : 'ดำเนินการสำเร็จ',
+        result?.status === 'COMPLETED'
+          ? 'ระบบตัดชำระเงินตามวิธีที่เลือกไว้แล้ว'
+          : 'ระบบกำลังประมวลผลการชำระเงิน',
+      );
+      await refreshSummary();
+    } catch (error: any) {
+      const message = error?.response?.data?.message ?? error?.message;
+      Alert.alert('ยังไม่สามารถชำระเงินได้', message ?? 'กรุณาถอดหัวชาร์จออกก่อน');
+    } finally { setIsCheckingOut(false); }
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>⚡ {t('chargingSummary.title')}</Text>
+
+      {isLoading && <ActivityIndicator size="small" color="#16A34A" />}
+      {loadError && <Text style={styles.errorText}>{loadError}</Text>}
 
       <View style={styles.card}>
         <Text style={styles.complete}>
@@ -44,6 +105,14 @@ export default function ChargingSummaryScreen() {
           <Text style={styles.label}>{t('chargingSummary.energyUsed')}</Text>
 
           <Text style={styles.value}>{chargingSession.energy} kWh</Text>
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.label}>{t('chargingSummary.pricePerKwh')}</Text>
+
+          <Text style={styles.value}>
+            {chargingSession.pricePerKwh.toFixed(2)} THB/kWh
+          </Text>
         </View>
 
         <View style={styles.row}>
@@ -81,14 +150,11 @@ export default function ChargingSummaryScreen() {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => {
-          navigation.navigate('Payment', {
-            sessionId: chargingSession.sessionId,
-          });
-        }}
+        onPress={handleCheckOut}
+        disabled={isCheckingOut || !sessionId}
       >
         <Text style={styles.buttonText}>
-          {t('chargingSummary.proceedPayment')}
+          {isCheckingOut ? 'กำลังชำระเงิน...' : 'ถอดหัวชาร์จแล้ว และชำระเงิน'}
         </Text>
       </TouchableOpacity>
     </View>
@@ -214,5 +280,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
 
     fontWeight: '800',
+  },
+
+  errorText: {
+    color: '#DC2626',
+    marginBottom: 12,
+    textAlign: 'center',
   },
 });

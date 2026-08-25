@@ -1,5 +1,12 @@
 const zh = {
   translation: {
+    bottomTab: {
+      home: '首页',
+      wallet: '钱包',
+      qr: '二维码',
+      history: '历史',
+      profile: '个人资料',
+    },
     common: {
       back: '返回',
       save: '保存',
@@ -150,7 +157,10 @@ const zh = {
 
       personalInformation: '个人信息',
 
-      fullName: '姓名',
+      firstName: '名',
+
+      lastName: '姓',
+
 
       emailAddress: '电子邮箱',
 
@@ -342,7 +352,7 @@ const zh = {
       serviceFee: '服务费',
       vat: '增值税 7%',
       total: '总计',
-
+      pricePerKwh: '每千瓦时充电价格',
       proceedPayment: '继续支付',
     },
 
@@ -394,6 +404,7 @@ const zh = {
       noCouponsAvailable: '暂无可用优惠券',
 
       collectPromotion: '请先领取优惠活动，然后在支付时使用优惠券。',
+      creditCardNotAvailable:'目前暫不支援信用卡付款。',
     },
 
     receipt: {

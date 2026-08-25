@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { updateMe } from '../../api/auth.api';
 import {
   SafeAreaView,
   ScrollView,
@@ -25,6 +26,7 @@ export default function PersonalInformationScreen() {
   const navigation = useNavigation<any>();
 
   const [name, setName] = useState(user.name ?? '');
+  const [surname, setSurname] = useState(user.surname ?? '');
   const [email, setEmail] = useState(user.email ?? '');
   const [phone, setPhone] = useState(user.phone ?? '');
   const [avatar, setAvatar] = useState<string | null>(user.avatar ?? null);
@@ -55,13 +57,20 @@ export default function PersonalInformationScreen() {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!name.trim()) {
       Alert.alert(
         t('personalInformation.incompleteInformation'),
         t('personalInformation.enterName'),
       );
+      return;
+    }
 
+    if (!surname.trim()) {
+      Alert.alert(
+        t('personalInformation.incompleteInformation'),
+        t('personalInformation.enterLastName'),
+      );
       return;
     }
 
@@ -70,7 +79,6 @@ export default function PersonalInformationScreen() {
         t('personalInformation.incompleteInformation'),
         t('personalInformation.enterEmail'),
       );
-
       return;
     }
 
@@ -79,23 +87,44 @@ export default function PersonalInformationScreen() {
         t('personalInformation.incompleteInformation'),
         t('personalInformation.enterPhone'),
       );
-
       return;
     }
 
-    updateUser({
-      name: name.trim(),
-      email: email.trim(),
-      phone: phone.trim(),
-      avatar,
-    });
+    try {
+      const updatedUser = await updateMe({
+        name: name.trim(),
+        surname: surname.trim(),
+        email: email.trim(),
+        phoneNumber: phone.trim(),
+      });
 
-    Alert.alert(t('common.success'), t('personalInformation.updated'), [
-      {
-        text: t('common.ok'),
-        onPress: () => navigation.goBack(),
-      },
-    ]);
+      updateUser({
+        name: updatedUser?.name ?? name.trim(),
+        surname: updatedUser?.surname ?? surname.trim(),
+        email: updatedUser?.email ?? email.trim(),
+        phone: updatedUser?.phoneNumber ?? phone.trim(),
+        phoneNumber: updatedUser?.phoneNumber ?? phone.trim(),
+        avatar,
+      });
+
+      Alert.alert(t('common.success'), t('personalInformation.updated'), [
+        {
+          text: t('common.success'),
+          onPress: () => navigation.goBack(),
+        },
+      ]);
+    } catch (error: any) {
+      console.log('===== UPDATE PROFILE ERROR =====');
+      console.log('Message:', error?.message);
+      console.log('Response:', error?.response?.data);
+      console.log('Status:', error?.response?.status);
+      console.log('================================');
+
+      Alert.alert(
+        t('common.error'),
+        error?.response?.data?.message || t('personalInformation.updateFailed'),
+      );
+    }
   };
 
   const Input = ({
@@ -198,9 +227,15 @@ export default function PersonalInformationScreen() {
           </View>
 
           <Input
-            label={t('personalInformation.fullName')}
+            label={t('personalInformation.firstName')}
             value={name}
             onChangeText={setName}
+          />
+
+          <Input
+            label={t('personalInformation.lastName')}
+            value={surname}
+            onChangeText={setSurname}
           />
 
           <Input

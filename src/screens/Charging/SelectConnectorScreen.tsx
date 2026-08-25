@@ -26,8 +26,9 @@ export default function SelectConnectorScreen() {
     connector: Connector;
   } | null>(null);
 
-  const { station } = route.params as {
+  const { station, verification } = route.params as {
     station: Station;
+    verification?: { qrCodePayload?: string; accessCode?: string };
   };
 
   const handleSelectConnector = (charger: Charger, connector: Connector) => {
@@ -64,12 +65,13 @@ export default function SelectConnectorScreen() {
             return;
           }
 
-          navigation.navigate('QRScanner', {
+          // After the connector is selected, show the real preparation step
+          // before asking the user to check in and start a session.
+          navigation.navigate('ReadyToCharge', {
             station,
-
             charger: selectedConnector.charger,
-
             connector: selectedConnector.connector,
+            verification,
           });
         }}
         style={[styles.button, !selectedConnector && styles.disabled]}

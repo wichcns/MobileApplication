@@ -43,6 +43,7 @@ export interface ChargingSession {
 
   total: number;
 
+  pricePerKwh: number;
   // เพิ่มใหม่
 
   paymentMethod?: string;

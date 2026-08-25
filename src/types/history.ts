@@ -15,6 +15,10 @@ export interface ChargingHistory {
 
   status: string;
 
+  startTime?: string;
+
+  endTime?: string;
+
   // Receipt
 
   receiptNumber?: string;

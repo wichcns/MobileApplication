@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import {
   SafeAreaView,
+  Alert,
+  ActivityIndicator,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -13,6 +15,7 @@ import {
 } from 'react-native';
 
 import Ionicons from '@react-native-vector-icons/ionicons';
+import apiClient from '../../../api/client';
 
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
@@ -39,6 +42,7 @@ export default function FeedbackScreen({ navigation }: Props) {
   const [rating, setRating] = useState(0);
   const [selectedTopic, setSelectedTopic] = useState('');
   const [comment, setComment] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const feedbackTopics = [
     {
@@ -82,6 +86,36 @@ export default function FeedbackScreen({ navigation }: Props) {
 
       default:
         return t('feedback.noRatingSelected');
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!rating || !selectedTopic || isSubmitting) {
+      return;
+    }
+
+    // Backend รองรับฟิลด์ message เพียงฟิลด์เดียว จึงเก็บรายละเอียด
+    // ของหัวข้อและคะแนนไว้ในข้อความเดียวกันเพื่อไม่ให้ข้อมูลสูญหาย
+    const message = [
+      `Rating: ${rating}/5`,
+      `Topic: ${selectedTopic}`,
+      comment.trim() || 'No additional comment',
+    ].join('\n');
+
+    try {
+      setIsSubmitting(true);
+      await apiClient.post('/feedbacks/me', { message });
+      Alert.alert(t('common.success'), t('feedback.thankYou'), [
+        { text: 'OK', onPress: () => navigation.goBack() },
+      ]);
+    } catch (error: any) {
+      console.log('[Feedback] Submit failed', {
+        status: error?.response?.status,
+        message: error?.response?.data?.message || error?.message,
+      });
+      Alert.alert(t('common.error'), 'Unable to submit feedback. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -229,16 +263,19 @@ export default function FeedbackScreen({ navigation }: Props) {
           activeOpacity={0.8}
           style={[
             styles.submitButton,
-            (!rating || !selectedTopic) && styles.submitButtonDisabled,
+            (!rating || !selectedTopic || isSubmitting) && styles.submitButtonDisabled,
           ]}
-          disabled={!rating || !selectedTopic}
-          onPress={() => {
-            // TODO: Submit Feedback
-          }}
+          disabled={!rating || !selectedTopic || isSubmitting}
+          onPress={handleSubmit}
         >
-          <Ionicons name="send-outline" size={20} color="#FFFFFF" />
-
-          <Text style={styles.submitText}>{t('feedback.submitFeedback')}</Text>
+          {isSubmitting ? (
+            <ActivityIndicator color="#FFFFFF" />
+          ) : (
+            <>
+              <Ionicons name="send-outline" size={20} color="#FFFFFF" />
+              <Text style={styles.submitText}>{t('feedback.submitFeedback')}</Text>
+            </>
+          )}
         </TouchableOpacity>
 
         <Text style={styles.footerText}>{t('feedback.thankYou')}</Text>
