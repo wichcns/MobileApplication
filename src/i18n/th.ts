@@ -18,6 +18,36 @@ const th = {
       success: 'สำเร็จ',
       error: 'เกิดข้อผิดพลาด',
     },
+    register: {
+      title: 'สร้างบัญชีผู้ใช้',
+      subtitle: 'สมัครสมาชิกเพื่อเริ่มชาร์จกับ GSB EV',
+      emailTitle: 'กรอกอีเมลของคุณ',
+      emailSubtitle: 'เราจะตรวจสอบว่าอีเมลนี้สามารถใช้สมัครได้หรือไม่',
+      email: 'อีเมล',
+      checkEmail: 'ดำเนินการต่อ',
+      changeEmail: 'เปลี่ยนอีเมล',
+      detailsTitle: 'กรอกรายละเอียดของคุณ',
+      firstName: 'ชื่อ',
+      lastName: 'นามสกุล',
+      phoneNumber: 'เบอร์โทรศัพท์',
+      password: 'รหัสผ่าน',
+      confirmPassword: 'ยืนยันรหัสผ่าน',
+      termsPrefix: 'ฉันยอมรับ',
+      termsLink: 'ข้อกำหนดในการใช้บริการ',
+      createAccount: 'สร้างบัญชี',
+      google: 'ดำเนินการต่อด้วย Google',
+      alreadyHaveAccount: 'มีบัญชีอยู่แล้ว?',
+      login: 'เข้าสู่ระบบ',
+      emailRequired: 'กรุณากรอกอีเมล',
+      emailInvalid: 'กรุณากรอกอีเมลให้ถูกต้อง',
+      emailExists: 'อีเมลนี้สมัครไว้แล้ว กรุณาเข้าสู่ระบบ',
+      emailCheckFailed: 'ไม่สามารถตรวจสอบอีเมลได้ กรุณาลองใหม่',
+      detailsRequired: 'กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน',
+      passwordLength: 'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร',
+      passwordMismatch: 'รหัสผ่านไม่ตรงกัน',
+      termsRequired: 'กรุณายอมรับข้อกำหนดในการใช้บริการ',
+      registerFailed: 'ไม่สามารถสร้างบัญชีได้ กรุณาลองใหม่',
+    },
 
     selectBank: {
       title: 'เลือกธนาคาร',
@@ -407,7 +437,8 @@ const th = {
       noCouponsAvailable: 'ไม่มีคูปองที่สามารถใช้งานได้',
 
       collectPromotion: 'รับโปรโมชั่นก่อนเพื่อใช้คูปองในการชำระเงิน',
-      creditCardNotAvailable: 'การชำระด้วยบัตรเครดิตยังไม่พร้อมให้บริการในขณะนี้',
+      creditCardNotAvailable:
+        'การชำระด้วยบัตรเครดิตยังไม่พร้อมให้บริการในขณะนี้',
     },
 
     receipt: {

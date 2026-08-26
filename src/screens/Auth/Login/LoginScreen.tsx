@@ -27,7 +27,7 @@ type LoginScreenProps = {
 const LoginScreen = ({ onLogin }: LoginScreenProps) => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  // const navigation = useNavigation<any>();
+  const navigation = useNavigation<any>();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -255,10 +255,7 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
   };
 
   const handleRegister = () => {
-    console.log('REGISTER');
-
-    // TODO:
-    // navigation ไปหน้า Register
+    navigation.navigate('Register');
   };
 
   const handleForgotPassword = () => {

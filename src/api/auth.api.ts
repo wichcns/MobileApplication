@@ -29,6 +29,25 @@ export const login = async (payload: any) => {
   }
 };
 
+export const register = async (payload: {
+  email: string;
+  password: string;
+  name: string;
+  surname: string;
+  phoneNumber: string;
+  role: 'individual';
+}) => {
+  const response = await apiClient.post('/auth/local/register', payload);
+  return response.data;
+};
+
+export const isEmailAvailable = async (email: string): Promise<boolean> => {
+  const response = await apiClient.get('/auth/is-email-available', {
+    params: { email: email.trim().toLowerCase() },
+  });
+  return response.data?.isAvailable === true;
+};
+
 export const getMe = async () => {
   try {
     const response = await apiClient.get('/users/me');

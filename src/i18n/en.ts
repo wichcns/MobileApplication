@@ -21,6 +21,36 @@ const en = {
       success: 'Success',
       error: 'Error',
     },
+    register: {
+      title: 'Create Account',
+      subtitle: 'Register to start charging with GSB EV',
+      emailTitle: 'Enter your email',
+      emailSubtitle: 'We will check whether this email can be used.',
+      email: 'Email',
+      checkEmail: 'Continue',
+      changeEmail: 'Change email',
+      detailsTitle: 'Complete your details',
+      firstName: 'First Name',
+      lastName: 'Last Name',
+      phoneNumber: 'Phone Number',
+      password: 'Password',
+      confirmPassword: 'Confirm Password',
+      termsPrefix: 'I accept the',
+      termsLink: 'Terms of Service',
+      createAccount: 'Create Account',
+      google: 'Continue with Google',
+      alreadyHaveAccount: 'Already have an account?',
+      login: 'Login',
+      emailRequired: 'Please enter your email address.',
+      emailInvalid: 'Please enter a valid email address.',
+      emailExists: 'This email is already registered. Please sign in instead.',
+      emailCheckFailed: 'Unable to check this email. Please try again.',
+      detailsRequired: 'Please complete all required information.',
+      passwordLength: 'Password must contain at least 8 characters.',
+      passwordMismatch: 'Passwords do not match.',
+      termsRequired: 'Please accept the Terms of Service.',
+      registerFailed: 'Unable to create your account. Please try again.',
+    },
 
     selectBank: {
       title: 'Select Bank',
@@ -414,7 +444,8 @@ const en = {
 
       collectPromotion:
         'Collect a promotion first to use a coupon during payment.',
-      creditCardNotAvailable: 'Credit card payment is not available at this time.',
+      creditCardNotAvailable:
+        'Credit card payment is not available at this time.',
     },
 
     receipt: {

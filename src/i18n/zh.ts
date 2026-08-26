@@ -18,6 +18,36 @@ const zh = {
       success: '成功',
       error: '发生错误',
     },
+    register: {
+      title: '创建账户',
+      subtitle: '注册后即可使用 GSB EV 充电服务',
+      emailTitle: '输入您的电子邮箱',
+      emailSubtitle: '我们将检查该邮箱是否可以注册。',
+      email: '电子邮箱',
+      checkEmail: '继续',
+      changeEmail: '更改邮箱',
+      detailsTitle: '填写您的资料',
+      firstName: '名字',
+      lastName: '姓氏',
+      phoneNumber: '电话号码',
+      password: '密码',
+      confirmPassword: '确认密码',
+      termsPrefix: '我接受',
+      termsLink: '服务条款',
+      createAccount: '创建账户',
+      google: '使用 Google 继续',
+      alreadyHaveAccount: '已有账户？',
+      login: '登录',
+      emailRequired: '请输入电子邮箱。',
+      emailInvalid: '请输入有效的电子邮箱。',
+      emailExists: '该邮箱已注册，请直接登录。',
+      emailCheckFailed: '无法检查该邮箱，请重试。',
+      detailsRequired: '请填写所有必填信息。',
+      passwordLength: '密码至少需要 8 个字符。',
+      passwordMismatch: '两次输入的密码不一致。',
+      termsRequired: '请接受服务条款。',
+      registerFailed: '无法创建账户，请重试。',
+    },
     selectBank: {
       title: '选择银行',
       topUpAmount: '充值金额',
@@ -160,7 +190,6 @@ const zh = {
       firstName: '名',
 
       lastName: '姓',
-
 
       emailAddress: '电子邮箱',
 
@@ -404,7 +433,7 @@ const zh = {
       noCouponsAvailable: '暂无可用优惠券',
 
       collectPromotion: '请先领取优惠活动，然后在支付时使用优惠券。',
-      creditCardNotAvailable:'目前暫不支援信用卡付款。',
+      creditCardNotAvailable: '目前暫不支援信用卡付款。',
     },
 
     receipt: {
