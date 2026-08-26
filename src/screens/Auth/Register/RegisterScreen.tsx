@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   ActivityIndicator,
+  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -16,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { googleLogin, isEmailAvailable, register } from '../../../api/auth.api';
 import { saveJwt, saveUser } from '../../../storage/authStorage';
+import { Images } from '../../../assets';
 
 type Props = { onLogin: () => void };
 
@@ -296,7 +298,11 @@ export default function RegisterScreen({ onLogin }: Props) {
           onPress={registerWithGoogle}
           disabled={isSubmitting}
         >
-          <Ionicons name="logo-google" size={20} color="#4285F4" />
+          <Image
+            source={Images.Google}
+            style={styles.googleIcon}
+            resizeMode="contain"
+          />
           <Text style={styles.googleText}>{t('register.google')}</Text>
         </TouchableOpacity>
         <View style={styles.loginRow}>
@@ -386,6 +392,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   googleText: { marginLeft: 9, color: '#111827', fontWeight: '700' },
+  googleIcon: { width: 20, height: 20 },
   loginRow: { marginTop: 22, flexDirection: 'row', justifyContent: 'center' },
   loginText: { color: '#64748B' },
   loginLink: { color: '#00A651', fontWeight: '800' },
