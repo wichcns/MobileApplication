@@ -33,7 +33,7 @@ export default function StationDetailSheet({
   const { t } = useTranslation();
   const navigation = useNavigation<any>();
 
-  const { chargers, setChargers, setSelectedCharger, setSelectedConnector } =
+  const { setChargers, setSelectedCharger, setSelectedConnector } =
     useChargerStore();
 
   useEffect(() => {
@@ -45,6 +45,8 @@ export default function StationDetailSheet({
   if (!station) {
     return null;
   }
+
+  const chargers = station.chargers ?? [];
   const total = chargers.reduce(
     (sum, charger) => sum + charger.connectors.length,
 
@@ -66,30 +68,29 @@ export default function StationDetailSheet({
     Linking.openURL(url);
   };
 
+  const availableSelections = chargers
+    .flatMap(charger =>
+      charger.connectors
+        .filter(connector => connector.status === 'AVAILABLE')
+        .map(connector => ({ charger, connector })),
+    );
+
+  const firstAvailableSelection = availableSelections[0];
+
   const handleStartCharging = () => {
-    const charger = station.chargers[0];
+    if (!firstAvailableSelection) {
+      return;
+    }
 
-    const connector = charger.connectors[0];
+    const { charger, connector } = firstAvailableSelection;
 
-    navigation.navigate('QRScanner', {
-      station: {
-        id: station.id,
-        name: station.name,
-      },
+    setSelectedCharger(charger);
+    setSelectedConnector(connector);
 
-      charger: {
-        chargerId: charger.chargerId,
-        chargerName: charger.chargerName,
-        chargerType: charger.chargerType,
-        maxPower: charger.maxPower,
-        price: station.price,
-      },
-
-      connector: {
-        connectorId: connector.connectorId,
-        label: connector.label,
-        type: connector.type,
-      },
+    navigation.navigate('ReadyToCharge', {
+      station,
+      charger,
+      connector,
     });
   };
 
@@ -331,7 +332,7 @@ export default function StationDetailSheet({
                       adjustsFontSizeToFit
                     >
                       {chargingCount > 0
-                        ? `${chargingCount} Charging`
+                        ? t('station.chargingCount', { count: chargingCount })
                         : availableCount > 0
                         ? t('station.available')
                         : t('station.unavailable')}
@@ -449,7 +450,7 @@ export default function StationDetailSheet({
                                 <Text style={styles.batteryText}>
                                   {batteryPercentage != null
                                     ? `${batteryPercentage}%`
-                                    : 'Charging'}
+                                    : t('station.charging')}
                                 </Text>
                               </View>
                             )}
@@ -485,8 +486,10 @@ export default function StationDetailSheet({
                               ? t('station.available')
                               : isCharging
                               ? batteryPercentage != null
-                                ? `Charging ${batteryPercentage}%`
-                                : 'Charging'
+                                ? t('station.chargingWithPercentage', {
+                                    percentage: batteryPercentage,
+                                  })
+                                : t('station.charging')
                               : t('station.unavailable')}
                           </Text>
                         </View>
@@ -510,13 +513,30 @@ export default function StationDetailSheet({
 
       <View style={styles.bottomBar}>
         <TouchableOpacity
-          style={styles.startButton}
+          style={[
+            styles.startButton,
+            !firstAvailableSelection && styles.startButtonDisabled,
+          ]}
           onPress={handleStartCharging}
+          disabled={!firstAvailableSelection}
           activeOpacity={0.8}
         >
-          <Ionicons name="scan-outline" size={20} color="#111827" />
+          <Ionicons
+            name="scan-outline"
+            size={20}
+            color={firstAvailableSelection ? '#111827' : '#94A3B8'}
+          />
 
-          <Text style={styles.startText}>{t('station.startCharging')}</Text>
+          <Text
+            style={[
+              styles.startText,
+              !firstAvailableSelection && styles.startTextDisabled,
+            ]}
+          >
+            {firstAvailableSelection
+              ? t('station.startCharging')
+              : t('station.noAvailableConnector')}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -1387,6 +1407,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 
+  startButtonDisabled: {
+    backgroundColor: '#F1F5F9',
+    borderColor: '#E2E8F0',
+  },
+
   startText: {
     marginLeft: 8,
 
@@ -1397,6 +1422,10 @@ const styles = StyleSheet.create({
     color: '#111827',
 
     textAlign: 'center',
+  },
+
+  startTextDisabled: {
+    color: '#94A3B8',
   },
 
   // =========================================================

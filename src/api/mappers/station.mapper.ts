@@ -52,12 +52,12 @@ const mapStationStatus = (
     ),
   );
 
-  if (hasAvailable) {
-    return 'Available';
-  }
-
   if (hasCharging) {
     return 'Busy';
+  }
+
+  if (hasAvailable) {
+    return 'Available';
   }
 
   return 'Offline';

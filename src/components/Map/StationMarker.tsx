@@ -50,6 +50,17 @@ export default function StationMarker({
     0,
   );
 
+  const chargingCount = (station.chargers ?? []).reduce(
+    (sum, charger) =>
+      sum +
+      (charger.connectors ?? []).filter(
+        connector => connector.status === 'CHARGING',
+      ).length,
+    0,
+  );
+
+  const displayedCount = chargingCount > 0 ? chargingCount : availableCount;
+
   return (
     <Animated.View
       style={[
@@ -75,7 +86,7 @@ export default function StationMarker({
       >
         <Ionicons name="flash" size={14} color="#FFFFFF" />
 
-        <Text style={styles.number}>{availableCount}</Text>
+        <Text style={styles.number}>{displayedCount}</Text>
       </View>
 
       <Image

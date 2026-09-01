@@ -53,6 +53,8 @@ export default function HomeScreen() {
    * โหลด Station จาก Production API
    */
   useEffect(() => {
+    let isMounted = true;
+
     const loadStations = async () => {
       try {
         console.log('===== HOME: LOAD STATIONS =====');
@@ -61,18 +63,35 @@ export default function HomeScreen() {
 
         console.log('HOME STATIONS:', data);
 
-        setStations(data);
+        if (isMounted) {
+          setStations(data);
+        }
 
         console.log('===== HOME: STATIONS LOADED =====');
       } catch (error) {
         console.error('HOME API ERROR:', error);
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     loadStations();
+
+    const refreshInterval = setInterval(() => {
+      loadStations();
+    }, 30_000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(refreshInterval);
+    };
   }, []);
+
+  const currentDetailStation = detailStation
+    ? stations.find(station => station.id === detailStation.id) ?? detailStation
+    : null;
 
   /**
    * Loading Screen
@@ -167,9 +186,9 @@ export default function HomeScreen() {
       {/*
         Station Detail Sheet
       */}
-      {detailStation && (
+      {currentDetailStation && (
         <StationDetailSheet
-          station={detailStation}
+          station={currentDetailStation}
           onClose={() => {
             /**
              * ปิด Station Detail

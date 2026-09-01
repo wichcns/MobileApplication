@@ -3,6 +3,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import Ionicons from '@react-native-vector-icons/ionicons';
+import { useTranslation } from 'react-i18next';
 
 import { Station } from '../../types/station';
 
@@ -19,6 +20,7 @@ export default function StationCard({
   selected = false,
   onPress,
 }: Props) {
+  const { t } = useTranslation();
   const color =
     station.status === 'Available'
       ? '#16A34A'
@@ -38,6 +40,15 @@ export default function StationCard({
       sum +
       (charger.connectors ?? []).filter(
         connector => connector.status === 'AVAILABLE',
+      ).length,
+    0,
+  );
+
+  const charging = chargers.reduce(
+    (sum, charger) =>
+      sum +
+      (charger.connectors ?? []).filter(
+        connector => connector.status === 'CHARGING',
       ).length,
     0,
   );
@@ -73,6 +84,9 @@ export default function StationCard({
         <View style={styles.info}>
           <Text style={styles.count}>
             ⚡ {available}/{total}
+            {charging > 0
+              ? ` • ${t('station.chargingCount', { count: charging })}`
+              : ''}
           </Text>
 
           <Text style={styles.price}>
