@@ -34,7 +34,9 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>GSB EV uses your location to show nearby charging stations.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>GSB EV uses your camera to scan charger QR codes.</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -61,8 +63,5 @@
 	<array>
 		<string>Ionicons.ttf</string>
 	</array>
-</dict>
-</plist>
-	<false/>
 </dict>
 </plist>

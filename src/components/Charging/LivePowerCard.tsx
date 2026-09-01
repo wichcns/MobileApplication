@@ -35,7 +35,7 @@ export default function LivePowerCard({ power }: Props) {
     return () => {
       animation.stop();
     };
-  }, []);
+  }, [pulse]);
 
   return (
     <View style={styles.container}>

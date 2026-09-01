@@ -1,5 +1,4 @@
 import React from 'react';
-import { useChargerStore } from '../../store/chargerStore';
 import { useTranslation } from 'react-i18next';
 import {
   View,

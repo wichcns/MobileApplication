@@ -45,7 +45,7 @@ export default function CreditCardTopUpScreen() {
       setSelectedCardId(
         savedCards.find(card => card.isDefault)?.id ?? savedCards[0]?.id ?? null,
       );
-    } catch (error) {
+    } catch {
       setCards([]);
       Alert.alert('เกิดข้อผิดพลาด', 'ไม่สามารถโหลดบัตรที่บันทึกไว้ได้');
     } finally {

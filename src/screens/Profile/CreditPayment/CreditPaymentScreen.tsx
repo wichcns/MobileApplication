@@ -40,7 +40,7 @@ export default function CreditPaymentScreen() {
         '/payment/customers/cards',
       );
       setCreditCards(Array.isArray(response.data) ? response.data : []);
-    } catch (error) {
+    } catch {
       setCreditCards([]);
     } finally {
       setIsLoading(false);
@@ -85,7 +85,7 @@ export default function CreditPaymentScreen() {
               setCreditCards(
                 Array.isArray(response.data) ? response.data : [],
               );
-            } catch (error) {
+            } catch {
               Alert.alert(
                 t('creditPayment.error'),
                 t('creditPayment.cannotRemoveCard'),
@@ -112,7 +112,7 @@ export default function CreditPaymentScreen() {
         { isDefault: true },
       );
       setCreditCards(Array.isArray(response.data) ? response.data : []);
-    } catch (error) {
+    } catch {
       Alert.alert(t('creditPayment.error'), t('creditPayment.cannotRemoveCard'));
     }
   };

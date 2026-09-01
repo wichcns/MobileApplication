@@ -64,7 +64,7 @@ const openLink = async (
     } else {
       Alert.alert(cannotOpenTitle, cannotOpenMessage);
     }
-  } catch (error) {
+  } catch {
     Alert.alert(errorTitle, errorMessage);
   }
 };
@@ -89,7 +89,7 @@ const callPhone = async (
     } else {
       Alert.alert(cannotCallTitle, cannotCallMessage);
     }
-  } catch (error) {
+  } catch {
     Alert.alert(errorTitle, errorMessage);
   }
 };

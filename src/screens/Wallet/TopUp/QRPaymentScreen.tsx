@@ -86,7 +86,9 @@ export default function QRPaymentScreen() {
   // ==========================================================
 
   useEffect(() => {
-    createPromptPayQR();
+    void createPromptPayQR();
+    // The payment request must run only once when this screen opens.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const createPromptPayQR = async () => {

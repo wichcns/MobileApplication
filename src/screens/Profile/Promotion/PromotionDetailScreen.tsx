@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
@@ -28,22 +28,18 @@ export default function PromotionDetailScreen() {
   // COUPON REFRESH VERSION
   // ==========================================================
 
-  const [couponVersion, setCouponVersion] = useState(0);
+  const [, setCouponVersion] = useState(0);
 
   // ==========================================================
   // CHECK COLLECTED
   // ==========================================================
 
-  const collected = useMemo(() => {
-    if (!promotion) {
-      return false;
-    }
-
-    return coupons.some(
-      coupon =>
-        coupon.promotionId === promotion.id && coupon.status === 'available',
-    );
-  }, [promotion, couponVersion]);
+  const collected = promotion
+    ? coupons.some(
+        coupon =>
+          coupon.promotionId === promotion.id && coupon.status === 'available',
+      )
+    : false;
 
   // ==========================================================
   // EMPTY PROMOTION

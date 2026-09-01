@@ -79,4 +79,5 @@ yarn-error.log
 android/app/client_secret_*.json
 android/app/*.jks
 android/app/*.keystore
+android/gradle.properties
 android/keystore.properties

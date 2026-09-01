@@ -29,7 +29,7 @@ export default function PaymentProcessingScreen() {
     }, 3000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [amount, navigation]);
 
   return (
     <SafeAreaView style={styles.container}>

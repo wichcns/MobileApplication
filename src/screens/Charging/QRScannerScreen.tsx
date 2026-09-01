@@ -235,9 +235,7 @@ export default function QRScannerScreen() {
           cameraType={CameraType.Back}
           scanBarcode={verificationMode === 'QR' && !scannedQrCode && !isStarting}
           allowedBarcodeTypes={['qr']}
-          showFrame={true}
-          frameColor="#00C878"
-          laserColor="#00C878"
+          showFrame={false}
           onReadCode={(event: any) => {
             const value = event?.nativeEvent?.codeStringValue?.trim();
             if (!value || scannedQrCode || isStarting) return;
@@ -253,15 +251,7 @@ export default function QRScannerScreen() {
 
         {/* Dark overlay */}
         <View style={styles.cameraOverlay}>
-          {/* Scan Area */}
-          <View style={styles.scanFrame}>
-            <View style={[styles.corner, styles.topLeft]} />
-            <View style={[styles.corner, styles.topRight]} />
-            <View style={[styles.corner, styles.bottomLeft]} />
-            <View style={[styles.corner, styles.bottomRight]} />
-
-            <View style={styles.scanLine} />
-          </View>
+          <View style={styles.scanFrame} />
 
           <Text style={styles.cameraText}>{t('qrScanner.scanChargerQr')}</Text>
 
@@ -406,57 +396,9 @@ const styles = StyleSheet.create({
   scanFrame: {
     width: 210,
     height: 210,
-    position: 'relative',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  corner: {
-    position: 'absolute',
-    width: 32,
-    height: 32,
-    borderColor: '#00C878',
-  },
-
-  topLeft: {
-    top: 0,
-    left: 0,
-    borderTopWidth: 4,
-    borderLeftWidth: 4,
-    borderTopLeftRadius: 8,
-  },
-
-  topRight: {
-    top: 0,
-    right: 0,
-    borderTopWidth: 4,
-    borderRightWidth: 4,
-    borderTopRightRadius: 8,
-  },
-
-  bottomLeft: {
-    bottom: 0,
-    left: 0,
-    borderBottomWidth: 4,
-    borderLeftWidth: 4,
-    borderBottomLeftRadius: 8,
-  },
-
-  bottomRight: {
-    bottom: 0,
-    right: 0,
-    borderBottomWidth: 4,
-    borderRightWidth: 4,
-    borderBottomRightRadius: 8,
-  },
-
-  scanLine: {
-    position: 'absolute',
-    left: 15,
-    right: 15,
-    height: 2,
-    backgroundColor: '#00C878',
-    top: '50%',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 200, 120, 0.75)',
+    borderRadius: 18,
   },
 
   cameraText: {

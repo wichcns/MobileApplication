@@ -227,9 +227,7 @@ export default function QRScreen() {
               cameraType={CameraType.Back}
               scanBarcode={!scannedValue && !isLookingUp}
               allowedBarcodeTypes={['qr']}
-              showFrame
-              frameColor="#00C878"
-              laserColor="#00C878"
+              showFrame={false}
               onReadCode={(event: any) => {
                 const value = event?.nativeEvent?.codeStringValue?.trim();
                 if (!value || scannedValue || isLookingUp) return;
@@ -239,12 +237,7 @@ export default function QRScreen() {
               onError={() => console.log('[QR] Camera error')}
             />
             <View pointerEvents="none" style={styles.cameraOverlay}>
-              <View style={styles.scanFrame}>
-                <View style={[styles.corner, styles.topLeft]} />
-                <View style={[styles.corner, styles.topRight]} />
-                <View style={[styles.corner, styles.bottomLeft]} />
-                <View style={[styles.corner, styles.bottomRight]} />
-              </View>
+              <View style={styles.scanFrame} />
               <Text style={styles.cameraText}>
                 {scannedValue
                   ? 'สแกนสำเร็จ กดไปต่อเพื่อเลือกหัวชาร์จ'
@@ -303,21 +296,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0.22)',
   },
-  scanFrame: { width: 250, height: 250, position: 'relative' },
-  corner: {
-    position: 'absolute',
-    width: 42,
-    height: 42,
-    borderColor: '#00C878',
-  },
-  topLeft: { top: 0, left: 0, borderTopWidth: 5, borderLeftWidth: 5 },
-  topRight: { top: 0, right: 0, borderTopWidth: 5, borderRightWidth: 5 },
-  bottomLeft: { bottom: 0, left: 0, borderBottomWidth: 5, borderLeftWidth: 5 },
-  bottomRight: {
-    bottom: 0,
-    right: 0,
-    borderBottomWidth: 5,
-    borderRightWidth: 5,
+  scanFrame: {
+    width: 250,
+    height: 250,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 200, 120, 0.75)',
+    borderRadius: 20,
   },
   cameraText: {
     marginTop: 26,

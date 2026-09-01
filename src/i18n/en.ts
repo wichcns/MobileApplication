@@ -1,5 +1,3 @@
-import { wallet } from '../store/walletStore';
-
 const en = {
   translation: {
     bottomTab: {

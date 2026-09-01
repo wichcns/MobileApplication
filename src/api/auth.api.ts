@@ -1,5 +1,4 @@
 import apiClient from './client';
-import { ENDPOINTS } from './endpoints';
 
 export const login = async (payload: any) => {
   try {

@@ -52,15 +52,13 @@ export default function PromotionScreen() {
 
   const [selectedCategory, setSelectedCategory] = useState('all');
 
-  const [couponVersion, setCouponVersion] = useState(0);
+  const [, setCouponVersion] = useState(0);
 
   // ==========================================================
   // MY COUPONS
   // ==========================================================
 
-  const collectedCoupons = useMemo(() => {
-    return coupons.filter(coupon => coupon.status === 'available');
-  }, [couponVersion]);
+  const collectedCoupons = coupons.filter(coupon => coupon.status === 'available');
 
   // ==========================================================
   // FILTER PROMOTIONS
