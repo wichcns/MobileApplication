@@ -212,7 +212,7 @@ export default function StationDetailSheet({
 
           <View style={styles.priceRow}>
             <View style={styles.dcBadge}>
-              <Text style={styles.dcText}>DC</Text>
+              <Text style={styles.dcText}>AC</Text>
             </View>
 
             <Text style={styles.price} numberOfLines={1}>

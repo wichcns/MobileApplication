@@ -47,6 +47,29 @@ export const isEmailAvailable = async (email: string): Promise<boolean> => {
   return response.data?.isAvailable === true;
 };
 
+export const requestLoginOtp = async (phoneNumber: string) => {
+  const response = await apiClient.post('/auth/request-login-otp', {
+    phoneNumber: phoneNumber.trim(),
+  });
+  return response.data;
+};
+
+export const loginWithPhone = async (payload: {
+  phoneNumber: string;
+  otp: string;
+  token: string;
+}) => {
+  const response = await apiClient.post('/auth/login-phone', payload);
+  return response.data;
+};
+
+export const forgotPassword = async (email: string) => {
+  const response = await apiClient.post('/auth/forgot-password', {
+    email: email.trim().toLowerCase(),
+  });
+  return response.data;
+};
+
 export const getMe = async () => {
   try {
     const response = await apiClient.get('/users/me');

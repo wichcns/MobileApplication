@@ -20,6 +20,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { Images } from '../../../assets';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { useTranslation } from 'react-i18next';
 type LoginScreenProps = {
   onLogin: () => void;
 };
@@ -33,15 +34,16 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
   const [password, setPassword] = useState('');
 
   const [showPassword, setShowPassword] = useState(false);
+  const { t } = useTranslation();
 
   const handleLogin = async () => {
     if (!username.trim()) {
-      setErrorMessage('Please enter your username or email.');
+      setErrorMessage(t('login.identifierRequired'));
       return;
     }
 
     if (!password) {
-      setErrorMessage('Please enter your password.');
+      setErrorMessage(t('login.passwordRequired'));
       return;
     }
 
@@ -110,7 +112,7 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
 
       const responseData = error?.response?.data;
 
-      let message = 'Login failed. Please check your username and password.';
+      let message = t('login.failed');
 
       // Backend ส่ง { message: "..." }
       if (typeof responseData?.message === 'string') {
@@ -236,7 +238,7 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
 
       const responseData = error?.response?.data;
 
-      let message = 'Google Sign-In failed. Please try again.';
+      let message = t('login.googleFailed');
 
       if (typeof responseData === 'string') {
         message = responseData;
@@ -259,11 +261,10 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
   };
 
   const handleForgotPassword = () => {
-    console.log('FORGOT PASSWORD');
-
-    // TODO:
-    // navigation ไปหน้า Forgot Password
+    navigation.navigate('ForgotPassword');
   };
+
+  const handlePhoneLogin = () => navigation.navigate('PhoneLogin');
 
   return (
     <KeyboardAvoidingView
@@ -295,10 +296,10 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
           {/* Header */}
 
           <View style={styles.header}>
-            <Text style={styles.title}>Welcome Back</Text>
+            <Text style={styles.title}>{t('login.title')}</Text>
 
             <Text style={styles.subtitle}>
-              Sign in to continue using EV Charging
+              {t('login.subtitle')}
             </Text>
           </View>
 
@@ -307,7 +308,7 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
           ========================== */}
 
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Username / Email</Text>
+            <Text style={styles.label}>{t('login.identifier')}</Text>
 
             <View style={styles.inputContainer}>
               <Ionicons name="person-outline" size={20} color="#64748B" />
@@ -316,7 +317,7 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
                 style={styles.input}
                 value={username}
                 onChangeText={setUsername}
-                placeholder="Enter your username or email"
+                placeholder={t('login.identifierPlaceholder')}
                 placeholderTextColor="#94A3B8"
                 autoCapitalize="none"
                 keyboardType="email-address"
@@ -329,7 +330,7 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
           ========================== */}
 
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Password</Text>
+            <Text style={styles.label}>{t('login.password')}</Text>
 
             <View style={styles.inputContainer}>
               <Ionicons name="lock-closed-outline" size={20} color="#64748B" />
@@ -338,7 +339,7 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
                 style={styles.input}
                 value={password}
                 onChangeText={setPassword}
-                placeholder="Enter your password"
+                placeholder={t('login.passwordPlaceholder')}
                 placeholderTextColor="#94A3B8"
                 secureTextEntry={!showPassword}
               />
@@ -367,7 +368,7 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
             onPress={handleForgotPassword}
             activeOpacity={0.7}
           >
-            <Text style={styles.forgotText}>Forgot Password?</Text>
+            <Text style={styles.forgotText}>{t('login.forgotPassword')}</Text>
           </TouchableOpacity>
 
           {/* =========================
@@ -381,7 +382,7 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
             disabled={loading}
           >
             <Text style={styles.loginButtonText}>
-              {loading ? 'Signing in...' : 'Login'}
+              {loading ? t('login.signingIn') : t('login.submit')}
             </Text>
 
             {!loading && (
@@ -396,7 +397,7 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
           <View style={styles.dividerContainer}>
             <View style={styles.dividerLine} />
 
-            <Text style={styles.dividerText}>OR</Text>
+            <Text style={styles.dividerText}>{t('login.or')}</Text>
 
             <View style={styles.dividerLine} />
           </View>
@@ -418,7 +419,12 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
               />
             </View>
 
-            <Text style={styles.googleText}>Continue with Google</Text>
+            <Text style={styles.googleText}>{t('login.google')}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.phoneButton} onPress={handlePhoneLogin} activeOpacity={0.8}>
+            <Ionicons name="call-outline" size={20} color="#00A651" />
+            <Text style={styles.phoneButtonText}>{t('login.phone')}</Text>
           </TouchableOpacity>
 
           {/* =========================
@@ -426,10 +432,10 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
           ========================== */}
 
           <View style={styles.registerContainer}>
-            <Text style={styles.registerLabel}>Don't have an account?</Text>
+            <Text style={styles.registerLabel}>{t('login.noAccount')}</Text>
 
             <TouchableOpacity onPress={handleRegister} activeOpacity={0.7}>
-              <Text style={styles.registerText}>Register</Text>
+              <Text style={styles.registerText}>{t('login.register')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -438,7 +444,7 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
             FOOTER
         ========================== */}
 
-        <Text style={styles.footer}>EV Charging Platform</Text>
+        <Text style={styles.footer}>{t('login.footer')}</Text>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -750,6 +756,25 @@ const styles = StyleSheet.create({
     fontWeight: '700',
 
     color: '#111827',
+  },
+
+  phoneButton: {
+    height: 56,
+    marginTop: 12,
+    borderRadius: 28,
+    borderWidth: 1,
+    borderColor: '#00A651',
+    backgroundColor: '#FFFFFF',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+  },
+
+  phoneButtonText: {
+    color: '#00A651',
+    fontSize: 15,
+    fontWeight: '700',
   },
 
   /*
