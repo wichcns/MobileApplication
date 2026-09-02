@@ -420,7 +420,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 29,
 
-    backgroundColor: '#DCFCE7',
+    backgroundColor: '#D7F3F5',
 
     justifyContent: 'center',
 
@@ -434,7 +434,7 @@ const styles = StyleSheet.create({
 
     fontWeight: '900',
 
-    color: '#16A34A',
+    color: '#44C4CE',
   },
 
   success: {
@@ -442,7 +442,7 @@ const styles = StyleSheet.create({
 
     fontWeight: '900',
 
-    color: '#16A34A',
+    color: '#44C4CE',
   },
 
   successSubtitle: {
@@ -542,13 +542,13 @@ const styles = StyleSheet.create({
 
     borderRadius: 5,
 
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
 
     fontSize: 9,
 
     fontWeight: '800',
 
-    color: '#16A34A',
+    color: '#44C4CE',
   },
 
   discountValue: {
@@ -556,7 +556,7 @@ const styles = StyleSheet.create({
 
     fontWeight: '800',
 
-    color: '#16A34A',
+    color: '#44C4CE',
 
     textAlign: 'right',
   },
@@ -598,7 +598,7 @@ const styles = StyleSheet.create({
 
     fontWeight: '900',
 
-    color: '#00A651',
+    color: '#44C4CE',
   },
 
   // ==========================================================
@@ -628,7 +628,7 @@ const styles = StyleSheet.create({
   saveButton: {
     minHeight: 72,
 
-    backgroundColor: '#16A34A',
+    backgroundColor: '#44C4CE',
 
     borderRadius: 18,
 
@@ -722,7 +722,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 21,
 
-    backgroundColor: '#F0FDF4',
+    backgroundColor: '#EAF9FA',
 
     justifyContent: 'center',
 
@@ -730,7 +730,7 @@ const styles = StyleSheet.create({
   },
 
   invoiceIcon: {
-    color: '#16A34A',
+    color: '#44C4CE',
 
     fontSize: 20,
 

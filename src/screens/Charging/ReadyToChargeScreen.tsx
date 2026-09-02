@@ -94,7 +94,7 @@ export default function ReadyToChargeScreen() {
         {/* ADD CAR */}
 
         <TouchableOpacity style={styles.addCar}>
-          <Ionicons name="add-circle" size={18} color="#00C878" />
+          <Ionicons name="add-circle" size={18} color="#44C4CE" />
 
           <Text style={styles.addCarText}>{t('readyToCharge.addMyCar')}</Text>
         </TouchableOpacity>
@@ -114,12 +114,12 @@ export default function ReadyToChargeScreen() {
             </Text>
 
             <TouchableOpacity>
-              <Text style={styles.green}>{t('readyToCharge.topUp')}</Text>
+              <Text style={styles.accent}>{t('readyToCharge.topUp')}</Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.balanceRow}>
-            <Ionicons name="wallet-outline" size={22} color="#00C878" />
+            <Ionicons name="wallet-outline" size={22} color="#44C4CE" />
 
             <View>
               <Text style={styles.balance}>0 THB</Text>
@@ -138,7 +138,7 @@ export default function ReadyToChargeScreen() {
             <Text style={styles.label}>Credit Payment</Text>
 
             <TouchableOpacity>
-              <Text style={styles.green}>+ Add Credit Card</Text>
+              <Text style={styles.accent}>+ Add Credit Card</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 7,
 
-    backgroundColor: '#00C878',
+    backgroundColor: '#44C4CE',
 
     marginRight: 12,
   },
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
 
     fontSize: 13,
 
-    color: '#00A651',
+    color: '#44C4CE',
 
     fontWeight: '700',
   },
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 14,
 
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
 
     justifyContent: 'center',
 
@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
   addCarText: {
     marginLeft: 8,
 
-    color: '#00A86B',
+    color: '#44C4CE',
 
     fontWeight: '700',
   },
@@ -447,8 +447,8 @@ const styles = StyleSheet.create({
     color: '#111827',
   },
 
-  green: {
-    color: '#00C878',
+  accent: {
+    color: '#44C4CE',
 
     fontWeight: '700',
   },
@@ -569,7 +569,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 18,
 
-    backgroundColor: '#00C878',
+    backgroundColor: '#44C4CE',
 
     justifyContent: 'center',
 

@@ -94,7 +94,7 @@ export default function AboutScreen({ navigation }: Props) {
                 <Ionicons
                   name="information-circle-outline"
                   size={22}
-                  color="#00A651"
+                  color="#44C4CE"
                 />
               </View>
 
@@ -120,7 +120,7 @@ export default function AboutScreen({ navigation }: Props) {
                 <Ionicons
                   name="document-text-outline"
                   size={22}
-                  color="#00A651"
+                  color="#44C4CE"
                 />
               </View>
 
@@ -144,7 +144,7 @@ export default function AboutScreen({ navigation }: Props) {
                 <Ionicons
                   name="shield-checkmark-outline"
                   size={22}
-                  color="#00A651"
+                  color="#44C4CE"
                 />
               </View>
 
@@ -165,7 +165,7 @@ export default function AboutScreen({ navigation }: Props) {
 
             <TouchableOpacity style={styles.menuItem} activeOpacity={0.7}>
               <View style={styles.menuIcon}>
-                <Ionicons name="headset-outline" size={22} color="#00A651" />
+                <Ionicons name="headset-outline" size={22} color="#44C4CE" />
               </View>
 
               <View style={styles.menuContent}>
@@ -187,7 +187,7 @@ export default function AboutScreen({ navigation }: Props) {
 
         <View style={styles.companyCard}>
           <View style={styles.companyIcon}>
-            <Ionicons name="business-outline" size={24} color="#00A651" />
+            <Ionicons name="business-outline" size={24} color="#44C4CE" />
           </View>
 
           <Text style={styles.companyLabel}>{t('about.poweredBy')}</Text>
@@ -210,7 +210,7 @@ export default function AboutScreen({ navigation }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F3F7F6',
+    backgroundColor: '#EAF9FA',
   },
 
   content: {
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 25,
     borderWidth: 1,
-    borderColor: '#E8F0EE',
+    borderColor: '#E7F1F2',
   },
 
   logoWrapper: {
@@ -271,11 +271,11 @@ const styles = StyleSheet.create({
     width: 76,
     height: 76,
     borderRadius: 20,
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
     justifyContent: 'center',
     alignItems: 'center',
 
-    shadowColor: '#00A651',
+    shadowColor: '#44C4CE',
     shadowOffset: {
       width: 0,
       height: 4,
@@ -302,13 +302,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 5,
     borderRadius: 20,
-    backgroundColor: '#F0FBF6',
+    backgroundColor: '#EAF9FA',
   },
 
   versionText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#008F48',
+    color: '#2E929A',
   },
 
   // ==========================================================
@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     paddingHorizontal: 12,
     borderWidth: 1,
-    borderColor: '#EDF2F0',
+    borderColor: '#E7F1F2',
   },
 
   menuItem: {
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 12,
-    backgroundColor: '#F0FBF6',
+    backgroundColor: '#EAF9FA',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -388,14 +388,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 22,
     borderWidth: 1,
-    borderColor: '#E8F0EE',
+    borderColor: '#E7F1F2',
   },
 
   companyIcon: {
     width: 46,
     height: 46,
     borderRadius: 14,
-    backgroundColor: '#F0FBF6',
+    backgroundColor: '#EAF9FA',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10,

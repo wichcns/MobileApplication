@@ -123,7 +123,7 @@ export default function TransactionHistoryScreen() {
                 : 'swap-horizontal'
             }
             size={30}
-            color={item.type === 'CHARGING' ? '#EF4444' : '#00A651'}
+            color={item.type === 'CHARGING' ? '#EF4444' : '#44C4CE'}
           />
         </View>
 
@@ -155,7 +155,7 @@ export default function TransactionHistoryScreen() {
           style={[
             styles.amount,
             {
-              color: isIncome ? '#00A651' : '#EF4444',
+              color: isIncome ? '#44C4CE' : '#EF4444',
             },
           ]}
         >
@@ -182,7 +182,7 @@ export default function TransactionHistoryScreen() {
 
       {isLoading ? (
         <View style={styles.empty}>
-          <ActivityIndicator size="large" color="#00A651" />
+          <ActivityIndicator size="large" color="#44C4CE" />
         </View>
       ) : error ? (
         <View style={styles.empty}>

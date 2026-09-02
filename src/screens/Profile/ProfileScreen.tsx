@@ -275,7 +275,7 @@ export default function ProfileScreen({ onLogout }: ProfileScreenProps) {
           {/* Charging Statistics */}
           <View style={styles.accountFooter}>
             <View style={styles.energyInfo}>
-              <Ionicons name="flash" size={18} color="#00A651" />
+              <Ionicons name="flash" size={18} color="#44C4CE" />
 
               <Text style={styles.energyText}>{t('profile.totalKwh')}:</Text>
 
@@ -290,7 +290,7 @@ export default function ProfileScreen({ onLogout }: ProfileScreenProps) {
               <Ionicons
                 name="information-circle-outline"
                 size={14}
-                color="#00A651"
+                color="#44C4CE"
               />
             </View>
           </View>
@@ -415,7 +415,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
 
-    backgroundColor: '#F3F7F6',
+    backgroundColor: '#EAF9FA',
   },
 
   content: {
@@ -461,7 +461,7 @@ const styles = StyleSheet.create({
 
     borderWidth: 2,
 
-    borderColor: '#00C878',
+    borderColor: '#44C4CE',
 
     justifyContent: 'center',
 
@@ -481,11 +481,11 @@ const styles = StyleSheet.create({
 
     borderRadius: 7,
 
-    backgroundColor: '#00C878',
+    backgroundColor: '#44C4CE',
 
     borderWidth: 2,
 
-    borderColor: '#F3F7F6',
+    borderColor: '#EAF9FA',
   },
 
   userInfo: {
@@ -541,7 +541,7 @@ const styles = StyleSheet.create({
 
     borderWidth: 1,
 
-    borderColor: '#E8F0EE',
+    borderColor: '#E7F1F2',
   },
 
   accountTitle: {
@@ -601,7 +601,7 @@ const styles = StyleSheet.create({
   accountFooter: {
     minHeight: 36,
 
-    backgroundColor: '#F0FBF6',
+    backgroundColor: '#EAF9FA',
 
     paddingHorizontal: 14,
 
@@ -623,7 +623,7 @@ const styles = StyleSheet.create({
 
     fontSize: 11,
 
-    color: '#008F48',
+    color: '#2E929A',
   },
 
   energyValue: {
@@ -631,7 +631,7 @@ const styles = StyleSheet.create({
 
     fontSize: 11,
 
-    color: '#008F48',
+    color: '#2E929A',
 
     fontWeight: '700',
   },
@@ -645,7 +645,7 @@ const styles = StyleSheet.create({
   co2Text: {
     fontSize: 11,
 
-    color: '#008F48',
+    color: '#2E929A',
   },
 
   co2Value: {
@@ -655,7 +655,7 @@ const styles = StyleSheet.create({
 
     fontSize: 11,
 
-    color: '#008F48',
+    color: '#2E929A',
 
     fontWeight: '700',
   },
@@ -717,7 +717,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 13,
 
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
 
     paddingHorizontal: 10,
 
@@ -785,7 +785,7 @@ const styles = StyleSheet.create({
 
     borderWidth: 1,
 
-    borderColor: '#EDF2F0',
+    borderColor: '#E7F1F2',
   },
 
   menuItem: {

@@ -423,7 +423,7 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.phoneButton} onPress={handlePhoneLogin} activeOpacity={0.8}>
-            <Ionicons name="call-outline" size={20} color="#00A651" />
+            <Ionicons name="call-outline" size={20} color="#44C4CE" />
             <Text style={styles.phoneButtonText}>{t('login.phone')}</Text>
           </TouchableOpacity>
 
@@ -618,7 +618,7 @@ const styles = StyleSheet.create({
   },
 
   forgotText: {
-    color: '#00A651',
+    color: '#44C4CE',
 
     fontSize: 14,
 
@@ -636,7 +636,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 28,
 
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
 
     flexDirection: 'row',
 
@@ -646,7 +646,7 @@ const styles = StyleSheet.create({
 
     gap: 10,
 
-    shadowColor: '#00A651',
+    shadowColor: '#44C4CE',
 
     shadowOffset: {
       width: 0,
@@ -763,7 +763,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     borderRadius: 28,
     borderWidth: 1,
-    borderColor: '#00A651',
+    borderColor: '#44C4CE',
     backgroundColor: '#FFFFFF',
     flexDirection: 'row',
     alignItems: 'center',
@@ -772,7 +772,7 @@ const styles = StyleSheet.create({
   },
 
   phoneButtonText: {
-    color: '#00A651',
+    color: '#44C4CE',
     fontSize: 15,
     fontWeight: '700',
   },
@@ -804,7 +804,7 @@ const styles = StyleSheet.create({
 
     fontSize: 14,
 
-    color: '#00A651',
+    color: '#44C4CE',
 
     fontWeight: '800',
   },

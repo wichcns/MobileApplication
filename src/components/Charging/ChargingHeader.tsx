@@ -35,8 +35,8 @@ export default function ChargingHeader({
       case 'CHARGING':
         return {
           text: t('charging.charging'),
-          color: '#16A34A',
-          bg: '#DCFCE7',
+          color: '#44C4CE',
+          bg: '#D7F3F5',
         };
 
       case 'PREPARING':

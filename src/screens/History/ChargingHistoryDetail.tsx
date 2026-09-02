@@ -111,7 +111,7 @@ export default function ChargingHistoryDetail() {
         <View ref={receiptRef} style={styles.receiptCard}>
           <View style={styles.receiptHeader}>
             <View style={styles.iconBox}>
-              <Ionicons name="receipt-outline" size={32} color="#00A651" />
+              <Ionicons name="receipt-outline" size={32} color="#44C4CE" />
             </View>
 
             <View>
@@ -197,7 +197,7 @@ export default function ChargingHistoryDetail() {
           onPress={saveReceipt}
           activeOpacity={0.8}
         >
-          <Ionicons name="download-outline" size={26} color="#16A34A" />
+          <Ionicons name="download-outline" size={26} color="#44C4CE" />
 
           <View style={styles.saveButtonContent}>
             <Text style={styles.saveButtonTitle}>
@@ -225,7 +225,7 @@ export default function ChargingHistoryDetail() {
           }}
           activeOpacity={0.8}
         >
-          <Ionicons name="document-text-outline" size={22} color="#00A651" />
+          <Ionicons name="document-text-outline" size={22} color="#44C4CE" />
 
           <Text style={styles.taxText}>
             {t('chargingHistoryDetail.requestTaxInvoice')}
@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 15,
 
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
 
     justifyContent: 'center',
 
@@ -396,7 +396,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 16,
 
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
 
     flexDirection: 'row',
 
@@ -418,7 +418,7 @@ const styles = StyleSheet.create({
 
     fontWeight: '900',
 
-    color: '#00A651',
+    color: '#44C4CE',
   },
 
   button: {
@@ -428,7 +428,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 18,
 
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
 
     flexDirection: 'row',
 
@@ -456,7 +456,7 @@ const styles = StyleSheet.create({
 
     borderWidth: 1,
 
-    borderColor: '#00A651',
+    borderColor: '#44C4CE',
 
     flexDirection: 'row',
 
@@ -468,7 +468,7 @@ const styles = StyleSheet.create({
   taxText: {
     marginLeft: 10,
 
-    color: '#00A651',
+    color: '#44C4CE',
 
     fontWeight: '800',
 

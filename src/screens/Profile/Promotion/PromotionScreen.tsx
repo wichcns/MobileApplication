@@ -239,7 +239,7 @@ export default function PromotionScreen() {
                           : 'flash-outline'
                       }
                       size={25}
-                      color="#00A651"
+                      color="#44C4CE"
                     />
                   </View>
                 </View>
@@ -288,7 +288,7 @@ export default function PromotionScreen() {
                       <Ionicons
                         name={collected ? 'checkmark' : 'add'}
                         size={17}
-                        color={collected ? '#16A34A' : '#FFFFFF'}
+                        color={collected ? '#44C4CE' : '#FFFFFF'}
                       />
 
                       <Text
@@ -317,7 +317,7 @@ export default function PromotionScreen() {
           <Ionicons
             name="information-circle-outline"
             size={22}
-            color="#00A651"
+            color="#44C4CE"
           />
 
           <Text style={styles.infoText}>{t('promotion.info')}</Text>
@@ -330,7 +330,7 @@ export default function PromotionScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F3F7F6',
+    backgroundColor: '#EAF9FA',
   },
 
   content: {
@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
   couponWallet: {
     minHeight: 88,
     borderRadius: 18,
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
     paddingHorizontal: 15,
     flexDirection: 'row',
     alignItems: 'center',
@@ -412,7 +412,7 @@ const styles = StyleSheet.create({
   walletSubtitle: {
     marginTop: 4,
     fontSize: 12,
-    color: '#E8FFF3',
+    color: '#EAF9FA',
   },
 
   viewCouponButton: {
@@ -458,8 +458,8 @@ const styles = StyleSheet.create({
   },
 
   categoryButtonActive: {
-    backgroundColor: '#00A651',
-    borderColor: '#00A651',
+    backgroundColor: '#44C4CE',
+    borderColor: '#44C4CE',
   },
 
   categoryText: {
@@ -487,7 +487,7 @@ const styles = StyleSheet.create({
     padding: 14,
     flexDirection: 'row',
     borderWidth: 1,
-    borderColor: '#E8EFEC',
+    borderColor: '#E7F1F2',
   },
 
   promotionLeft: {
@@ -499,7 +499,7 @@ const styles = StyleSheet.create({
     width: 46,
     height: 46,
     borderRadius: 14,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -512,7 +512,7 @@ const styles = StyleSheet.create({
   merchantName: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#00A651',
+    color: '#44C4CE',
   },
 
   promotionTitle: {
@@ -539,7 +539,7 @@ const styles = StyleSheet.create({
   discount: {
     fontSize: 17,
     fontWeight: '900',
-    color: '#16A34A',
+    color: '#44C4CE',
   },
 
   expiryRow: {
@@ -558,7 +558,7 @@ const styles = StyleSheet.create({
     minWidth: 88,
     height: 34,
     borderRadius: 17,
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
     paddingHorizontal: 12,
     flexDirection: 'row',
     alignItems: 'center',
@@ -573,13 +573,13 @@ const styles = StyleSheet.create({
   },
 
   collectedButton: {
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
     borderWidth: 1,
-    borderColor: '#BBF7D0',
+    borderColor: '#B8E7EA',
   },
 
   collectedText: {
-    color: '#16A34A',
+    color: '#44C4CE',
   },
 
   // ==========================================================
@@ -590,7 +590,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     padding: 14,
     borderRadius: 15,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -600,6 +600,6 @@ const styles = StyleSheet.create({
     marginLeft: 9,
     fontSize: 11,
     lineHeight: 17,
-    color: '#166534',
+    color: '#24777D',
   },
 });

@@ -170,13 +170,13 @@ export default function HistoryScreen() {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={() => loadHistory(true)}
-            colors={['#00A651']}
+            colors={['#44C4CE']}
           />
         }
         ListEmptyComponent={
           loading ? (
             <View style={styles.emptyState}>
-              <ActivityIndicator size="large" color="#00A651" />
+              <ActivityIndicator size="large" color="#44C4CE" />
               <Text style={styles.emptyText}>กำลังโหลดประวัติการชาร์จ...</Text>
             </View>
           ) : (

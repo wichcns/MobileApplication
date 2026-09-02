@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   selectedCard: {
     borderWidth: 2,
 
-    borderColor: '#16A34A',
+    borderColor: '#44C4CE',
   },
 
   header: {

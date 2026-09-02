@@ -219,7 +219,7 @@ export default function PersonalInformationScreen() {
 
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Ionicons name="person-circle-outline" size={22} color="#16A34A" />
+            <Ionicons name="person-circle-outline" size={22} color="#44C4CE" />
 
             <Text style={styles.sectionTitle}>
               {t('personalInformation.personalInformation')}
@@ -258,7 +258,7 @@ export default function PersonalInformationScreen() {
       ====================================================== */}
 
         <View style={styles.noticeBox}>
-          <Ionicons name="shield-checkmark-outline" size={24} color="#16A34A" />
+          <Ionicons name="shield-checkmark-outline" size={24} color="#44C4CE" />
 
           <View style={styles.noticeContent}>
             <Text style={styles.noticeTitle}>
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
     width: 90,
     height: 90,
     borderRadius: 45,
-    backgroundColor: '#16A34A',
+    backgroundColor: '#44C4CE',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -464,7 +464,7 @@ const styles = StyleSheet.create({
 
   noticeBox: {
     flexDirection: 'row',
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
     borderRadius: 18,
     padding: 16,
     marginTop: 20,
@@ -478,14 +478,14 @@ const styles = StyleSheet.create({
   noticeTitle: {
     fontSize: 14,
     fontWeight: '800',
-    color: '#166534',
+    color: '#24777D',
   },
 
   noticeText: {
     marginTop: 4,
     fontSize: 13,
     lineHeight: 19,
-    color: '#166534',
+    color: '#24777D',
   },
 
   // =========================
@@ -495,7 +495,7 @@ const styles = StyleSheet.create({
   saveButton: {
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#16A34A',
+    backgroundColor: '#44C4CE',
     marginTop: 25,
     flexDirection: 'row',
     justifyContent: 'center',

@@ -167,7 +167,7 @@ export default function LanguageScreen({ navigation }: Props) {
             <Ionicons
               name="information-circle-outline"
               size={21}
-              color="#00A651"
+              color="#44C4CE"
             />
           </View>
 
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#F3F7F6',
+    backgroundColor: '#EAF9FA',
   },
 
   content: {
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
 
     borderWidth: 1,
 
-    borderColor: '#E8F0EE',
+    borderColor: '#E7F1F2',
 
     overflow: 'hidden',
   },
@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 12,
 
-    backgroundColor: '#F0FBF6',
+    backgroundColor: '#EAF9FA',
 
     justifyContent: 'center',
 
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
   },
 
   selectedLanguageTitle: {
-    color: '#00A651',
+    color: '#44C4CE',
 
     fontWeight: '800',
   },
@@ -383,9 +383,9 @@ const styles = StyleSheet.create({
   },
 
   radioSelected: {
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
 
-    borderColor: '#00A651',
+    borderColor: '#44C4CE',
   },
 
   // ==========================================================
@@ -397,7 +397,7 @@ const styles = StyleSheet.create({
 
     padding: 14,
 
-    backgroundColor: '#F0FBF6',
+    backgroundColor: '#EAF9FA',
 
     borderRadius: 14,
 
@@ -405,7 +405,7 @@ const styles = StyleSheet.create({
 
     borderWidth: 1,
 
-    borderColor: '#D9F5E7',
+    borderColor: '#D7F3F5',
   },
 
   infoIcon: {
@@ -425,7 +425,7 @@ const styles = StyleSheet.create({
 
     fontWeight: '700',
 
-    color: '#008F48',
+    color: '#2E929A',
   },
 
   infoText: {
@@ -435,6 +435,6 @@ const styles = StyleSheet.create({
 
     lineHeight: 18,
 
-    color: '#4B6358',
+    color: '#4D686B',
   },
 });

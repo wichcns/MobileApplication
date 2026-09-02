@@ -144,10 +144,10 @@ export default function CreditCardTopUpScreen() {
         <Text style={styles.sectionTitle}>เลือกบัตรที่บันทึกไว้</Text>
 
         {isLoadingCards ? (
-          <ActivityIndicator style={styles.loader} size="large" color="#00A651" />
+          <ActivityIndicator style={styles.loader} size="large" color="#44C4CE" />
         ) : cards.length === 0 ? (
           <View style={styles.emptyCard}>
-            <Ionicons name="card-outline" size={38} color="#00A651" />
+            <Ionicons name="card-outline" size={38} color="#44C4CE" />
             <Text style={styles.emptyTitle}>ยังไม่มีบัตรที่บันทึกไว้</Text>
             <TouchableOpacity
               style={styles.addCardButton}
@@ -168,7 +168,7 @@ export default function CreditCardTopUpScreen() {
                 <Ionicons
                   name="card-outline"
                   size={28}
-                  color={isSelected ? '#FFFFFF' : '#00A651'}
+                  color={isSelected ? '#FFFFFF' : '#44C4CE'}
                 />
                 <View style={styles.cardContent}>
                   <Text style={[styles.cardBrand, isSelected && styles.selectedText]}>
@@ -218,23 +218,23 @@ const styles = StyleSheet.create({
   content: { padding: 20, paddingBottom: 40 },
   header: { flexDirection: 'row', alignItems: 'center', marginBottom: 28 },
   title: { marginLeft: 16, fontSize: 20, fontWeight: '800', color: '#111827' },
-  amountCard: { backgroundColor: '#ECFDF5', borderRadius: 18, padding: 20 },
-  amountLabel: { color: '#166534', fontSize: 14, fontWeight: '600' },
-  amount: { marginTop: 6, color: '#008F48', fontSize: 32, fontWeight: '900' },
+  amountCard: { backgroundColor: '#EAF9FA', borderRadius: 18, padding: 20 },
+  amountLabel: { color: '#24777D', fontSize: 14, fontWeight: '600' },
+  amount: { marginTop: 6, color: '#2E929A', fontSize: 32, fontWeight: '900' },
   sectionTitle: { marginTop: 28, marginBottom: 8, fontSize: 17, fontWeight: '800', color: '#111827' },
   loader: { marginTop: 36 },
   emptyCard: { marginTop: 8, padding: 28, alignItems: 'center', borderRadius: 18, backgroundColor: '#FFFFFF' },
   emptyTitle: { marginTop: 12, fontSize: 16, fontWeight: '700', color: '#111827' },
-  addCardButton: { marginTop: 18, paddingHorizontal: 18, paddingVertical: 11, borderRadius: 16, backgroundColor: '#00A651' },
+  addCardButton: { marginTop: 18, paddingHorizontal: 18, paddingVertical: 11, borderRadius: 16, backgroundColor: '#44C4CE' },
   addCardText: { color: '#FFFFFF', fontWeight: '800' },
   card: { marginTop: 12, padding: 16, borderRadius: 18, borderWidth: 1, borderColor: '#E2E8F0', backgroundColor: '#FFFFFF', flexDirection: 'row', alignItems: 'center' },
-  selectedCard: { backgroundColor: '#00A651', borderColor: '#00A651' },
+  selectedCard: { backgroundColor: '#44C4CE', borderColor: '#44C4CE' },
   cardContent: { flex: 1, marginLeft: 14 },
   cardBrand: { fontSize: 15, fontWeight: '800', color: '#111827' },
   cardNumber: { marginTop: 4, fontSize: 13, color: '#64748B' },
-  defaultText: { marginRight: 10, fontSize: 11, fontWeight: '700', color: '#008F48' },
+  defaultText: { marginRight: 10, fontSize: 11, fontWeight: '700', color: '#2E929A' },
   selectedText: { color: '#FFFFFF' },
-  confirmButton: { height: 56, marginTop: 32, borderRadius: 18, backgroundColor: '#00A651', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 },
+  confirmButton: { height: 56, marginTop: 32, borderRadius: 18, backgroundColor: '#44C4CE', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 },
   disabledButton: { opacity: 0.45 },
   confirmText: { color: '#FFFFFF', fontSize: 16, fontWeight: '800' },
 });

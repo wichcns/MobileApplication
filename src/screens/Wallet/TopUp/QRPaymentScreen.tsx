@@ -344,7 +344,7 @@ export default function QRPaymentScreen() {
 
         <View style={styles.methodCard}>
           <View style={styles.methodIcon}>
-            <Ionicons name="qr-code-outline" size={25} color="#00A651" />
+            <Ionicons name="qr-code-outline" size={25} color="#44C4CE" />
           </View>
 
           <View style={styles.methodText}>
@@ -379,7 +379,7 @@ export default function QRPaymentScreen() {
 
           {isLoading && (
             <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color="#00A651" />
+              <ActivityIndicator size="large" color="#44C4CE" />
 
               <Text style={styles.loadingTitle}>กำลังสร้าง QR Code</Text>
 
@@ -567,7 +567,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 14,
-    backgroundColor: '#E9F8F0',
+    backgroundColor: '#E3F6F7',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -608,7 +608,7 @@ const styles = StyleSheet.create({
   amount: {
     fontSize: 32,
     fontWeight: '900',
-    color: '#00A651',
+    color: '#44C4CE',
     marginTop: 5,
   },
 
@@ -682,7 +682,7 @@ const styles = StyleSheet.create({
     height: 48,
     paddingHorizontal: 22,
     borderRadius: 14,
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -754,7 +754,7 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 20,
     height: 56,
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
     borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',

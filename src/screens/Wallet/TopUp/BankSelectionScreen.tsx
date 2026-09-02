@@ -97,7 +97,7 @@ export default function BankSelectionScreen() {
               <Ionicons
                 name="business"
                 size={26}
-                color={isSelected ? '#FFFFFF' : '#00A651'}
+                color={isSelected ? '#FFFFFF' : '#44C4CE'}
               />
             </View>
 
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   amount: {
     fontSize: 30,
     fontWeight: '900',
-    color: '#00A651',
+    color: '#44C4CE',
     marginBottom: 28,
   },
 
@@ -226,8 +226,8 @@ const styles = StyleSheet.create({
   },
 
   selected: {
-    backgroundColor: '#00A651',
-    borderColor: '#00A651',
+    backgroundColor: '#44C4CE',
+    borderColor: '#44C4CE',
   },
 
   // ==========================================================
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     width: 46,
     height: 46,
     borderRadius: 13,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
 
     justifyContent: 'center',
     alignItems: 'center',
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
   },
 
   shortSelected: {
-    color: '#E5F7ED',
+    color: '#E3F6F7',
   },
 
   // ==========================================================
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
 
     borderRadius: 26,
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
 
     flexDirection: 'row',
     alignItems: 'center',

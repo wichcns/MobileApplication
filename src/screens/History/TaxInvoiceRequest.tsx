@@ -137,7 +137,7 @@ export default function TaxInvoiceRequest() {
   const Section = ({ title, icon, children }: any) => (
     <View style={styles.section}>
       <View style={styles.sectionHeader}>
-        <Ionicons name={icon} size={22} color="#16A34A" />
+        <Ionicons name={icon} size={22} color="#44C4CE" />
 
         <Text style={styles.sectionTitle}>{title}</Text>
       </View>
@@ -285,7 +285,7 @@ export default function TaxInvoiceRequest() {
         {/* INFORMATION SECURITY */}
 
         <View style={styles.noticeBox}>
-          <Ionicons name="shield-checkmark" size={26} color="#16A34A" />
+          <Ionicons name="shield-checkmark" size={26} color="#44C4CE" />
 
           <View style={{ flex: 1, marginLeft: 12 }}>
             <Text style={styles.noticeTitle}>
@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
   total: {
     fontSize: 20,
     fontWeight: '900',
-    color: '#16A34A',
+    color: '#44C4CE',
   },
 
   inputGroup: {
@@ -439,7 +439,7 @@ const styles = StyleSheet.create({
 
   noticeBox: {
     flexDirection: 'row',
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
     padding: 18,
     borderRadius: 18,
     marginBottom: 25,
@@ -447,18 +447,18 @@ const styles = StyleSheet.create({
 
   noticeTitle: {
     fontWeight: '700',
-    color: '#166534',
+    color: '#24777D',
   },
 
   noticeText: {
     marginTop: 5,
-    color: '#166534',
+    color: '#24777D',
   },
 
   button: {
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#16A34A',
+    backgroundColor: '#44C4CE',
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',

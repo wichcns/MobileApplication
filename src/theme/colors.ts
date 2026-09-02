@@ -3,7 +3,7 @@ export const colors = {
     main: '#0A84FF',
   },
 
-  secondary: '#34C759',
+  secondary: '#44C4CE',
 
   surface: '#FFFFFF',
 
@@ -21,7 +21,7 @@ export const colors = {
   border: '#E8E8E8',
 
   status: {
-    success: '#34C759',
+    success: '#44C4CE',
     warning: '#FF9500',
     danger: '#FF3B30',
   },

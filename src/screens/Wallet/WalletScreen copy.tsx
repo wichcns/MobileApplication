@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
   },
 
   balanceCard: {
-    backgroundColor: '#16A34A',
+    backgroundColor: '#44C4CE',
 
     padding: 25,
 
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
 
     height: 45,
 
-    backgroundColor: '#16A34A',
+    backgroundColor: '#44C4CE',
 
     borderRadius: 15,
 
@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
 
     height: 45,
 
-    backgroundColor: '#16A34A',
+    backgroundColor: '#44C4CE',
 
     borderRadius: 15,
 
@@ -348,7 +348,7 @@ const styles = StyleSheet.create({
   },
 
   plus: {
-    color: '#16A34A',
+    color: '#44C4CE',
 
     fontWeight: '800',
   },

@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
 
   selected: {
     borderWidth: 2,
-    borderColor: '#16A34A',
+    borderColor: '#44C4CE',
   },
 
   type: {

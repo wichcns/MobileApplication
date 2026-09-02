@@ -153,7 +153,7 @@ export default function FeedbackScreen({ navigation }: Props) {
             <Ionicons
               name="chatbubble-ellipses-outline"
               size={30}
-              color="#00A651"
+              color="#44C4CE"
             />
           </View>
 
@@ -287,7 +287,7 @@ export default function FeedbackScreen({ navigation }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F3F7F6',
+    backgroundColor: '#EAF9FA',
   },
 
   content: {
@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 31,
 
-    backgroundColor: '#E8F8F0',
+    backgroundColor: '#E3F6F7',
 
     justifyContent: 'center',
 
@@ -395,7 +395,7 @@ const styles = StyleSheet.create({
 
     borderWidth: 1,
 
-    borderColor: '#E8F0EE',
+    borderColor: '#E7F1F2',
   },
 
   sectionTitle: {
@@ -471,9 +471,9 @@ const styles = StyleSheet.create({
   },
 
   topicButtonSelected: {
-    backgroundColor: '#E8F8F0',
+    backgroundColor: '#E3F6F7',
 
-    borderColor: '#00A651',
+    borderColor: '#44C4CE',
   },
 
   topicText: {
@@ -485,7 +485,7 @@ const styles = StyleSheet.create({
   },
 
   topicTextSelected: {
-    color: '#008F48',
+    color: '#2E929A',
 
     fontWeight: '700',
   },
@@ -531,7 +531,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 15,
 
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
 
     flexDirection: 'row',
 
@@ -543,7 +543,7 @@ const styles = StyleSheet.create({
   },
 
   submitButtonDisabled: {
-    backgroundColor: '#A7D9BF',
+    backgroundColor: '#9DDFE4',
   },
 
   submitText: {

@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   status: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#16A34A',
+    color: '#44C4CE',
   },
 
   divider: {
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 30,
     height: 55,
-    backgroundColor: '#16A34A',
+    backgroundColor: '#44C4CE',
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',

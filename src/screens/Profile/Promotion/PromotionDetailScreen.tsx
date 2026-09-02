@@ -160,7 +160,7 @@ export default function PromotionDetailScreen() {
             <Ionicons
               name={getCategoryIcon() as any}
               size={42}
-              color="#00A651"
+              color="#44C4CE"
             />
           </View>
 
@@ -179,7 +179,7 @@ export default function PromotionDetailScreen() {
           <Text style={styles.description}>{promotion.description}</Text>
 
           <View style={styles.categoryBadge}>
-            <Ionicons name="pricetag-outline" size={14} color="#00A651" />
+            <Ionicons name="pricetag-outline" size={14} color="#44C4CE" />
 
             <Text style={styles.categoryText}>{promotion.category}</Text>
           </View>
@@ -213,7 +213,7 @@ export default function PromotionDetailScreen() {
                 );
               }}
             >
-              <Ionicons name="copy-outline" size={18} color="#00A651" />
+              <Ionicons name="copy-outline" size={18} color="#44C4CE" />
 
               <Text style={styles.copyText}>{t('promotionDetail.copy')}</Text>
             </TouchableOpacity>
@@ -231,7 +231,7 @@ export default function PromotionDetailScreen() {
 
           <View style={styles.validityCard}>
             <View style={styles.validityIcon}>
-              <Ionicons name="calendar-outline" size={21} color="#00A651" />
+              <Ionicons name="calendar-outline" size={21} color="#44C4CE" />
             </View>
 
             <View style={styles.validityInfo}>
@@ -255,7 +255,7 @@ export default function PromotionDetailScreen() {
 
           <View style={styles.termsCard}>
             <View style={styles.termRow}>
-              <Ionicons name="checkmark-circle" size={18} color="#16A34A" />
+              <Ionicons name="checkmark-circle" size={18} color="#44C4CE" />
 
               <Text style={styles.termText}>
                 {t('promotionDetail.termParticipatingLocations')}
@@ -263,7 +263,7 @@ export default function PromotionDetailScreen() {
             </View>
 
             <View style={styles.termRow}>
-              <Ionicons name="checkmark-circle" size={18} color="#16A34A" />
+              <Ionicons name="checkmark-circle" size={18} color="#44C4CE" />
 
               <Text style={styles.termText}>
                 {t('promotionDetail.termOnePerAccount')}
@@ -271,7 +271,7 @@ export default function PromotionDetailScreen() {
             </View>
 
             <View style={styles.termRow}>
-              <Ionicons name="checkmark-circle" size={18} color="#16A34A" />
+              <Ionicons name="checkmark-circle" size={18} color="#44C4CE" />
 
               <Text style={styles.termText}>
                 {t('promotionDetail.termCannotCombine')}
@@ -279,7 +279,7 @@ export default function PromotionDetailScreen() {
             </View>
 
             <View style={styles.termRow}>
-              <Ionicons name="checkmark-circle" size={18} color="#16A34A" />
+              <Ionicons name="checkmark-circle" size={18} color="#44C4CE" />
 
               <Text style={styles.termText}>
                 {t('promotionDetail.termValidPayment')}
@@ -296,7 +296,7 @@ export default function PromotionDetailScreen() {
           <Ionicons
             name="information-circle-outline"
             size={22}
-            color="#00A651"
+            color="#44C4CE"
           />
 
           <Text style={styles.noticeText}>{t('promotionDetail.notice')}</Text>
@@ -315,7 +315,7 @@ export default function PromotionDetailScreen() {
           <Ionicons
             name={collected ? 'checkmark-circle-outline' : 'ticket-outline'}
             size={22}
-            color={collected ? '#16A34A' : '#FFFFFF'}
+            color={collected ? '#44C4CE' : '#FFFFFF'}
           />
 
           <Text
@@ -337,7 +337,7 @@ export default function PromotionDetailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F3F7F6',
+    backgroundColor: '#EAF9FA',
   },
 
   content: {
@@ -388,14 +388,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#E8EFEC',
+    borderColor: '#E7F1F2',
   },
 
   heroIcon: {
     width: 78,
     height: 78,
     borderRadius: 24,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -411,7 +411,7 @@ const styles = StyleSheet.create({
     marginTop: 3,
     fontSize: 27,
     fontWeight: '900',
-    color: '#00A651',
+    color: '#44C4CE',
   },
 
   // ==========================================================
@@ -424,7 +424,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     padding: 18,
     borderWidth: 1,
-    borderColor: '#E8EFEC',
+    borderColor: '#E7F1F2',
   },
 
   title: {
@@ -446,7 +446,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 12,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -455,7 +455,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontSize: 11,
     fontWeight: '700',
-    color: '#008F48',
+    color: '#2E929A',
   },
 
   // ==========================================================
@@ -485,7 +485,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderWidth: 1,
-    borderColor: '#E8EFEC',
+    borderColor: '#E7F1F2',
   },
 
   codeLabel: {
@@ -505,7 +505,7 @@ const styles = StyleSheet.create({
     height: 36,
     paddingHorizontal: 12,
     borderRadius: 18,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -514,7 +514,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontSize: 11,
     fontWeight: '800',
-    color: '#00A651',
+    color: '#44C4CE',
   },
 
   // ==========================================================
@@ -528,14 +528,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#E8EFEC',
+    borderColor: '#E7F1F2',
   },
 
   validityIcon: {
     width: 42,
     height: 42,
     borderRadius: 13,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -565,7 +565,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 15,
     borderWidth: 1,
-    borderColor: '#E8EFEC',
+    borderColor: '#E7F1F2',
   },
 
   termRow: {
@@ -589,7 +589,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     padding: 14,
     borderRadius: 15,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -599,7 +599,7 @@ const styles = StyleSheet.create({
     marginLeft: 9,
     fontSize: 11,
     lineHeight: 17,
-    color: '#166534',
+    color: '#24777D',
   },
 
   // ==========================================================
@@ -610,7 +610,7 @@ const styles = StyleSheet.create({
     height: 56,
     marginTop: 20,
     borderRadius: 28,
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -624,13 +624,13 @@ const styles = StyleSheet.create({
   },
 
   collectedButton: {
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
     borderWidth: 1,
-    borderColor: '#BBF7D0',
+    borderColor: '#B8E7EA',
   },
 
   collectedButtonText: {
-    color: '#16A34A',
+    color: '#44C4CE',
   },
 
   // ==========================================================
@@ -656,7 +656,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 22,
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
   },
 
   backButtonEmptyText: {

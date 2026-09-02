@@ -23,7 +23,7 @@ export default function StationCard({
   const { t } = useTranslation();
   const color =
     station.status === 'Available'
-      ? '#16A34A'
+      ? '#44C4CE'
       : station.status === 'Busy'
       ? '#F59E0B'
       : '#DC2626';
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   selected: {
     borderWidth: 2,
 
-    borderColor: '#16A34A',
+    borderColor: '#44C4CE',
   },
 
   header: {

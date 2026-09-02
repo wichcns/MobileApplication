@@ -184,7 +184,7 @@ export default function QRScannerScreen() {
     if (isRequestingPermission) {
       return (
         <View style={styles.cameraMessage}>
-          <ActivityIndicator size="large" color="#00C878" />
+          <ActivityIndicator size="large" color="#44C4CE" />
 
           <Text style={styles.cameraMessageTitle}>
             {t('qrScanner.requestingCameraPermission')}
@@ -397,7 +397,7 @@ const styles = StyleSheet.create({
     width: 210,
     height: 210,
     borderWidth: 1,
-    borderColor: 'rgba(0, 200, 120, 0.75)',
+    borderColor: 'rgba(68, 196, 206, 0.75)',
     borderRadius: 18,
   },
 
@@ -442,7 +442,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#00C878',
+    backgroundColor: '#44C4CE',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -466,7 +466,7 @@ const styles = StyleSheet.create({
   },
 
   accessCodeLinkText: {
-    color: '#16A34A',
+    color: '#44C4CE',
     fontWeight: '700',
   },
 
@@ -543,12 +543,12 @@ const styles = StyleSheet.create({
   },
 
   qrSwitchTextLink: {
-    color: '#2F9E44',
+    color: '#44C4CE',
     textDecorationLine: 'underline',
   },
 
   accessConfirmButton: {
-    backgroundColor: '#00C878',
+    backgroundColor: '#44C4CE',
     borderRadius: 18,
     bottom: 32,
     height: 54,
@@ -599,7 +599,7 @@ const styles = StyleSheet.create({
     right: 20,
     height: 56,
     borderRadius: 18,
-    backgroundColor: '#00C878',
+    backgroundColor: '#44C4CE',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',

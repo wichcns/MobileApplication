@@ -167,12 +167,12 @@ export default function CreditPaymentScreen() {
 
         {isLoading ? (
           <View style={styles.loadingCard}>
-            <ActivityIndicator size="large" color="#16A34A" />
+            <ActivityIndicator size="large" color="#44C4CE" />
           </View>
         ) : creditCards.length === 0 ? (
           <View style={styles.emptyCard}>
             <View style={styles.emptyIcon}>
-              <Ionicons name="card-outline" size={38} color="#16A34A" />
+              <Ionicons name="card-outline" size={38} color="#44C4CE" />
             </View>
 
             <Text style={styles.emptyTitle}>
@@ -254,7 +254,7 @@ export default function CreditPaymentScreen() {
                 <Ionicons
                   name="checkmark-circle-outline"
                   size={20}
-                  color="#16A34A"
+                  color="#44C4CE"
                 />
 
                 <Text style={styles.actionText}>
@@ -290,7 +290,7 @@ export default function CreditPaymentScreen() {
             onPress={handleAddCard}
           >
             <View style={styles.addAnotherIcon}>
-              <Ionicons name="add" size={22} color="#16A34A" />
+              <Ionicons name="add" size={22} color="#44C4CE" />
             </View>
 
             <View style={styles.addAnotherContent}>
@@ -316,7 +316,7 @@ export default function CreditPaymentScreen() {
             <Ionicons
               name="shield-checkmark-outline"
               size={24}
-              color="#16A34A"
+              color="#44C4CE"
             />
           </View>
 
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
 
-    backgroundColor: '#F3F7F6',
+    backgroundColor: '#EAF9FA',
   },
 
   content: {
@@ -445,7 +445,7 @@ const styles = StyleSheet.create({
 
     borderWidth: 1,
 
-    borderColor: '#E8F0EE',
+    borderColor: '#E7F1F2',
   },
 
   loadingCard: {
@@ -461,7 +461,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 38,
 
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
 
     justifyContent: 'center',
 
@@ -501,7 +501,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 25,
 
-    backgroundColor: '#16A34A',
+    backgroundColor: '#44C4CE',
 
     flexDirection: 'row',
 
@@ -555,7 +555,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 12,
 
-    backgroundColor: '#16A34A',
+    backgroundColor: '#44C4CE',
 
     justifyContent: 'center',
 
@@ -581,7 +581,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 8,
 
-    backgroundColor: '#DCFCE7',
+    backgroundColor: '#D7F3F5',
   },
 
   defaultBadgeText: {
@@ -589,7 +589,7 @@ const styles = StyleSheet.create({
 
     fontWeight: '900',
 
-    color: '#166534',
+    color: '#24777D',
   },
 
   cardNumber: {
@@ -675,7 +675,7 @@ const styles = StyleSheet.create({
 
     fontWeight: '700',
 
-    color: '#16A34A',
+    color: '#44C4CE',
   },
 
   removeText: {
@@ -725,7 +725,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 21,
 
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
 
     justifyContent: 'center',
 
@@ -765,7 +765,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 18,
 
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
 
     flexDirection: 'row',
   },
@@ -795,7 +795,7 @@ const styles = StyleSheet.create({
 
     fontWeight: '800',
 
-    color: '#166534',
+    color: '#24777D',
   },
 
   securityText: {
@@ -805,6 +805,6 @@ const styles = StyleSheet.create({
 
     lineHeight: 18,
 
-    color: '#166534',
+    color: '#24777D',
   },
 });
