@@ -25,7 +25,7 @@ export default function BottomNavigator({ onLogout }: BottomNavigatorProps) {
       screenOptions={({ route }) => ({
         headerShown: false,
 
-        tabBarActiveTintColor: '#00A651',
+        tabBarActiveTintColor: '#44C4CE',
         tabBarInactiveTintColor: '#9CA3AF',
 
         tabBarIcon: ({ color, size }) => {

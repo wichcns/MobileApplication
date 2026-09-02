@@ -164,7 +164,7 @@ export default function StationDetailSheet({
     =========================== */}
 
         <View style={styles.distanceRow}>
-          <Ionicons name="navigate" size={18} color="#00C878" />
+          <Ionicons name="navigate" size={18} color="#44C4CE" />
 
           <Text style={styles.distanceText}>8.6 km</Text>
         </View>
@@ -174,7 +174,7 @@ export default function StationDetailSheet({
     =========================== */}
 
         <View style={styles.promotionCard}>
-          <Ionicons name="rocket-outline" size={18} color="#00C878" />
+          <Ionicons name="rocket-outline" size={18} color="#44C4CE" />
 
           <Text style={styles.promotionText} numberOfLines={2}>
             Super DC 120+kW {t('station.fasterCharging')}
@@ -313,7 +313,7 @@ export default function StationDetailSheet({
                         chargingCount > 0
                           ? '#F59E0B'
                           : availableCount > 0
-                          ? '#00C878'
+                          ? '#44C4CE'
                           : '#9CA3AF'
                       }
                     />
@@ -397,7 +397,7 @@ export default function StationDetailSheet({
                               size={16}
                               color={
                                 isAvailable
-                                  ? '#00C878'
+                                  ? '#44C4CE'
                                   : isCharging
                                   ? '#F59E0B'
                                   : '#9CA3AF'
@@ -719,7 +719,7 @@ const styles = StyleSheet.create({
 
     fontSize: 13,
 
-    color: '#00C878',
+    color: '#44C4CE',
 
     fontWeight: '600',
   },
@@ -776,7 +776,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 14,
 
-    backgroundColor: '#E9FFF6',
+    backgroundColor: '#EAF9FA',
 
     flexDirection: 'row',
 
@@ -788,7 +788,7 @@ const styles = StyleSheet.create({
 
     marginLeft: 8,
 
-    color: '#00A86B',
+    color: '#44C4CE',
 
     fontSize: 13,
 
@@ -1042,7 +1042,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 6,
 
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
 
     justifyContent: 'center',
     alignItems: 'center',
@@ -1063,7 +1063,7 @@ const styles = StyleSheet.create({
   availableText: {
     marginTop: 3,
 
-    color: '#00C878',
+    color: '#44C4CE',
 
     fontSize: 11,
 
@@ -1158,7 +1158,7 @@ const styles = StyleSheet.create({
   },
 
   connectorIconAvailable: {
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
   },
 
   connectorIconCharging: {
@@ -1216,7 +1216,7 @@ const styles = StyleSheet.create({
   },
 
   connectorStatusAvailable: {
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
   },
 
   connectorStatusCharging: {
@@ -1234,7 +1234,7 @@ const styles = StyleSheet.create({
   },
 
   connectorStatusTextAvailable: {
-    color: '#00A86B',
+    color: '#44C4CE',
   },
 
   connectorStatusTextCharging: {
@@ -1439,7 +1439,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 15,
 
-    backgroundColor: '#00C878',
+    backgroundColor: '#44C4CE',
 
     justifyContent: 'center',
     alignItems: 'center',

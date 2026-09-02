@@ -132,7 +132,7 @@ export default function PaymentMethodScreen() {
             <Ionicons
               name={item.icon}
               size={30}
-              color={isSelected ? '#FFFFFF' : '#00A651'}
+              color={isSelected ? '#FFFFFF' : '#44C4CE'}
             />
 
             {/* TEXT */}
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
   amount: {
     fontSize: 32,
     fontWeight: '900',
-    color: '#00A651',
+    color: '#44C4CE',
     marginTop: 5,
   },
 
@@ -253,8 +253,8 @@ const styles = StyleSheet.create({
   },
 
   selected: {
-    backgroundColor: '#00A651',
-    borderColor: '#00A651',
+    backgroundColor: '#44C4CE',
+    borderColor: '#44C4CE',
   },
 
   // ==========================================================
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
   },
 
   selectedSubText: {
-    color: '#E5F7ED',
+    color: '#E3F6F7',
   },
 
   // ==========================================================
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 40,
     height: 54,
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
     borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',

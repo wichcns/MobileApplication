@@ -16,7 +16,7 @@ export default function HistoryCard({ item, onPress }: Props) {
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.iconContainer}>
-          <Ionicons name="flash" size={22} color="#00A651" />
+          <Ionicons name="flash" size={22} color="#44C4CE" />
         </View>
 
         <View style={styles.stationContainer}>
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#E8F8EE',
+    backgroundColor: '#E3F6F7',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   },
 
   completed: {
-    backgroundColor: '#DCFCE7',
+    backgroundColor: '#D7F3F5',
   },
 
   failed: {
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   total: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#00A651',
+    color: '#44C4CE',
   },
 
   date: {

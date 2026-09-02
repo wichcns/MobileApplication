@@ -139,7 +139,7 @@ export default function TaxInvoiceScreen() {
   const Section = ({ title, icon, children }: SectionProps) => (
     <View style={styles.section}>
       <View style={styles.sectionHeader}>
-        <Ionicons name={icon as any} size={20} color="#16A34A" />
+        <Ionicons name={icon as any} size={20} color="#44C4CE" />
 
         <Text style={styles.sectionTitle}>{title}</Text>
       </View>
@@ -268,7 +268,7 @@ export default function TaxInvoiceScreen() {
       ====================================================== */}
 
         <View style={styles.noticeBox}>
-          <Ionicons name="shield-checkmark" size={26} color="#16A34A" />
+          <Ionicons name="shield-checkmark" size={26} color="#44C4CE" />
 
           <View
             style={{
@@ -402,7 +402,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 28,
 
-    backgroundColor: '#16A34A',
+    backgroundColor: '#44C4CE',
 
     justifyContent: 'center',
 
@@ -472,7 +472,7 @@ const styles = StyleSheet.create({
   noticeBox: {
     flexDirection: 'row',
 
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
 
     borderRadius: 18,
 
@@ -486,11 +486,11 @@ const styles = StyleSheet.create({
   noticeTitle: {
     fontWeight: '700',
 
-    color: '#166534',
+    color: '#24777D',
   },
 
   noticeText: {
-    color: '#166534',
+    color: '#24777D',
 
     marginTop: 5,
 

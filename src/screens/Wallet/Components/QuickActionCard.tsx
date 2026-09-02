@@ -20,7 +20,7 @@ export default function QuickActionCard({
   title,
   subtitle,
   icon,
-  color = '#00A651',
+  color = '#44C4CE',
   onPress,
 }: Props) {
   return (

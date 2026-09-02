@@ -43,9 +43,9 @@ const styles = StyleSheet.create({
   },
 
   selectedContainer: {
-    backgroundColor: '#0F766E',
+    backgroundColor: '#2B7F86',
 
-    borderColor: '#0F766E',
+    borderColor: '#2B7F86',
   },
 
   text: {

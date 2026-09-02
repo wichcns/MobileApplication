@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
 
     borderWidth: 10,
 
-    borderColor: '#DCFCE7',
+    borderColor: '#D7F3F5',
 
     justifyContent: 'center',
 
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
 
     fontWeight: '700',
 
-    color: '#16A34A',
+    color: '#44C4CE',
 
     marginTop: -6,
   },
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 5,
 
-    backgroundColor: '#16A34A',
+    backgroundColor: '#44C4CE',
 
     marginRight: 8,
   },

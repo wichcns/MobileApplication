@@ -16,9 +16,9 @@ const statusConfig: Record<string, {
   AVAILABLE: {
     text: 'Ready',
 
-    color: '#16A34A',
+    color: '#44C4CE',
 
-    background: '#DCFCE7',
+    background: '#D7F3F5',
   },
 
   CHARGING: {

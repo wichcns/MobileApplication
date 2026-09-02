@@ -182,9 +182,9 @@ const styles = StyleSheet.create({
   },
 
   selected: {
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
 
-    borderColor: '#00A651',
+    borderColor: '#44C4CE',
   },
 
   amountText: {
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
 
     marginTop: 28,
 
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
 
     borderRadius: 16,
 

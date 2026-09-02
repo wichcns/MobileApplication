@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
 
   viewAll: {
-    color: '#00A651',
+    color: '#44C4CE',
 
     fontWeight: '700',
   },

@@ -163,7 +163,7 @@ export default function MyCouponsScreen() {
 
                 <View style={styles.couponLeft}>
                   <View style={styles.couponIcon}>
-                    <Ionicons name="ticket-outline" size={25} color="#00A651" />
+                    <Ionicons name="ticket-outline" size={25} color="#44C4CE" />
                   </View>
                 </View>
 
@@ -225,7 +225,7 @@ export default function MyCouponsScreen() {
           <Ionicons
             name="information-circle-outline"
             size={21}
-            color="#00A651"
+            color="#44C4CE"
           />
 
           <Text style={styles.infoText}>{t('myCoupons.info')}</Text>
@@ -238,7 +238,7 @@ export default function MyCouponsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F3F7F6',
+    backgroundColor: '#EAF9FA',
   },
 
   content: {
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
   summaryCard: {
     minHeight: 82,
     borderRadius: 18,
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
     paddingHorizontal: 15,
     flexDirection: 'row',
     alignItems: 'center',
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
   summarySubtitle: {
     marginTop: 4,
     fontSize: 12,
-    color: '#E8FFF3',
+    color: '#EAF9FA',
   },
 
   // TABS
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
     marginTop: 18,
     height: 42,
     borderRadius: 21,
-    backgroundColor: '#E8EFEC',
+    backgroundColor: '#E7F1F2',
     padding: 3,
     flexDirection: 'row',
   },
@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
   },
 
   activeTabText: {
-    color: '#00A651',
+    color: '#44C4CE',
     fontWeight: '800',
   },
 
@@ -365,7 +365,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#E8EFEC',
+    borderColor: '#E7F1F2',
   },
 
   couponLeft: {
@@ -377,7 +377,7 @@ const styles = StyleSheet.create({
     width: 46,
     height: 46,
     borderRadius: 14,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -390,7 +390,7 @@ const styles = StyleSheet.create({
   merchant: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#00A651',
+    color: '#44C4CE',
   },
 
   couponTitle: {
@@ -404,7 +404,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     fontSize: 16,
     fontWeight: '900',
-    color: '#16A34A',
+    color: '#44C4CE',
   },
 
   codeRow: {
@@ -477,7 +477,7 @@ const styles = StyleSheet.create({
     height: 42,
     paddingHorizontal: 20,
     borderRadius: 21,
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -494,7 +494,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     padding: 14,
     borderRadius: 15,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -504,7 +504,7 @@ const styles = StyleSheet.create({
     marginLeft: 9,
     fontSize: 11,
     lineHeight: 17,
-    color: '#166534',
+    color: '#24777D',
   },
 
   statusBadge: {

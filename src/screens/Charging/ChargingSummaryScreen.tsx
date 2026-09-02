@@ -75,7 +75,7 @@ export default function ChargingSummaryScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>⚡ {t('chargingSummary.title')}</Text>
 
-      {isLoading && <ActivityIndicator size="small" color="#16A34A" />}
+      {isLoading && <ActivityIndicator size="small" color="#44C4CE" />}
       {loadError && <Text style={styles.errorText}>{loadError}</Text>}
 
       <View style={styles.card}>
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
 
     fontWeight: '800',
 
-    color: '#16A34A',
+    color: '#44C4CE',
 
     marginBottom: 15,
   },
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
 
     fontWeight: '900',
 
-    color: '#16A34A',
+    color: '#44C4CE',
   },
 
   button: {
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 30,
 
-    backgroundColor: '#16A34A',
+    backgroundColor: '#44C4CE',
 
     justifyContent: 'center',
 

@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   defaultBadge: {
     marginTop: 10,
     alignSelf: 'flex-start',
-    backgroundColor: '#16A34A',
+    backgroundColor: '#44C4CE',
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 20,
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   },
 
   addButton: {
-    backgroundColor: '#16A34A',
+    backgroundColor: '#44C4CE',
     padding: 16,
     borderRadius: 14,
     alignItems: 'center',

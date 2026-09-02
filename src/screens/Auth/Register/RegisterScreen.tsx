@@ -262,7 +262,7 @@ export default function RegisterScreen({ onLogin }: Props) {
                 <Ionicons
                   name={acceptedTerms ? 'checkbox' : 'square-outline'}
                   size={23}
-                  color="#00A651"
+                  color="#44C4CE"
                 />
                 <Text style={styles.terms}>
                   {t('register.termsPrefix')}{' '}
@@ -319,7 +319,7 @@ export default function RegisterScreen({ onLogin }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F3F7F6' },
+  container: { flex: 1, backgroundColor: '#EAF9FA' },
   content: { padding: 24, paddingBottom: 42 },
   back: {
     width: 42,
@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
   button: {
     height: 54,
     borderRadius: 15,
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 6,
@@ -395,5 +395,5 @@ const styles = StyleSheet.create({
   googleIcon: { width: 20, height: 20 },
   loginRow: { marginTop: 22, flexDirection: 'row', justifyContent: 'center' },
   loginText: { color: '#64748B' },
-  loginLink: { color: '#00A651', fontWeight: '800' },
+  loginLink: { color: '#44C4CE', fontWeight: '800' },
 });

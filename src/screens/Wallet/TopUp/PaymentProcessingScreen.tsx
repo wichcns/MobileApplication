@@ -34,7 +34,7 @@ export default function PaymentProcessingScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <ActivityIndicator size="large" color="#00A651" />
+        <ActivityIndicator size="large" color="#44C4CE" />
 
         <Text style={styles.title}>{t('paymentProcessing.title')}</Text>
 
@@ -94,6 +94,6 @@ const styles = StyleSheet.create({
 
     fontWeight: '900',
 
-    color: '#00A651',
+    color: '#44C4CE',
   },
 });

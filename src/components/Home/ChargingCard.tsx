@@ -19,7 +19,7 @@ export default function ChargingCard() {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#EDF8ED',
+    backgroundColor: '#EAF9FA',
     borderRadius: 20,
     padding: 18,
     marginBottom: 15,

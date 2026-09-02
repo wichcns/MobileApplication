@@ -204,7 +204,7 @@ export default function QRScreen() {
       <View style={styles.cameraBox}>
         {requestingPermission ? (
           <View style={styles.messageBox}>
-            <ActivityIndicator size="large" color="#00C878" />
+            <ActivityIndicator size="large" color="#44C4CE" />
             <Text style={styles.messageText}>กำลังขอสิทธิ์ใช้งานกล้อง</Text>
           </View>
         ) : !hasPermission ? (
@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
     width: 250,
     height: 250,
     borderWidth: 1,
-    borderColor: 'rgba(0, 200, 120, 0.75)',
+    borderColor: 'rgba(68, 196, 206, 0.75)',
     borderRadius: 20,
   },
   cameraText: {
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingVertical: 12,
     borderRadius: 12,
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
   },
   permissionText: { color: '#FFFFFF', fontWeight: '800' },
   bottom: {
@@ -340,7 +340,7 @@ const styles = StyleSheet.create({
   },
   description: { color: '#64748B', textAlign: 'center', fontSize: 14 },
   accessLink: {
-    color: '#319B42',
+    color: '#44C4CE',
     textAlign: 'center',
     fontWeight: '700',
     fontSize: 15,
@@ -350,9 +350,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 14,
-    backgroundColor: '#49A83B',
+    backgroundColor: '#44C4CE',
   },
-  disabledButton: { backgroundColor: '#A7D8B0' },
+  disabledButton: { backgroundColor: '#9DDFE4' },
   continueText: { color: '#FFFFFF', fontWeight: '800', fontSize: 16 },
   accessContainer: { flex: 1, padding: 18, backgroundColor: '#FFFFFF' },
   backButton: {
@@ -384,5 +384,5 @@ const styles = StyleSheet.create({
   codeDigit: { fontSize: 30, color: '#111827' },
   hiddenInput: { position: 'absolute', width: 1, height: 1, opacity: 0 },
   switchText: { marginTop: 106, color: '#777777', fontSize: 15 },
-  switchLink: { color: '#319B42', textDecorationLine: 'underline' },
+  switchLink: { color: '#44C4CE', textDecorationLine: 'underline' },
 });

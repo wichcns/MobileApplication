@@ -223,7 +223,7 @@ export default function TaxInfoScreen() {
 
         <View style={styles.infoCard}>
           <View style={styles.infoIcon}>
-            <Ionicons name="document-text-outline" size={25} color="#16A34A" />
+            <Ionicons name="document-text-outline" size={25} color="#44C4CE" />
           </View>
 
           <View style={styles.infoContent}>
@@ -255,7 +255,7 @@ export default function TaxInfoScreen() {
               <Ionicons
                 name="person-outline"
                 size={22}
-                color={taxType === 'individual' ? '#16A34A' : '#64748B'}
+                color={taxType === 'individual' ? '#44C4CE' : '#64748B'}
               />
 
               <Text
@@ -268,7 +268,7 @@ export default function TaxInfoScreen() {
               </Text>
 
               {taxType === 'individual' && (
-                <Ionicons name="checkmark-circle" size={20} color="#16A34A" />
+                <Ionicons name="checkmark-circle" size={20} color="#44C4CE" />
               )}
             </TouchableOpacity>
 
@@ -285,7 +285,7 @@ export default function TaxInfoScreen() {
               <Ionicons
                 name="business-outline"
                 size={22}
-                color={taxType === 'company' ? '#16A34A' : '#64748B'}
+                color={taxType === 'company' ? '#44C4CE' : '#64748B'}
               />
 
               <Text
@@ -298,7 +298,7 @@ export default function TaxInfoScreen() {
               </Text>
 
               {taxType === 'company' && (
-                <Ionicons name="checkmark-circle" size={20} color="#16A34A" />
+                <Ionicons name="checkmark-circle" size={20} color="#44C4CE" />
               )}
             </TouchableOpacity>
           </View>
@@ -315,7 +315,7 @@ export default function TaxInfoScreen() {
                   : 'person-circle-outline'
               }
               size={22}
-              color="#16A34A"
+              color="#44C4CE"
             />
 
             <Text style={styles.sectionTitle}>
@@ -349,7 +349,7 @@ export default function TaxInfoScreen() {
 
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Ionicons name="location-outline" size={22} color="#16A34A" />
+            <Ionicons name="location-outline" size={22} color="#44C4CE" />
 
             <Text style={styles.sectionTitle}>Billing Address</Text>
           </View>
@@ -395,7 +395,7 @@ export default function TaxInfoScreen() {
 
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Ionicons name="call-outline" size={22} color="#16A34A" />
+            <Ionicons name="call-outline" size={22} color="#44C4CE" />
 
             <Text style={styles.sectionTitle}>Contact Information</Text>
           </View>
@@ -420,7 +420,7 @@ export default function TaxInfoScreen() {
         {/* SECURITY NOTICE */}
 
         <View style={styles.noticeBox}>
-          <Ionicons name="shield-checkmark-outline" size={24} color="#16A34A" />
+          <Ionicons name="shield-checkmark-outline" size={24} color="#44C4CE" />
 
           <View style={styles.noticeContent}>
             <Text style={styles.noticeTitle}>Your information is secure</Text>
@@ -508,7 +508,7 @@ const styles = StyleSheet.create({
 
   infoCard: {
     flexDirection: 'row',
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
     borderRadius: 18,
     padding: 16,
     marginBottom: 18,
@@ -531,14 +531,14 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 15,
     fontWeight: '800',
-    color: '#166534',
+    color: '#24777D',
   },
 
   infoText: {
     marginTop: 4,
     fontSize: 13,
     lineHeight: 19,
-    color: '#166534',
+    color: '#24777D',
   },
 
   // =========================
@@ -588,8 +588,8 @@ const styles = StyleSheet.create({
   },
 
   typeButtonActive: {
-    borderColor: '#16A34A',
-    backgroundColor: '#F0FDF4',
+    borderColor: '#44C4CE',
+    backgroundColor: '#EAF9FA',
   },
 
   typeText: {
@@ -601,7 +601,7 @@ const styles = StyleSheet.create({
   },
 
   typeTextActive: {
-    color: '#166534',
+    color: '#24777D',
     fontWeight: '700',
   },
 
@@ -637,7 +637,7 @@ const styles = StyleSheet.create({
 
   noticeBox: {
     flexDirection: 'row',
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
     borderRadius: 18,
     padding: 16,
     marginBottom: 20,
@@ -651,14 +651,14 @@ const styles = StyleSheet.create({
   noticeTitle: {
     fontSize: 14,
     fontWeight: '800',
-    color: '#166534',
+    color: '#24777D',
   },
 
   noticeText: {
     marginTop: 4,
     fontSize: 13,
     lineHeight: 19,
-    color: '#166534',
+    color: '#24777D',
   },
 
   // =========================
@@ -668,7 +668,7 @@ const styles = StyleSheet.create({
   saveButton: {
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#16A34A',
+    backgroundColor: '#44C4CE',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',

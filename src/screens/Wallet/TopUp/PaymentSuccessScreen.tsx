@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 50,
 
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
 
     justifyContent: 'center',
 
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
 
     fontWeight: '900',
 
-    color: '#00A651',
+    color: '#44C4CE',
   },
 
   button: {
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
 
     width: '100%',
 
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
 
     padding: 18,
 

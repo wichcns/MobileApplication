@@ -25,7 +25,7 @@ export default function TransactionItem({
 }: Props) {
   const isIncome = type === 'TOPUP' || type === 'REFUND';
 
-  const amountColor = isIncome ? '#16A34A' : '#DC2626';
+  const amountColor = isIncome ? '#44C4CE' : '#DC2626';
 
   const amountPrefix = isIncome ? '+' : '-';
 
@@ -40,7 +40,7 @@ export default function TransactionItem({
     <View style={styles.container}>
       <View style={styles.left}>
         <View style={styles.iconContainer}>
-          <Ionicons name={icon} size={22} color="#00A651" />
+          <Ionicons name={icon} size={22} color="#44C4CE" />
         </View>
 
         <View>
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 23,
 
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
 
     justifyContent: 'center',
 

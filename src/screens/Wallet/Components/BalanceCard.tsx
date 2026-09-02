@@ -69,7 +69,7 @@ export default function BalanceCard({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#00A651',
+    backgroundColor: '#44C4CE',
 
     borderRadius: 24,
 
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   },
 
   updated: {
-    color: '#D1FAE5',
+    color: '#D7F3F5',
 
     marginTop: 6,
 

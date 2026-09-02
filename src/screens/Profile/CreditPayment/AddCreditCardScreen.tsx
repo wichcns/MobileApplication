@@ -398,7 +398,7 @@ export default function AddCreditCardScreen() {
         {/* SECURITY */}
 
         <View style={styles.securityBox}>
-          <Ionicons name="shield-checkmark-outline" size={22} color="#16A34A" />
+          <Ionicons name="shield-checkmark-outline" size={22} color="#44C4CE" />
 
           <View style={styles.securityContent}>
             <Text style={styles.securityTitle}>
@@ -593,7 +593,7 @@ const styles = StyleSheet.create({
   securityBox: {
     marginTop: 18,
     flexDirection: 'row',
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#EAF9FA',
     borderRadius: 16,
     padding: 15,
   },
@@ -606,14 +606,14 @@ const styles = StyleSheet.create({
   securityTitle: {
     fontSize: 13,
     fontWeight: '800',
-    color: '#166534',
+    color: '#24777D',
   },
 
   securityText: {
     marginTop: 4,
     fontSize: 12,
     lineHeight: 18,
-    color: '#166534',
+    color: '#24777D',
   },
 
   // BUTTON
@@ -622,7 +622,7 @@ const styles = StyleSheet.create({
     height: 56,
     marginTop: 22,
     borderRadius: 28,
-    backgroundColor: '#16A34A',
+    backgroundColor: '#44C4CE',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
