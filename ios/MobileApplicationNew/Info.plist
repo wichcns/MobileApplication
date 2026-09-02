@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>MobileApplicationNew</string>
+	<string>GSB EV</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -24,6 +24,17 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.458026609639-cgkfc1hhrcfk546fs4g3gh08m1jjspaf</string>
+			</array>
+		</dict>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -33,10 +44,18 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>GSB EV uses your location to show nearby charging stations.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>GSB EV uses your camera to scan charger QR codes.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>GSB EV uses your location to show nearby charging stations.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>GSB EV uses your location to show nearby charging stations while you use the app. GSB EV does not track your location in the background.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>GSB EV accesses your photo library so you can select a profile picture.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>GSB EV saves charging receipts and charging history images to your photo library.</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
