@@ -193,7 +193,7 @@ export default function StationDetailSheet({
             numberOfLines={1}
             ellipsizeMode="tail"
           >
-            {available}/{total} • DC • 120kW
+            {available}/{total} • AC • 40 kW
           </Text>
         </View>
 
