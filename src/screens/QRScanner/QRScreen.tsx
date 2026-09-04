@@ -2,15 +2,20 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import { Camera, CameraType } from 'react-native-camera-kit';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCameraPermission } from 'react-native-vision-camera';
 
 import apiClient from '../../api/client';
@@ -39,6 +44,7 @@ const findStationFromChargingPoint = (chargingPoint: any): Station | null => {
 
 export default function QRScreen() {
   const navigation = useNavigation<any>();
+  const { width } = useWindowDimensions();
   const { hasPermission, requestPermission } = useCameraPermission();
   const accessCodeInputRef = useRef<TextInput>(null);
   const [mode, setMode] = useState<VerificationMode>('QR');
@@ -48,6 +54,7 @@ export default function QRScreen() {
   const [isLookingUp, setIsLookingUp] = useState(false);
   const canContinue =
     mode === 'QR' ? Boolean(scannedValue) : /^\d{4}$/.test(accessCode);
+  const codeBoxSize = Math.min(72, Math.max(52, (width - 84) / 4));
 
   useEffect(() => {
     if (hasPermission) return;
@@ -124,75 +131,110 @@ export default function QRScreen() {
 
   if (mode === 'ACCESS_CODE') {
     return (
-      <View style={styles.accessContainer}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => {
-            setAccessCode('');
-            setMode('QR');
-          }}
-          disabled={isLookingUp}
+      <SafeAreaView style={styles.accessContainer} edges={['top', 'bottom']}>
+        <KeyboardAvoidingView
+          style={styles.accessKeyboardView}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
-          <Ionicons name="arrow-back" size={24} color="#111827" />
-        </TouchableOpacity>
-        <View style={styles.accessContent}>
-          <Text style={styles.accessTitle}>กรอกรหัส</Text>
-          <Text style={styles.accessSubtitle}>
-            โปรดกรอกรหัส (Access Code){'\n'}เพื่อค้นหาหัวชาร์จ
-          </Text>
-          <TouchableOpacity
-            activeOpacity={1}
-            style={styles.codeBoxes}
-            onPress={() => accessCodeInputRef.current?.focus()}
+          <View style={styles.accessHeader}>
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => {
+                setAccessCode('');
+                setMode('QR');
+              }}
+              disabled={isLookingUp}
+              accessibilityRole="button"
+              accessibilityLabel="ย้อนกลับไปสแกน QR Code"
+            >
+              <Ionicons name="arrow-back" size={24} color="#111827" />
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView
+            style={styles.accessScroll}
+            contentContainerStyle={styles.accessContent}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
           >
-            {[0, 1, 2, 3].map(index => (
-              <View key={index} style={styles.codeBox}>
-                <Text style={styles.codeDigit}>
-                  {accessCode[index] ? '•' : ''}
-                </Text>
-              </View>
-            ))}
-          </TouchableOpacity>
-          <TextInput
-            ref={accessCodeInputRef}
-            value={accessCode}
-            onChangeText={value =>
-              setAccessCode(value.replace(/\D/g, '').slice(0, 4))
-            }
-            keyboardType="number-pad"
-            maxLength={4}
-            autoFocus
-            secureTextEntry
-            editable={!isLookingUp}
-            style={styles.hiddenInput}
-          />
-          <TouchableOpacity
-            onPress={() => {
-              setAccessCode('');
-              setMode('QR');
-            }}
-            disabled={isLookingUp}
-          >
-            <Text style={styles.switchText}>
-              เช็คอินด้วย <Text style={styles.switchLink}>QR Code?</Text>
+            <Text style={styles.accessTitle} maxFontSizeMultiplier={1.3}>
+              กรอกรหัส
             </Text>
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity
-          style={[
-            styles.continueButton,
-            (!canContinue || isLookingUp) && styles.disabledButton,
-          ]}
-          onPress={lookUpChargingPoint}
-          disabled={!canContinue || isLookingUp}
-        >
-          {isLookingUp ? (
-            <ActivityIndicator color="#FFFFFF" />
-          ) : (
-            <Text style={styles.continueText}>ไปต่อ</Text>
-          )}
-        </TouchableOpacity>
-      </View>
+            <Text style={styles.accessSubtitle} maxFontSizeMultiplier={1.3}>
+              โปรดกรอกรหัส (Access Code){'\n'}เพื่อค้นหาหัวชาร์จ
+            </Text>
+            <TouchableOpacity
+              activeOpacity={1}
+              style={styles.codeBoxes}
+              onPress={() => accessCodeInputRef.current?.focus()}
+              accessibilityRole="button"
+              accessibilityLabel="กรอกรหัส Access Code 4 หลัก"
+            >
+              {[0, 1, 2, 3].map(index => (
+                <View
+                  key={index}
+                  style={[
+                    styles.codeBox,
+                    { width: codeBoxSize, height: codeBoxSize },
+                  ]}
+                >
+                  <Text style={styles.codeDigit} maxFontSizeMultiplier={1.2}>
+                    {accessCode[index] ? '•' : ''}
+                  </Text>
+                </View>
+              ))}
+            </TouchableOpacity>
+            <TextInput
+              ref={accessCodeInputRef}
+              value={accessCode}
+              onChangeText={value =>
+                setAccessCode(value.replace(/\D/g, '').slice(0, 4))
+              }
+              keyboardType="number-pad"
+              maxLength={4}
+              autoFocus
+              secureTextEntry
+              editable={!isLookingUp}
+              style={styles.hiddenInput}
+            />
+            <TouchableOpacity
+              style={styles.switchButton}
+              onPress={() => {
+                setAccessCode('');
+                setMode('QR');
+              }}
+              disabled={isLookingUp}
+            >
+              <Text style={styles.switchText} maxFontSizeMultiplier={1.3}>
+                เช็คอินด้วย <Text style={styles.switchLink}>QR Code?</Text>
+              </Text>
+            </TouchableOpacity>
+          </ScrollView>
+
+          <View style={styles.accessFooter}>
+            <TouchableOpacity
+              style={[
+                styles.continueButton,
+                (!canContinue || isLookingUp) && styles.disabledButton,
+              ]}
+              onPress={lookUpChargingPoint}
+              disabled={!canContinue || isLookingUp}
+            >
+              {isLookingUp ? (
+                <ActivityIndicator color="#FFFFFF" />
+              ) : (
+                <Text
+                  style={styles.continueText}
+                  maxFontSizeMultiplier={1.3}
+                  numberOfLines={1}
+                >
+                  ไปต่อ
+                </Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
     );
   }
 
@@ -354,17 +396,36 @@ const styles = StyleSheet.create({
   },
   disabledButton: { backgroundColor: '#9DDFE4' },
   continueText: { color: '#FFFFFF', fontWeight: '800', fontSize: 16 },
-  accessContainer: { flex: 1, padding: 18, backgroundColor: '#FFFFFF' },
+  accessContainer: { flex: 1, backgroundColor: '#FFFFFF' },
+  accessKeyboardView: { flex: 1 },
+  accessHeader: {
+    minHeight: 64,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 8,
+  },
   backButton: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F1F5F9',
   },
-  accessContent: { flex: 1, alignItems: 'center', paddingTop: 44 },
-  accessTitle: { color: '#111827', fontSize: 28, fontWeight: '800' },
+  accessScroll: { flex: 1 },
+  accessContent: {
+    flexGrow: 1,
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingTop: 20,
+    paddingBottom: 24,
+  },
+  accessTitle: {
+    color: '#111827',
+    fontSize: 28,
+    fontWeight: '800',
+    textAlign: 'center',
+  },
   accessSubtitle: {
     marginTop: 16,
     color: '#7A7A7A',
@@ -372,17 +433,29 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 23,
   },
-  codeBoxes: { marginTop: 142, flexDirection: 'row', gap: 22 },
+  codeBoxes: {
+    width: '100%',
+    maxWidth: 360,
+    marginTop: 72,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 8,
+  },
   codeBox: {
-    width: 76,
-    height: 76,
     borderRadius: 12,
     backgroundColor: '#E9E9ED',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  codeDigit: { fontSize: 30, color: '#111827' },
+  codeDigit: { fontSize: 30, lineHeight: 36, color: '#111827' },
   hiddenInput: { position: 'absolute', width: 1, height: 1, opacity: 0 },
-  switchText: { marginTop: 106, color: '#777777', fontSize: 15 },
+  switchButton: { marginTop: 48, padding: 12 },
+  switchText: { color: '#777777', fontSize: 15, textAlign: 'center' },
   switchLink: { color: '#44C4CE', textDecorationLine: 'underline' },
+  accessFooter: {
+    paddingHorizontal: 24,
+    paddingTop: 12,
+    paddingBottom: 8,
+    backgroundColor: '#FFFFFF',
+  },
 });
