@@ -253,6 +253,8 @@ const en = {
 
       receiptSaved: 'Receipt saved to your device.',
       receiptSaveError: 'Cannot save receipt.',
+      photoPermissionDenied:
+        'Allow photo access in Settings to save the receipt.',
     },
 
     profile: {
@@ -520,6 +522,10 @@ const en = {
 
       saveReceipt: 'Save Receipt',
       saveReceiptDescription: 'Save a copy to your device',
+      receiptSaved: 'Receipt saved to Photos.',
+      receiptSaveError: 'Unable to save the receipt. Please try again.',
+      photoPermissionDenied:
+        'Allow photo access in Settings to save the receipt.',
 
       requestTaxInvoice: 'Request Tax Invoice',
       taxInvoiceDescription: 'Get an official tax invoice',

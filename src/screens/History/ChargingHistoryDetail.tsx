@@ -1,10 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
 import { captureRef } from 'react-native-view-shot';
-
-import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 
 import {
   StyleSheet,
@@ -22,6 +20,10 @@ import Ionicons from '@react-native-vector-icons/ionicons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { ChargingHistory } from '../../types/history';
+import {
+  GalleryPermissionError,
+  saveImageToGallery,
+} from '../../utils/saveImageToGallery';
 
 export default function ChargingHistoryDetail() {
   const { t } = useTranslation();
@@ -31,17 +33,28 @@ export default function ChargingHistoryDetail() {
   const route = useRoute<any>();
 
   const receiptRef = useRef<any>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const saveReceipt = async () => {
+    if (isSaving) {
+      return;
+    }
+
+    setIsSaving(true);
+
     try {
-      const uri = await captureRef(receiptRef, {
+      if (!receiptRef.current) {
+        throw new Error('Receipt is not ready to capture');
+      }
+
+      const uri = await captureRef(receiptRef.current, {
         format: 'png',
         quality: 1,
+        result: 'tmpfile',
+        fileName: `gsb-ev-receipt-${Date.now()}`,
       });
 
-      await CameraRoll.save(uri, {
-        type: 'photo',
-      });
+      await saveImageToGallery(uri);
 
       Alert.alert(t('common.success'), t('chargingHistoryDetail.receiptSaved'));
     } catch (error) {
@@ -49,8 +62,12 @@ export default function ChargingHistoryDetail() {
 
       Alert.alert(
         t('common.error'),
-        t('chargingHistoryDetail.receiptSaveError'),
+        error instanceof GalleryPermissionError
+          ? t('chargingHistoryDetail.photoPermissionDenied')
+          : t('chargingHistoryDetail.receiptSaveError'),
       );
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -193,9 +210,10 @@ export default function ChargingHistoryDetail() {
         ====================================================== */}
 
         <TouchableOpacity
-          style={styles.saveButton}
+          style={[styles.saveButton, isSaving && styles.disabledButton]}
           onPress={saveReceipt}
           activeOpacity={0.8}
+          disabled={isSaving}
         >
           <Ionicons name="download-outline" size={26} color="#44C4CE" />
 
@@ -493,6 +511,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
 
     paddingHorizontal: 20,
+  },
+
+  disabledButton: {
+    opacity: 0.6,
   },
 
   saveButtonContent: {
