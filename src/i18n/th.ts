@@ -251,6 +251,8 @@ const th = {
 
       receiptSaved: 'บันทึกใบเสร็จลงในอุปกรณ์เรียบร้อยแล้ว',
       receiptSaveError: 'ไม่สามารถบันทึกใบเสร็จได้',
+      photoPermissionDenied:
+        'กรุณาอนุญาตให้เข้าถึงรูปภาพในการตั้งค่าเพื่อบันทึกใบเสร็จ',
     },
 
     profile: {
@@ -515,6 +517,10 @@ const th = {
 
       saveReceipt: 'บันทึกใบเสร็จ',
       saveReceiptDescription: 'บันทึกสำเนาใบเสร็จลงในอุปกรณ์',
+      receiptSaved: 'บันทึกใบเสร็จลงในแอปรูปภาพเรียบร้อยแล้ว',
+      receiptSaveError: 'ไม่สามารถบันทึกใบเสร็จได้ กรุณาลองอีกครั้ง',
+      photoPermissionDenied:
+        'กรุณาอนุญาตให้เข้าถึงรูปภาพในการตั้งค่าเพื่อบันทึกใบเสร็จ',
 
       requestTaxInvoice: 'ขอใบกำกับภาษี',
       taxInvoiceDescription: 'ขอใบกำกับภาษีอย่างเป็นทางการ',

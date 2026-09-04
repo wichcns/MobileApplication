@@ -1,8 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ViewShot from 'react-native-view-shot';
-
-import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 
 import {
   Alert,
@@ -19,6 +17,10 @@ import {
   chargingSession,
   clearChargingSession,
 } from '../../store/chargingStore';
+import {
+  GalleryPermissionError,
+  saveImageToGallery,
+} from '../../utils/saveImageToGallery';
 
 export default function ReceiptScreen() {
   const { t } = useTranslation();
@@ -27,6 +29,7 @@ export default function ReceiptScreen() {
   const route = useRoute<any>();
 
   const receiptRef = useRef<any>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   // ==========================================================
   // PAYMENT DATA
@@ -45,6 +48,12 @@ export default function ReceiptScreen() {
   // ==========================================================
 
   const saveReceipt = async () => {
+    if (isSaving) {
+      return;
+    }
+
+    setIsSaving(true);
+
     try {
       const uri = await receiptRef.current?.capture();
 
@@ -54,15 +63,20 @@ export default function ReceiptScreen() {
         return;
       }
 
-      await CameraRoll.save(uri, {
-        type: 'photo',
-      });
+      await saveImageToGallery(uri);
 
-      Alert.alert('Success', 'Receipt saved successfully');
+      Alert.alert(t('common.success'), t('receipt.receiptSaved'));
     } catch (error) {
       console.log('Save receipt error', error);
 
-      Alert.alert('Error', 'Unable to save receipt. Please try again.');
+      Alert.alert(
+        t('common.error'),
+        error instanceof GalleryPermissionError
+          ? t('receipt.photoPermissionDenied')
+          : t('receipt.receiptSaveError'),
+      );
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -284,9 +298,10 @@ export default function ReceiptScreen() {
         ================================================== */}
 
           <TouchableOpacity
-            style={styles.saveButton}
+            style={[styles.saveButton, isSaving && styles.disabledButton]}
             onPress={saveReceipt}
             activeOpacity={0.8}
+            disabled={isSaving}
           >
             <View style={styles.actionIconWhite}>
               <Text style={styles.saveIcon}>↓</Text>
@@ -637,6 +652,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
 
     alignItems: 'center',
+  },
+
+  disabledButton: {
+    opacity: 0.6,
   },
 
   actionIconWhite: {

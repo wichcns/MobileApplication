@@ -286,6 +286,7 @@ const zh = {
 
       receiptSaved: '收据已保存到您的设备',
       receiptSaveError: '无法保存收据',
+      photoPermissionDenied: '请在设置中允许访问照片，以保存收据',
     },
 
     profile: {
@@ -510,6 +511,9 @@ const zh = {
 
       saveReceipt: '保存收据',
       saveReceiptDescription: '将收据副本保存到您的设备',
+      receiptSaved: '收据已保存到照片中',
+      receiptSaveError: '无法保存收据，请重试',
+      photoPermissionDenied: '请在设置中允许访问照片，以保存收据',
 
       requestTaxInvoice: '申请税务发票',
       taxInvoiceDescription: '获取正式税务发票',

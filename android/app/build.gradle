@@ -87,8 +87,8 @@ android {
         applicationId "com.mobileapplicationnew"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 19
-        versionName "4.2.2"
+        versionCode 20
+        versionName "4.2.3"
     }
    signingConfigs {
 
