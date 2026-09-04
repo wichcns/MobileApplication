@@ -7,7 +7,11 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
   TextInput,
+  useWindowDimensions,
 } from 'react-native';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -15,6 +19,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import Ionicons from '@react-native-vector-icons/ionicons';
 
 import { Camera, CameraType } from 'react-native-camera-kit';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCameraPermission } from 'react-native-vision-camera';
 
 import { createAndCheckInChargingSession } from '../../services/charging/chargingSessionApi';
@@ -23,6 +28,7 @@ export default function QRScannerScreen() {
   const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
+  const { width } = useWindowDimensions();
 
   const { station, charger, connector, verification } = route.params ?? {};
   const connectorId = connector?.connectorId;
@@ -31,9 +37,9 @@ export default function QRScannerScreen() {
 
   const [isRequestingPermission, setIsRequestingPermission] = useState(false);
   const [isStarting, setIsStarting] = useState(false);
-  const [verificationMode, setVerificationMode] = useState<'QR' | 'ACCESS_CODE'>(
-    verification?.accessCode ? 'ACCESS_CODE' : 'QR',
-  );
+  const [verificationMode, setVerificationMode] = useState<
+    'QR' | 'ACCESS_CODE'
+  >(verification?.accessCode ? 'ACCESS_CODE' : 'QR');
   const [scannedQrCode, setScannedQrCode] = useState<string | null>(
     verification?.qrCodePayload ?? null,
   );
@@ -42,6 +48,7 @@ export default function QRScannerScreen() {
   const isAccessCodeValid = /^\d{4}$/.test(accessCode);
   const canStart =
     verificationMode === 'QR' ? Boolean(scannedQrCode) : isAccessCodeValid;
+  const accessCodeBoxSize = Math.min(72, Math.max(52, (width - 84) / 4));
 
   useEffect(() => {
     const requestCameraAccess = async () => {
@@ -96,7 +103,15 @@ export default function QRScannerScreen() {
     } finally {
       setIsStarting(false);
     }
-  }, [accessCode, canStart, connectorId, isStarting, navigation, scannedQrCode, verificationMode]);
+  }, [
+    accessCode,
+    canStart,
+    connectorId,
+    isStarting,
+    navigation,
+    scannedQrCode,
+    verificationMode,
+  ]);
 
   if (!station || !charger || !connector) {
     return (
@@ -111,72 +126,113 @@ export default function QRScannerScreen() {
 
   if (verificationMode === 'ACCESS_CODE') {
     return (
-      <View style={styles.accessPage}>
-        <TouchableOpacity
-          style={styles.accessBackButton}
-          onPress={() => {
-            setAccessCode('');
-            setVerificationMode('QR');
-          }}
-          disabled={isStarting}
+      <SafeAreaView style={styles.accessPage} edges={['top', 'bottom']}>
+        <KeyboardAvoidingView
+          style={styles.accessKeyboardView}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
-          <Ionicons name="arrow-back" size={24} color="#111827" />
-        </TouchableOpacity>
+          <View style={styles.accessHeader}>
+            <TouchableOpacity
+              style={styles.accessBackButton}
+              onPress={() => {
+                setAccessCode('');
+                setVerificationMode('QR');
+              }}
+              disabled={isStarting}
+              accessibilityRole="button"
+              accessibilityLabel="ย้อนกลับไปสแกน QR Code"
+            >
+              <Ionicons name="arrow-back" size={24} color="#111827" />
+            </TouchableOpacity>
+          </View>
 
-        <Text style={styles.accessPageTitle}>กรอกรหัส</Text>
-        <Text style={styles.accessPageSubtitle}>
-          โปรดกรอกรหัส (Access Code){'\n'}เพื่อเช็คอิน
-        </Text>
+          <ScrollView
+            style={styles.accessScroll}
+            contentContainerStyle={styles.accessContent}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            <Text style={styles.accessPageTitle} maxFontSizeMultiplier={1.3}>
+              กรอกรหัส
+            </Text>
+            <Text style={styles.accessPageSubtitle} maxFontSizeMultiplier={1.3}>
+              โปรดกรอกรหัส (Access Code){'\n'}เพื่อเช็คอิน
+            </Text>
 
-        <TouchableOpacity
-          activeOpacity={1}
-          style={styles.accessCodeBoxes}
-          onPress={() => accessCodeInputRef.current?.focus()}
-        >
-          {[0, 1, 2, 3].map(index => (
-            <View key={index} style={styles.accessCodeBox}>
-              <Text style={styles.accessCodeDigit}>
-                {accessCode[index] ? '•' : ''}
+            <TouchableOpacity
+              activeOpacity={1}
+              style={styles.accessCodeBoxes}
+              onPress={() => accessCodeInputRef.current?.focus()}
+              accessibilityRole="button"
+              accessibilityLabel="กรอกรหัส Access Code 4 หลัก"
+            >
+              {[0, 1, 2, 3].map(index => (
+                <View
+                  key={index}
+                  style={[
+                    styles.accessCodeBox,
+                    { width: accessCodeBoxSize, height: accessCodeBoxSize },
+                  ]}
+                >
+                  <Text
+                    style={styles.accessCodeDigit}
+                    maxFontSizeMultiplier={1.2}
+                  >
+                    {accessCode[index] ? '•' : ''}
+                  </Text>
+                </View>
+              ))}
+            </TouchableOpacity>
+
+            <TextInput
+              ref={accessCodeInputRef}
+              value={accessCode}
+              onChangeText={value =>
+                setAccessCode(value.replace(/\D/g, '').slice(0, 4))
+              }
+              keyboardType="number-pad"
+              maxLength={4}
+              autoFocus
+              secureTextEntry
+              editable={!isStarting}
+              style={styles.hiddenAccessInput}
+            />
+
+            <TouchableOpacity
+              style={styles.qrSwitchLink}
+              onPress={() => {
+                setAccessCode('');
+                setVerificationMode('QR');
+              }}
+              disabled={isStarting}
+            >
+              <Text style={styles.qrSwitchText} maxFontSizeMultiplier={1.3}>
+                เช็คอินด้วย{' '}
+                <Text style={styles.qrSwitchTextLink}>QR Code?</Text>
               </Text>
-            </View>
-          ))}
-        </TouchableOpacity>
+            </TouchableOpacity>
+          </ScrollView>
 
-        <TextInput
-          ref={accessCodeInputRef}
-          value={accessCode}
-          onChangeText={value => setAccessCode(value.replace(/\D/g, '').slice(0, 4))}
-          keyboardType="number-pad"
-          maxLength={4}
-          autoFocus
-          secureTextEntry
-          editable={!isStarting}
-          style={styles.hiddenAccessInput}
-        />
-
-        <TouchableOpacity
-          style={styles.qrSwitchLink}
-          onPress={() => {
-            setAccessCode('');
-            setVerificationMode('QR');
-          }}
-          disabled={isStarting}
-        >
-          <Text style={styles.qrSwitchText}>
-            เช็คอินด้วย <Text style={styles.qrSwitchTextLink}>QR Code?</Text>
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.accessConfirmButton, (!canStart || isStarting) && { opacity: 0.6 }]}
-          onPress={handleConfirmCharging}
-          disabled={!canStart || isStarting}
-        >
-          <Text style={styles.accessConfirmButtonText}>
-            {isStarting ? 'กำลังเริ่มชาร์จ...' : 'ยืนยัน'}
-          </Text>
-        </TouchableOpacity>
-      </View>
+          <View style={styles.accessFooter}>
+            <TouchableOpacity
+              style={[
+                styles.accessConfirmButton,
+                (!canStart || isStarting) && { opacity: 0.6 },
+              ]}
+              onPress={handleConfirmCharging}
+              disabled={!canStart || isStarting}
+            >
+              <Text
+                style={styles.accessConfirmButtonText}
+                maxFontSizeMultiplier={1.3}
+                numberOfLines={1}
+              >
+                {isStarting ? 'กำลังเริ่มชาร์จ...' : 'ยืนยัน'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
     );
   }
 
@@ -233,7 +289,9 @@ export default function QRScannerScreen() {
             bottom: 0,
           }}
           cameraType={CameraType.Back}
-          scanBarcode={verificationMode === 'QR' && !scannedQrCode && !isStarting}
+          scanBarcode={
+            verificationMode === 'QR' && !scannedQrCode && !isStarting
+          }
           allowedBarcodeTypes={['qr']}
           showFrame={false}
           onReadCode={(event: any) => {
@@ -331,7 +389,9 @@ export default function QRScannerScreen() {
         <Ionicons name="flash" size={22} color="#FFFFFF" />
 
         <Text style={styles.buttonText}>
-          {isStarting ? 'กำลังเริ่มชาร์จ...' : t('qrScanner.confirmStartCharging')}
+          {isStarting
+            ? 'กำลังเริ่มชาร์จ...'
+            : t('qrScanner.confirmStartCharging')}
         </Text>
       </TouchableOpacity>
     </View>
@@ -473,20 +533,38 @@ const styles = StyleSheet.create({
   accessPage: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    paddingHorizontal: 32,
-    paddingTop: 74,
+  },
+
+  accessKeyboardView: {
+    flex: 1,
+  },
+
+  accessHeader: {
+    minHeight: 64,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 8,
   },
 
   accessBackButton: {
     alignItems: 'center',
     backgroundColor: '#F3F4F6',
-    borderRadius: 20,
-    height: 40,
+    borderRadius: 22,
+    height: 44,
     justifyContent: 'center',
-    left: 20,
-    position: 'absolute',
-    top: 20,
-    width: 40,
+    width: 44,
+  },
+
+  accessScroll: {
+    flex: 1,
+  },
+
+  accessContent: {
+    alignItems: 'center',
+    flexGrow: 1,
+    paddingBottom: 24,
+    paddingHorizontal: 24,
+    paddingTop: 20,
   },
 
   accessPageTitle: {
@@ -506,17 +584,18 @@ const styles = StyleSheet.create({
 
   accessCodeBoxes: {
     flexDirection: 'row',
+    gap: 8,
     justifyContent: 'space-between',
-    marginTop: 145,
+    marginTop: 72,
+    maxWidth: 360,
+    width: '100%',
   },
 
   accessCodeBox: {
     alignItems: 'center',
     backgroundColor: '#E9E9EE',
     borderRadius: 12,
-    height: 76,
     justifyContent: 'center',
-    width: 76,
   },
 
   accessCodeDigit: {
@@ -534,12 +613,14 @@ const styles = StyleSheet.create({
 
   qrSwitchLink: {
     alignSelf: 'center',
-    marginTop: 110,
+    marginTop: 48,
+    padding: 12,
   },
 
   qrSwitchText: {
     color: '#737373',
     fontSize: 15,
+    textAlign: 'center',
   },
 
   qrSwitchTextLink: {
@@ -550,12 +631,15 @@ const styles = StyleSheet.create({
   accessConfirmButton: {
     backgroundColor: '#44C4CE',
     borderRadius: 18,
-    bottom: 32,
     height: 54,
     justifyContent: 'center',
-    left: 32,
-    position: 'absolute',
-    right: 32,
+  },
+
+  accessFooter: {
+    backgroundColor: '#FFFFFF',
+    paddingBottom: 8,
+    paddingHorizontal: 24,
+    paddingTop: 12,
   },
 
   accessConfirmButtonText: {
@@ -564,7 +648,6 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     textAlign: 'center',
   },
-
 
   sectionTitle: {
     fontSize: 17,
