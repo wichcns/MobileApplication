@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 
 import { FlatList } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import StationCard from './StationCard';
 
@@ -22,6 +23,7 @@ export default function StationList({
   onPress,
 }: Props) {
   const listRef = useRef<FlatList>(null);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (!selectedStation) {
@@ -60,6 +62,11 @@ export default function StationList({
           animated: true,
         });
       }}
+      contentContainerStyle={{
+        paddingBottom: Math.max(insets.bottom + 24, 40),
+      }}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
     />
   );
 }

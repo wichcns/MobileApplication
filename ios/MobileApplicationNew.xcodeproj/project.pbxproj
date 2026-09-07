@@ -196,17 +196,29 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MobileApplicationNew/Pods-MobileApplicationNew-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MobileApplicationNew/Pods-MobileApplicationNew-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MobileApplicationNew/Pods-MobileApplicationNew-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A8F25C4D2F4E4F0A8C123010 /* Generate prebuilt framework dSYMs */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate prebuilt framework dSYMs";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MobileApplicationNew/Pods-MobileApplicationNew-frameworks.sh\"\n";
+			shellScript = "if [ \"${ACTION}\" = \"install\" ]; then\n  FRAMEWORKS_DIR=\"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}\"\n  mkdir -p \"${DWARF_DSYM_FOLDER_PATH}\"\n  for FRAMEWORK_NAME in React ReactNativeDependencies hermesvm; do\n    FRAMEWORK_BINARY=\"${FRAMEWORKS_DIR}/${FRAMEWORK_NAME}.framework/${FRAMEWORK_NAME}\"\n    DSYM_OUTPUT=\"${DWARF_DSYM_FOLDER_PATH}/${FRAMEWORK_NAME}.framework.dSYM\"\n    if [ -f \"${FRAMEWORK_BINARY}\" ]; then\n      xcrun dsymutil \"${FRAMEWORK_BINARY}\" -o \"${DSYM_OUTPUT}\" || true\n    fi\n  done\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
@@ -239,33 +251,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MobileApplicationNew/Pods-MobileApplicationNew-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MobileApplicationNew/Pods-MobileApplicationNew-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
-			outputPaths = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MobileApplicationNew/Pods-MobileApplicationNew-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A8F25C4D2F4E4F0A8C123010 /* Generate prebuilt framework dSYMs */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Generate prebuilt framework dSYMs";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"${ACTION}\" = \"install\" ]; then\n  FRAMEWORKS_DIR=\"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}\"\n  mkdir -p \"${DWARF_DSYM_FOLDER_PATH}\"\n  for FRAMEWORK_NAME in React ReactNativeDependencies hermesvm; do\n    FRAMEWORK_BINARY=\"${FRAMEWORKS_DIR}/${FRAMEWORK_NAME}.framework/${FRAMEWORK_NAME}\"\n    DSYM_OUTPUT=\"${DWARF_DSYM_FOLDER_PATH}/${FRAMEWORK_NAME}.framework.dSYM\"\n    if [ -f \"${FRAMEWORK_BINARY}\" ]; then\n      xcrun dsymutil \"${FRAMEWORK_BINARY}\" -o \"${DSYM_OUTPUT}\" || true\n    fi\n  done\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -288,7 +280,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_TEAM = UPQ4F7WPTR;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MobileApplicationNew/Info.plist;
@@ -319,7 +311,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_TEAM = UPQ4F7WPTR;
 				INFOPLIST_FILE = MobileApplicationNew/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;

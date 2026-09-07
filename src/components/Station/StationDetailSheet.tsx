@@ -47,20 +47,6 @@ export default function StationDetailSheet({
   }
 
   const chargers = station.chargers ?? [];
-  const total = chargers.reduce(
-    (sum, charger) => sum + charger.connectors.length,
-
-    0,
-  );
-
-  const available = chargers.reduce(
-    (sum, charger) =>
-      sum +
-      charger.connectors.filter(connector => connector.status === 'AVAILABLE')
-        .length,
-
-    0,
-  );
 
   const handleNavigate = () => {
     const url = `https://www.google.com/maps/dir/?api=1&destination=${station.latitude},${station.longitude}`;
@@ -68,12 +54,11 @@ export default function StationDetailSheet({
     Linking.openURL(url);
   };
 
-  const availableSelections = chargers
-    .flatMap(charger =>
-      charger.connectors
-        .filter(connector => connector.status === 'AVAILABLE')
-        .map(connector => ({ charger, connector })),
-    );
+  const availableSelections = chargers.flatMap(charger =>
+    charger.connectors
+      .filter(connector => connector.status === 'AVAILABLE')
+      .map(connector => ({ charger, connector })),
+  );
 
   const firstAvailableSelection = availableSelections[0];
 
@@ -193,7 +178,7 @@ export default function StationDetailSheet({
             numberOfLines={1}
             ellipsizeMode="tail"
           >
-            {available}/{total} • AC • 40 kW
+            AC • 7 kW
           </Text>
         </View>
 
@@ -204,10 +189,6 @@ export default function StationDetailSheet({
         <View style={styles.card}>
           <View style={styles.cardHeader}>
             <Text style={styles.title}>{t('station.price')}</Text>
-
-            <TouchableOpacity activeOpacity={0.7}>
-              <Text style={styles.detailText}>{t('station.detail')} ›</Text>
-            </TouchableOpacity>
           </View>
 
           <View style={styles.priceRow}>
@@ -219,7 +200,7 @@ export default function StationDetailSheet({
               {station.price} THB/kWh
             </Text>
 
-            <Text style={styles.time}>09:00 - 22:00</Text>
+            <Text style={styles.time}>09.00 - 24.00</Text>
           </View>
 
           <Text style={styles.delayText}>{t('station.delayFreeTime')}</Text>
@@ -232,10 +213,6 @@ export default function StationDetailSheet({
         <View style={styles.card}>
           <View style={styles.cardHeader}>
             <Text style={styles.title}>{t('station.allChargers')}</Text>
-
-            <TouchableOpacity activeOpacity={0.7}>
-              <Text style={styles.detailText}>{t('station.detail')} ›</Text>
-            </TouchableOpacity>
           </View>
 
           {chargers.map((charger, chargerIndex) => {

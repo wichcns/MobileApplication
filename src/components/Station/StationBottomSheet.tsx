@@ -172,7 +172,6 @@ export default function StationBottomSheet({
 
   return (
     <Animated.View
-      {...panResponder.panHandlers}
       style={[
         styles.container,
 
@@ -185,12 +184,16 @@ export default function StationBottomSheet({
         },
       ]}
     >
-      <View style={styles.handle} />
+      <View {...panResponder.panHandlers} style={styles.dragArea}>
+        <View style={styles.handle} />
 
-      <View style={styles.header}>
-        <Text style={styles.title}>{t('home.nearbyStations')}</Text>
+        <View style={styles.header}>
+          <Text style={styles.title}>{t('home.nearbyStations')}</Text>
 
-        <Text style={styles.count}>{stations.length} {t('home.chargingStations')}</Text>
+          <Text style={styles.count}>
+            {stations.length} {t('home.chargingStations')}
+          </Text>
+        </View>
       </View>
 
       <View style={styles.searchBox}>
@@ -276,6 +279,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
 
     alignSelf: 'center',
+  },
+
+  dragArea: {
+    marginHorizontal: -20,
+    paddingHorizontal: 20,
   },
 
   header: {
