@@ -30,11 +30,11 @@ interface Props {
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-const COLLAPSED = SCREEN_HEIGHT - 120;
+const COLLAPSED_HEIGHT = 120;
 
-const HALF = SCREEN_HEIGHT - 430;
+const HALF_HEIGHT = Math.min(430, SCREEN_HEIGHT * 0.55);
 
-const FULL = 200;
+const FULL_HEIGHT = SCREEN_HEIGHT - 200;
 
 export default function StationBottomSheet({
   stations,
@@ -53,17 +53,17 @@ export default function StationBottomSheet({
     'ALL' | 'AVAILABLE' | 'AC' | 'DC'
   >('ALL');
 
-  const translateY = useRef(new Animated.Value(HALF)).current;
+  const sheetHeight = useRef(new Animated.Value(HALF_HEIGHT)).current;
 
-  const currentPosition = useRef(HALF);
+  const currentHeight = useRef(HALF_HEIGHT);
 
-  const animateTo = (position: number) => {
-    currentPosition.current = position;
+  const animateTo = (height: number) => {
+    currentHeight.current = height;
 
-    Animated.spring(translateY, {
-      toValue: position,
+    Animated.spring(sheetHeight, {
+      toValue: height,
 
-      useNativeDriver: true,
+      useNativeDriver: false,
 
       damping: 20,
 
@@ -84,25 +84,25 @@ export default function StationBottomSheet({
       },
 
       onPanResponderMove: (_, gesture) => {
-        let next = currentPosition.current + gesture.dy;
+        let next = currentHeight.current - gesture.dy;
 
-        if (next < FULL) next = FULL;
+        if (next < COLLAPSED_HEIGHT) next = COLLAPSED_HEIGHT;
 
-        if (next > COLLAPSED) next = COLLAPSED;
+        if (next > FULL_HEIGHT) next = FULL_HEIGHT;
 
-        translateY.setValue(next);
+        sheetHeight.setValue(next);
       },
 
       onPanResponderRelease: (_, gesture) => {
-        const current = currentPosition.current;
+        const current = currentHeight.current;
 
         // ลากขึ้น
 
         if (gesture.dy < -100) {
-          if (current === COLLAPSED) {
-            animateTo(HALF);
+          if (current === COLLAPSED_HEIGHT) {
+            animateTo(HALF_HEIGHT);
           } else {
-            animateTo(FULL);
+            animateTo(FULL_HEIGHT);
           }
 
           return;
@@ -111,10 +111,10 @@ export default function StationBottomSheet({
         // ลากลง ปิด
 
         if (gesture.dy > 120) {
-          Animated.spring(translateY, {
-            toValue: SCREEN_HEIGHT,
+          Animated.spring(sheetHeight, {
+            toValue: 0,
 
-            useNativeDriver: true,
+            useNativeDriver: false,
           }).start(() => {
             onClose();
           });
@@ -171,26 +171,17 @@ export default function StationBottomSheet({
   }, [stations, searchText, selectedFilter]);
 
   return (
-    <Animated.View
-      {...panResponder.panHandlers}
-      style={[
-        styles.container,
+    <Animated.View style={[styles.container, { height: sheetHeight }]}>
+      <View {...panResponder.panHandlers} style={styles.dragArea}>
+        <View style={styles.handle} />
 
-        {
-          transform: [
-            {
-              translateY,
-            },
-          ],
-        },
-      ]}
-    >
-      <View style={styles.handle} />
+        <View style={styles.header}>
+          <Text style={styles.title}>{t('home.nearbyStations')}</Text>
 
-      <View style={styles.header}>
-        <Text style={styles.title}>{t('home.nearbyStations')}</Text>
-
-        <Text style={styles.count}>{stations.length} {t('home.chargingStations')}</Text>
+          <Text style={styles.count}>
+            {stations.length} {t('home.chargingStations')}
+          </Text>
+        </View>
       </View>
 
       <View style={styles.searchBox}>
@@ -251,8 +242,6 @@ const styles = StyleSheet.create({
 
     bottom: 0,
 
-    height: SCREEN_HEIGHT * 0.92,
-
     backgroundColor: '#FFFFFF',
 
     borderTopLeftRadius: 28,
@@ -262,6 +251,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
 
     paddingTop: 12,
+
+    overflow: 'hidden',
 
     elevation: 20,
   },
@@ -276,6 +267,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
 
     alignSelf: 'center',
+  },
+
+  dragArea: {
+    marginHorizontal: -20,
+    paddingHorizontal: 20,
   },
 
   header: {

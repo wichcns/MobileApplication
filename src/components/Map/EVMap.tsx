@@ -1,8 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import Geolocation from 'react-native-geolocation-service';
 
-import { StyleSheet } from 'react-native';
+import { PermissionsAndroid, Platform, StyleSheet } from 'react-native';
 
 import StationMarker from './StationMarker';
 
@@ -24,6 +25,38 @@ export default function EVMap({
   onMarkerPress,
 }: Props) {
   const mapRef = useRef<MapView>(null);
+  const [hasLocationPermission, setHasLocationPermission] = useState(false);
+
+  useEffect(() => {
+    const requestLocationPermission = async () => {
+      if (Platform.OS === 'ios') {
+        const status = await Geolocation.requestAuthorization('whenInUse');
+        setHasLocationPermission(status === 'granted');
+        return;
+      }
+
+      const permission = PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION;
+      const alreadyGranted = await PermissionsAndroid.check(permission);
+
+      if (alreadyGranted) {
+        setHasLocationPermission(true);
+        return;
+      }
+
+      const result = await PermissionsAndroid.request(permission, {
+        title: 'อนุญาตให้เข้าถึงตำแหน่ง',
+        message: 'GSB EV ใช้ตำแหน่งของคุณเพื่อแสดงจุดปัจจุบันบนแผนที่',
+        buttonPositive: 'อนุญาต',
+        buttonNegative: 'ไม่อนุญาต',
+      });
+
+      setHasLocationPermission(result === PermissionsAndroid.RESULTS.GRANTED);
+    };
+
+    requestLocationPermission().catch(() => {
+      setHasLocationPermission(false);
+    });
+  }, []);
 
   const handleMarkerPress = (station: Station) => {
     // ส่งค่ากลับ HomeScreen
@@ -50,9 +83,10 @@ export default function EVMap({
   return (
     <MapView
       ref={mapRef}
+      provider={PROVIDER_GOOGLE}
       style={styles.map}
-      showsUserLocation={true}
-      showsMyLocationButton={true}
+      showsUserLocation={hasLocationPermission}
+      showsMyLocationButton={hasLocationPermission}
       initialRegion={{
         latitude: 13.7563,
 

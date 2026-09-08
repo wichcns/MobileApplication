@@ -17,6 +17,9 @@ end
 target 'MobileApplicationNew' do
   config = use_native_modules!
 
+  # Use the Google Maps implementation from react-native-maps on iOS.
+  pod 'react-native-maps/Google', :path => '../node_modules/react-native-maps'
+
   # Google Sign-In 9.x pulls in Swift pods whose Objective-C dependencies
   # need module maps when React Native links pods as static libraries.
   pod 'GoogleUtilities', :modular_headers => true

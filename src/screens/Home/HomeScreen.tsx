@@ -130,15 +130,9 @@ export default function HomeScreen() {
         stations={stations}
         selectedStation={selectedStation}
         onMarkerPress={station => {
-          /**
-           * เก็บ Station ที่เลือก
-           */
           setSelectedStation(station);
-
-          /**
-           * เปิด Station List
-           */
-          setShowStation(true);
+          setShowStation(false);
+          setDetailStation(station);
         }}
       />
 
