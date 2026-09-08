@@ -80,6 +80,32 @@ export default function EVMap({
     );
   };
 
+  const validStations = stations.filter(
+    station =>
+      Number.isFinite(station.latitude) &&
+      Number.isFinite(station.longitude) &&
+      !(station.latitude === 0 && station.longitude === 0),
+  );
+
+  const getMarkerVisualKey = (station: Station) => {
+    const connectors = station.chargers.flatMap(charger => charger.connectors);
+    const available = connectors.filter(
+      connector => connector.status === 'AVAILABLE',
+    ).length;
+    const charging = connectors.filter(
+      connector => connector.status === 'CHARGING',
+    ).length;
+
+    return [
+      station.id,
+      station.status,
+      available,
+      charging,
+      connectors.length,
+      selectedStation?.id === station.id ? 'selected' : 'default',
+    ].join('-');
+  };
+
   return (
     <MapView
       ref={mapRef}
@@ -97,9 +123,9 @@ export default function EVMap({
         longitudeDelta: 0.08,
       }}
     >
-      {stations.map(station => (
+      {validStations.map(station => (
         <Marker
-          key={station.id}
+          key={getMarkerVisualKey(station)}
           coordinate={{
             latitude: station.latitude,
 
@@ -111,7 +137,8 @@ export default function EVMap({
 
             y: 1,
           }}
-          tracksViewChanges={true}
+          tracksViewChanges={false}
+          zIndex={selectedStation?.id === station.id ? 2 : 1}
         >
           <StationMarker
             station={station}

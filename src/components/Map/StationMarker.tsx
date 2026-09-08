@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
-import { View, Text, Image, StyleSheet, Animated } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 
 import Ionicons from '@react-native-vector-icons/ionicons';
 
@@ -14,21 +14,11 @@ interface Props {
   selected?: boolean;
 }
 
-export default function StationMarker({
+function StationMarker({
   station,
 
   selected = false,
 }: Props) {
-  const scale = useRef(new Animated.Value(1)).current;
-
-  useEffect(() => {
-    Animated.spring(scale, {
-      toValue: selected ? 1.25 : 1,
-
-      useNativeDriver: true,
-    }).start();
-  }, [selected, scale]);
-
   const color =
     station.status === 'Available'
       ? '#44C4CE'
@@ -59,21 +49,20 @@ export default function StationMarker({
     0,
   );
 
-  const displayedCount = chargingCount > 0 ? chargingCount : availableCount;
+  const totalCount = (station.chargers ?? []).reduce(
+    (sum, charger) => sum + (charger.connectors ?? []).length,
+    0,
+  );
+
+  const displayedCount =
+    chargingCount > 0
+      ? String(chargingCount)
+      : `${availableCount}/${totalCount}`;
 
   return (
-    <Animated.View
-      style={[
-        styles.wrapper,
-
-        {
-          transform: [
-            {
-              scale,
-            },
-          ],
-        },
-      ]}
+    <View
+      collapsable={false}
+      style={[styles.wrapper, selected && styles.selected]}
     >
       <View
         style={[
@@ -110,13 +99,19 @@ export default function StationMarker({
           },
         ]}
       />
-    </Animated.View>
+    </View>
   );
 }
+
+export default React.memo(StationMarker);
 
 const styles = StyleSheet.create({
   wrapper: {
     alignItems: 'center',
+  },
+
+  selected: {
+    transform: [{ scale: 1.2 }],
   },
 
   badge: {

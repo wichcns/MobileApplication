@@ -68,6 +68,8 @@ export default function StationBottomSheet({
       damping: 20,
 
       stiffness: 120,
+
+      overshootClamping: true,
     }).start();
   };
 
@@ -111,10 +113,12 @@ export default function StationBottomSheet({
         // ลากลง ปิด
 
         if (gesture.dy > 120) {
-          Animated.spring(sheetHeight, {
+          Animated.timing(sheetHeight, {
             toValue: 0,
 
             useNativeDriver: false,
+
+            duration: 180,
           }).start(() => {
             onClose();
           });
