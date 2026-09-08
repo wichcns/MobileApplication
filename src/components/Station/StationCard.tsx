@@ -108,6 +108,7 @@ export default function StationCard({
                   <Text style={styles.chargerText}>
                     {charger.chargerType} {availableConnector}/
                     {connectors.length}
+                    {charger.maxPower > 0 ? ` • ${charger.maxPower} kW` : ''}
                   </Text>
                 </View>
               );

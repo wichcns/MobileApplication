@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import Ionicons from '@react-native-vector-icons/ionicons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -16,6 +17,7 @@ export default function ReadyToChargeScreen() {
   const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
+  const insets = useSafeAreaInsets();
 
   const { station, charger, connector, verification } = route.params;
 
@@ -40,7 +42,7 @@ export default function ReadyToChargeScreen() {
     <View style={styles.container}>
       {/* HEADER */}
 
-      <View style={styles.header}>
+      <View style={[styles.header, { marginTop: insets.top }]}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.backButton}
@@ -227,8 +229,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
 
     justifyContent: 'space-between',
-
-    marginTop: 10,
   },
 
   backButton: {

@@ -7,8 +7,9 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  SafeAreaView,
+  ScrollView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Ionicons from '@react-native-vector-icons/ionicons';
 
@@ -83,97 +84,106 @@ export default function PaymentMethodScreen() {
   // ==========================================================
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* =====================================================
+    <SafeAreaView style={styles.container} edges={['top']}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.content}
+      >
+        {/* =====================================================
           HEADER
       ====================================================== */}
 
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          activeOpacity={0.7}
-        >
-          <Ionicons name="arrow-back" size={26} color="#111827" />
-        </TouchableOpacity>
+        <View style={styles.header}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.backButton}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="arrow-back" size={26} color="#111827" />
+          </TouchableOpacity>
 
-        <Text style={styles.title}>{t('paymentMethod.title')}</Text>
-      </View>
+          <Text style={styles.title}>{t('paymentMethod.title')}</Text>
+        </View>
 
-      {/* =====================================================
+        {/* =====================================================
           AMOUNT
       ====================================================== */}
 
-      <Text style={styles.label}>{t('paymentMethod.topUpAmount')}</Text>
+        <Text style={styles.label}>{t('paymentMethod.topUpAmount')}</Text>
 
-      <Text style={styles.amount}>
-        {amount.toFixed(2)} {t('common.currency')}
-      </Text>
+        <Text style={styles.amount}>
+          {amount.toFixed(2)} {t('common.currency')}
+        </Text>
 
-      {/* =====================================================
+        {/* =====================================================
           PAYMENT METHOD
       ====================================================== */}
 
-      <Text style={styles.section}>
-        {t('paymentMethod.choosePaymentMethod')}
-      </Text>
+        <Text style={styles.section}>
+          {t('paymentMethod.choosePaymentMethod')}
+        </Text>
 
-      {methods.map(item => {
-        const isSelected = selected === item.id;
+        {methods.map(item => {
+          const isSelected = selected === item.id;
 
-        return (
-          <TouchableOpacity
-            key={item.id}
-            style={[styles.card, isSelected && styles.selected]}
-            activeOpacity={0.8}
-            onPress={() => setSelected(item.id)}
-          >
-            {/* ICON */}
+          return (
+            <TouchableOpacity
+              key={item.id}
+              style={[styles.card, isSelected && styles.selected]}
+              activeOpacity={0.8}
+              onPress={() => setSelected(item.id)}
+            >
+              {/* ICON */}
 
-            <Ionicons
-              name={item.icon}
-              size={30}
-              color={isSelected ? '#FFFFFF' : '#44C4CE'}
-            />
+              <Ionicons
+                name={item.icon}
+                size={30}
+                color={isSelected ? '#FFFFFF' : '#44C4CE'}
+              />
 
-            {/* TEXT */}
+              {/* TEXT */}
 
-            <View style={styles.text}>
-              <Text
-                style={[styles.cardTitle, isSelected && styles.selectedText]}
-              >
-                {item.title}
-              </Text>
+              <View style={styles.text}>
+                <Text
+                  style={[styles.cardTitle, isSelected && styles.selectedText]}
+                >
+                  {item.title}
+                </Text>
 
-              <Text
-                style={[styles.subtitle, isSelected && styles.selectedSubText]}
-              >
-                {item.subtitle}
-              </Text>
-            </View>
+                <Text
+                  style={[
+                    styles.subtitle,
+                    isSelected && styles.selectedSubText,
+                  ]}
+                >
+                  {item.subtitle}
+                </Text>
+              </View>
 
-            {/* SELECTED */}
+              {/* SELECTED */}
 
-            {isSelected && (
-              <Ionicons name="checkmark-circle" size={22} color="#FFFFFF" />
-            )}
-          </TouchableOpacity>
-        );
-      })}
+              {isSelected && (
+                <Ionicons name="checkmark-circle" size={22} color="#FFFFFF" />
+              )}
+            </TouchableOpacity>
+          );
+        })}
 
-      {/* =====================================================
+        {/* =====================================================
           CONTINUE
       ====================================================== */}
 
-      <TouchableOpacity
-        disabled={!selected}
-        activeOpacity={0.85}
-        style={[styles.button, !selected && styles.disabledButton]}
-        onPress={handleContinue}
-      >
-        <Text style={styles.buttonText}>{t('common.continue')}</Text>
+        <TouchableOpacity
+          disabled={!selected}
+          activeOpacity={0.85}
+          style={[styles.button, !selected && styles.disabledButton]}
+          onPress={handleContinue}
+        >
+          <Text style={styles.buttonText}>{t('common.continue')}</Text>
 
-        <Ionicons name="arrow-forward" size={19} color="#FFFFFF" />
-      </TouchableOpacity>
+          <Ionicons name="arrow-forward" size={19} color="#FFFFFF" />
+        </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -186,7 +196,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F8FAFC',
-    padding: 20,
+  },
+
+  content: {
+    flexGrow: 1,
+    paddingHorizontal: 24,
+    paddingTop: 12,
+    paddingBottom: 28,
   },
 
   // ==========================================================
@@ -194,15 +210,33 @@ const styles = StyleSheet.create({
   // ==========================================================
 
   header: {
+    minHeight: 52,
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: 28,
+  },
+
+  backButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000000',
+    shadowOpacity: 0.07,
+    shadowRadius: 8,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    elevation: 2,
   },
 
   title: {
     fontSize: 20,
     fontWeight: '800',
-    marginLeft: 20,
+    marginLeft: 16,
     color: '#111827',
   },
 

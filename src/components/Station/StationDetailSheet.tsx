@@ -48,6 +48,20 @@ export default function StationDetailSheet({
 
   const chargers = station.chargers ?? [];
 
+  const chargerCapabilities = Array.from(
+    new Set(
+      chargers.map(charger =>
+        charger.maxPower > 0
+          ? `${charger.chargerType} • ${charger.maxPower} kW`
+          : charger.chargerType,
+      ),
+    ),
+  ).join('   ');
+
+  const chargerTypes = Array.from(
+    new Set(chargers.map(charger => charger.chargerType)),
+  ).join('/');
+
   const handleNavigate = () => {
     const url = `https://www.google.com/maps/dir/?api=1&destination=${station.latitude},${station.longitude}`;
 
@@ -136,7 +150,9 @@ export default function StationDetailSheet({
               {station.address ?? t('station.chargingStation')}
             </Text>
 
-            <Text style={styles.openText}>{t('station.open24Hours')}</Text>
+            {station.openingHours ? (
+              <Text style={styles.openText}>{station.openingHours}</Text>
+            ) : null}
           </View>
 
           <TouchableOpacity style={styles.shareButton} activeOpacity={0.8}>
@@ -148,63 +164,61 @@ export default function StationDetailSheet({
         DISTANCE
     =========================== */}
 
-        <View style={styles.distanceRow}>
-          <Ionicons name="navigate" size={18} color="#44C4CE" />
+        {station.distance != null ? (
+          <View style={styles.distanceRow}>
+            <Ionicons name="navigate" size={18} color="#44C4CE" />
 
-          <Text style={styles.distanceText}>8.6 km</Text>
-        </View>
-
-        {/* ==========================
-        PROMOTION
-    =========================== */}
-
-        <View style={styles.promotionCard}>
-          <Ionicons name="rocket-outline" size={18} color="#44C4CE" />
-
-          <Text style={styles.promotionText} numberOfLines={2}>
-            Super DC 120+kW {t('station.fasterCharging')}
-          </Text>
-        </View>
+            <Text style={styles.distanceText}>
+              {station.distance.toLocaleString()} km
+            </Text>
+          </View>
+        ) : null}
 
         {/* ==========================
         CONNECTOR SUMMARY
     =========================== */}
 
-        <View style={styles.connectorSummary}>
-          <Ionicons name="flash-outline" size={20} color="#F97316" />
+        {chargerCapabilities ? (
+          <View style={styles.connectorSummary}>
+            <Ionicons name="flash-outline" size={20} color="#F97316" />
 
-          <Text
-            style={styles.connectorText}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-          >
-            AC • 7 kW
-          </Text>
-        </View>
+            <Text
+              style={styles.connectorText}
+              numberOfLines={2}
+              ellipsizeMode="tail"
+            >
+              {chargerCapabilities}
+            </Text>
+          </View>
+        ) : null}
 
         {/* ==========================
         PRICE CARD
     =========================== */}
 
-        <View style={styles.card}>
-          <View style={styles.cardHeader}>
-            <Text style={styles.title}>{t('station.price')}</Text>
-          </View>
-
-          <View style={styles.priceRow}>
-            <View style={styles.dcBadge}>
-              <Text style={styles.dcText}>AC</Text>
+        {station.price > 0 ? (
+          <View style={styles.card}>
+            <View style={styles.cardHeader}>
+              <Text style={styles.title}>{t('station.price')}</Text>
             </View>
 
-            <Text style={styles.price} numberOfLines={1}>
-              {station.price} THB/kWh
-            </Text>
+            <View style={styles.priceRow}>
+              {chargerTypes ? (
+                <View style={styles.dcBadge}>
+                  <Text style={styles.dcText}>{chargerTypes}</Text>
+                </View>
+              ) : null}
 
-            <Text style={styles.time}>09.00 - 24.00</Text>
+              <Text style={styles.price} numberOfLines={1}>
+                {station.price} THB/kWh
+              </Text>
+
+              {station.priceSchedule ? (
+                <Text style={styles.time}>{station.priceSchedule}</Text>
+              ) : null}
+            </View>
           </View>
-
-          <Text style={styles.delayText}>{t('station.delayFreeTime')}</Text>
-        </View>
+        ) : null}
 
         {/* ==========================
         ALL CHARGERS

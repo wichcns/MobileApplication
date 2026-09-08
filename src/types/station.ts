@@ -1,6 +1,6 @@
 export type StationStatus = 'Available' | 'Busy' | 'Offline';
 
-export type ChargerType = 'AC' | 'DC';
+export type ChargerType = 'AC' | 'DC' | 'UNKNOWN';
 
 export type ConnectorStatus =
   | 'AVAILABLE'
@@ -19,6 +19,9 @@ export interface Connector {
   status: ConnectorStatus;
 
   powerElectricity?: number;
+
+  // Battery / Charging Progress
+  batteryPercentage?: number;
 
   disabled?: boolean;
 
@@ -54,6 +57,10 @@ export interface Station {
 
   price: number;
 
+  priceSchedule?: string;
+
+  openingHours?: string;
+
   address?: string;
 
   distance?: number;
@@ -63,20 +70,4 @@ export interface Station {
   type?: string;
 
   phoneNumber?: string;
-}
-
-export interface Connector {
-  connectorId: number | string;
-  label: string;
-  type: string;
-  status: ConnectorStatus;
-
-  powerElectricity?: number;
-
-  // Battery / Charging Progress
-  batteryPercentage?: number;
-
-  disabled?: boolean;
-  hasDoor?: boolean;
-  hasSmartLock?: boolean;
 }

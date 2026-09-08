@@ -98,13 +98,93 @@ const mapConnectorStatus = (connector: any): ConnectorStatus => {
  * ============================================================
  */
 const mapChargerType = (chargingPoint: any): ChargerType => {
-  const current = chargingPoint?.connectorType?.current?.toUpperCase();
+  const rawConnectors = Array.isArray(chargingPoint?.connectors)
+    ? chargingPoint.connectors
+    : [];
 
-  if (current === 'DC') {
+  const candidates = [
+    chargingPoint?.chargerType,
+    chargingPoint?.current,
+    chargingPoint?.connectorType,
+    chargingPoint?.connectorType?.current,
+    chargingPoint?.connectorType?.key,
+    chargingPoint?.connectorType?.name,
+    ...rawConnectors.flatMap((connector: any) => [
+      connector?.type,
+      connector?.current,
+      connector?.connectorType,
+      connector?.connectorType?.current,
+      connector?.connectorType?.key,
+      connector?.connectorType?.name,
+    ]),
+  ]
+    .filter(value => typeof value === 'string')
+    .map(value => value.trim().toUpperCase());
+
+  if (
+    candidates.some(
+      value =>
+        value === 'DC' ||
+        value.includes('CCS') ||
+        value.includes('CHADEMO') ||
+        value.includes('GB/T DC'),
+    )
+  ) {
     return 'DC';
   }
 
-  return 'AC';
+  if (
+    candidates.some(
+      value =>
+        value === 'AC' ||
+        value.includes('TYPE 2') ||
+        value.includes('TYPE2') ||
+        value.includes('J1772'),
+    )
+  ) {
+    return 'AC';
+  }
+
+  return 'UNKNOWN';
+};
+
+const readConnectorType = (connector: any): string => {
+  const candidates = [
+    connector?.type,
+    connector?.connectorType?.name,
+    connector?.connectorType?.key,
+    connector?.connectorType?.current,
+    connector?.connectorType,
+  ];
+
+  return (
+    candidates
+      .find(value => typeof value === 'string' && value.trim().length > 0)
+      ?.trim() ?? 'Unknown'
+  );
+};
+
+const readNumber = (...values: any[]): number => {
+  const value = values.find(candidate => {
+    const number = Number(candidate);
+    return (
+      candidate != null &&
+      candidate !== '' &&
+      Number.isFinite(number) &&
+      number > 0
+    );
+  });
+
+  return value == null ? 0 : Number(value);
+};
+
+const formatTime = (value: any): string | undefined => {
+  if (typeof value !== 'string' || !value.trim()) {
+    return undefined;
+  }
+
+  const match = value.trim().match(/^(\d{1,2}):(\d{2})(?::\d{2})?$/);
+  return match ? `${match[1].padStart(2, '0')}.${match[2]}` : value.trim();
 };
 
 /**
@@ -121,15 +201,15 @@ const mapConnector = (
 
     label: connector?.name ?? connector?.connectorName ?? 'Connector',
 
-    type:
-      connector?.connectorType?.name ??
-      connector?.connectorType?.key ??
-      connector?.connectorType?.current ??
-      'AC',
+    type: readConnectorType(connector),
 
     status: mapConnectorStatus(connector),
 
-    powerElectricity: connector?.powerElectricity ?? 0,
+    powerElectricity: readNumber(
+      connector?.powerElectricity,
+      connector?.maxPower,
+      connector?.power,
+    ),
 
     batteryPercentage:
       connector?.batteryPercentage ??
@@ -162,6 +242,17 @@ const mapChargingPoint = (chargingPoint: any): Charger => {
     ? chargingPoint.connectors
     : [];
 
+  const connectorMaxPower = Math.max(
+    0,
+    ...rawConnectors.map((connector: any) =>
+      readNumber(
+        connector?.powerElectricity,
+        connector?.maxPower,
+        connector?.power,
+      ),
+    ),
+  );
+
   return {
     chargerId: String(
       chargingPoint?.id ??
@@ -175,7 +266,12 @@ const mapChargingPoint = (chargingPoint: any): Charger => {
 
     chargerType: mapChargerType(chargingPoint),
 
-    maxPower: Number(chargingPoint?.powerElectricity ?? 0),
+    maxPower: readNumber(
+      chargingPoint?.powerElectricity,
+      chargingPoint?.maxPower,
+      chargingPoint?.power,
+      connectorMaxPower,
+    ),
 
     connectors: rawConnectors.map((connector: any, index: number) =>
       mapConnector(connector, `${chargingPoint?.id ?? 'charger'}-${index}`),
@@ -210,7 +306,34 @@ export const mapStationFromApi = (station: any): Station => {
     : [];
 
   const price =
-    serviceRates.length > 0 ? Number(serviceRates[0]?.price ?? 0) : 0;
+    serviceRates.length > 0 ? readNumber(serviceRates[0]?.price) : 0;
+
+  const firstServiceRate = serviceRates[0];
+  const priceStart = formatTime(
+    firstServiceRate?.startTime ??
+      firstServiceRate?.fromTime ??
+      firstServiceRate?.startAt,
+  );
+  const priceEnd = formatTime(
+    firstServiceRate?.endTime ??
+      firstServiceRate?.toTime ??
+      firstServiceRate?.endAt,
+  );
+  const priceSchedule =
+    priceStart && priceEnd ? `${priceStart} - ${priceEnd}` : undefined;
+
+  const openingStart = formatTime(
+    station?.openingTime ?? station?.openTime ?? station?.opensAt,
+  );
+  const openingEnd = formatTime(
+    station?.closingTime ?? station?.closeTime ?? station?.closesAt,
+  );
+  const openingHours =
+    typeof (station?.openingHours ?? station?.operatingHours) === 'string'
+      ? station.openingHours ?? station.operatingHours
+      : openingStart && openingEnd
+      ? `${openingStart} - ${openingEnd}`
+      : undefined;
 
   /**
    * รูปภาพ
@@ -267,11 +390,18 @@ export const mapStationFromApi = (station: any): Station => {
 
     price,
 
+    priceSchedule,
+
+    openingHours,
+
     address,
 
     image,
 
-    distance: station?.distance,
+    distance:
+      station?.distance != null && Number.isFinite(Number(station.distance))
+        ? Number(station.distance)
+        : undefined,
 
     type: station?.type,
 
