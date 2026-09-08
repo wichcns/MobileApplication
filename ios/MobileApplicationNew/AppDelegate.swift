@@ -15,13 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
-    if
-      let googleServicePath = Bundle.main.path(
-        forResource: "GoogleService-Info",
-        ofType: "plist"
-      ),
-      let googleServiceConfig = NSDictionary(contentsOfFile: googleServicePath),
-      let googleMapsApiKey = googleServiceConfig["API_KEY"] as? String
+    if let googleMapsApiKey = RNCConfig.env(for: "GOOGLE_MAPS_IOS_API_KEY"),
+       !googleMapsApiKey.isEmpty
     {
       GMSServices.provideAPIKey(googleMapsApiKey)
     }
