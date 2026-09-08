@@ -1,42 +1,57 @@
 {
   "project_info": {
-    "project_number": "909128229498",
-    "project_id": "gsbev-581ef",
-    "storage_bucket": "gsbev-581ef.firebasestorage.app"
+    "project_number": "458026609639",
+    "project_id": "sunpower-ev",
+    "storage_bucket": "sunpower-ev.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:909128229498:android:6530b9a152b4702461d1c3",
+        "mobilesdk_app_id": "1:458026609639:android:02870967941fdfdb676b42",
         "android_client_info": {
-          "package_name": "com.mobileapplicationnew"
+          "package_name": "com.sunpower.evcharge"
         }
       },
       "oauth_client": [
         {
-          "client_id": "909128229498-qfm1gdd44vghh9o3ncgnvb9tkh04r0ao.apps.googleusercontent.com",
+          "client_id": "458026609639-chll8q9oapkujlcds7t39lte500kd126.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.mobileapplicationnew",
-            "certificate_hash": "48b0f5b1574dcc79478bf6a4fe2709e7a948ebd1"
+            "package_name": "com.sunpower.evcharge",
+            "certificate_hash": "88b340ae6e98bb968ab6106cfb9250e499e6e408"
           }
         },
         {
-          "client_id": "909128229498-ggqlvh72f58o98a5ieb99nnjcg204kin.apps.googleusercontent.com",
+          "client_id": "458026609639-rdaoevqse3ugfkaviu4vl5k7dkdn2ttd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sunpower.evcharge",
+            "certificate_hash": "55dddf6c524ff5a857aa0121538e634b7d949a94"
+          }
+        },
+        {
+          "client_id": "458026609639-ttvbs5d5kihmn2nv01lsgs2mdat1e1pt.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAigmXcS4lFBxLx-XuHX9_Ob1_eEJpcM3k"
+          "current_key": "AIzaSyBbAuWluupnx_qZLSZh7OdXbhiMWeRTVRI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "909128229498-ggqlvh72f58o98a5ieb99nnjcg204kin.apps.googleusercontent.com",
+              "client_id": "458026609639-ttvbs5d5kihmn2nv01lsgs2mdat1e1pt.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "458026609639-ba3no7i3m9pk9lkuajf5do9b7tm0siru.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.privatus.evcharge"
+              }
             }
           ]
         }

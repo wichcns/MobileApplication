@@ -84,7 +84,7 @@ android {
 
     namespace "com.mobileapplicationnew"
     defaultConfig {
-        applicationId "com.mobileapplicationnew"
+        applicationId "com.sunpower.evcharge"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 20
