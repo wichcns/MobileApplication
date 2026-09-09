@@ -61,4 +61,19 @@ describe('station mapper', () => {
     expect(station.openingHours).toBeUndefined();
     expect(station.priceSchedule).toBeUndefined();
   });
+
+  it('maps latitude and longitude from common backend location shapes', () => {
+    const station = mapStationFromApi({
+      id: 'station-3',
+      name: 'Coordinates station',
+      status: 'OPEN',
+      location: {
+        coordinates: [100.5018, 13.7563],
+      },
+      chargingPoints: [],
+    });
+
+    expect(station.latitude).toBe(13.7563);
+    expect(station.longitude).toBe(100.5018);
+  });
 });

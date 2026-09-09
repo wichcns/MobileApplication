@@ -107,7 +107,13 @@ export default React.memo(StationMarker);
 
 const styles = StyleSheet.create({
   wrapper: {
+    // width: 64,
+
+    // height: 72,
+
     alignItems: 'center',
+
+    // justifyContent: 'flex-start',
   },
 
   selected: {

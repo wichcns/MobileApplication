@@ -178,6 +178,12 @@ const readNumber = (...values: any[]): number => {
   return value == null ? 0 : Number(value);
 };
 
+const readCoordinate = (...values: any[]): number => {
+  const value = values.find(candidate => Number.isFinite(Number(candidate)));
+
+  return value == null ? 0 : Number(value);
+};
+
 const formatTime = (value: any): string | undefined => {
   if (typeof value !== 'string' || !value.trim()) {
     return undefined;
@@ -285,6 +291,12 @@ const mapChargingPoint = (chargingPoint: any): Charger => {
  * ============================================================
  */
 export const mapStationFromApi = (station: any): Station => {
+  const coordinateArray = Array.isArray(station?.coordinates)
+    ? station.coordinates
+    : Array.isArray(station?.location?.coordinates)
+    ? station.location.coordinates
+    : [];
+
   /**
    * Production Charging Points
    */
@@ -380,9 +392,24 @@ export const mapStationFromApi = (station: any): Station => {
 
     name: station?.name ?? 'Unknown Station',
 
-    latitude: Number(station?.latitude ?? 0),
+    latitude: readCoordinate(
+      station?.latitude,
+      station?.lat,
+      station?.location?.latitude,
+      station?.location?.lat,
+      station?.address?.latitude,
+      coordinateArray[1],
+    ),
 
-    longitude: Number(station?.longitude ?? 0),
+    longitude: readCoordinate(
+      station?.longitude,
+      station?.lng,
+      station?.lon,
+      station?.location?.longitude,
+      station?.location?.lng,
+      station?.address?.longitude,
+      coordinateArray[0],
+    ),
 
     status,
 
